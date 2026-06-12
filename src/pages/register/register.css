@@ -1,0 +1,241 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* MAIN CONTAINER */
+.register-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+
+
+/* LEFT IMAGE SECTION */
+.register-image-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.register-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* BLUE OVERLAY */
+.register-image-container::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 89, 190, 0.32);
+    z-index: 1;
+}
+
+/* TEXT ON IMAGE */
+.register-image-text {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    right: 40px;
+    z-index: 2;
+    color: white;
+}
+
+
+.templogo {
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    z-index: 3;
+    display: none;
+}
+
+.register-image-text-content {
+    max-width: 350px;
+}
+
+.register-image-text-content h1 {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.register-image-text-content p {
+    font-size: 15px;
+    margin-top: 15px;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+/* RIGHT FORM SECTION */
+.register-form-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+}
+
+/* FORM BOX */
+.register-form {
+    width: 80%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.register-form h2 {
+    margin: 0;
+    font-size: 28px;
+    color: #333;
+}
+
+.register-form p {
+    margin: 0;
+    font-size: 15px;
+    color: #666;
+}
+
+.left-right-tow-label-input {
+    display: flex;
+    gap: 15px;
+}
+
+/* CHECKBOX */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-container input[type="checkbox"] {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+}
+
+.checkbox-container label {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.4;
+}
+
+/* BUTTON */
+.register-button {
+    background-color: #0058BE;
+    color: white;
+    margin-top: 15px;
+    width: 100%;
+}
+
+/* ERROR */
+.error-text {
+    color: red;
+    font-size: 13px;
+    margin-top: -8px;
+    display: block;
+}
+.login-link{
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+    margin-top: 10px;
+}
+
+
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+    body {
+        background: #f5f7fa;
+    }
+
+    .register-container {
+        flex-direction: column;
+        min-height: 100vh;
+        height: auto;
+    }
+
+    /* IMAGE TOP */
+    .register-image-container {
+        width: 100%;
+        height: 220px;
+        min-height: 220px;
+        flex: none;
+    }
+
+    .register-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* HIDE IMAGE TEXT */
+    .register-image-text {
+        display: none;
+    }
+
+    /* FORM BELOW IMAGE */
+    .register-form-container {
+        width: 100%;
+        flex: none;
+        margin-top: -35px;
+        /* padding: 0 16px 24px; */
+        background: transparent;
+        box-sizing: border-box;
+        z-index: 5;
+    }
+
+    /* WHITE CARD */
+    .register-form {
+        width: 100%;
+        max-width: 100%;
+        background: white;
+        border-radius: 20px;
+        padding: 24px;
+        box-sizing: border-box;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+        gap: 14px;
+    }
+
+    .register-form h2 {
+        font-size: 24px;
+    }
+
+    .register-form p {
+        font-size: 14px;
+    }
+
+    /* STACK Major + Password */
+    .left-right-tow-label-input {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .checkbox-container {
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .checkbox-container input[type="checkbox"] {
+        margin-top: 3px;
+    }
+
+    .register-button {
+        width: 100%;
+    }
+
+
+    .templogo {
+        top: 20px;
+        left: 20px;
+        display: block;
+    }
+
+   
+}
