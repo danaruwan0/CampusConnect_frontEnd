@@ -1,102 +1,67 @@
-import React, {
-    useEffect,
-    useState
-} from "react";
+import { useState } from "react";
+
+import ChatList from "../../components/chatList/ChatList";
+import ChatWindow from "../../components/chatWindow/ChatWindow";
 
 import "./message.css";
 
-import {
-    connectSocket,
-    sendMessage
-} from "../../services/websocket";
-
 export default function Message() {
 
-    const [messages, setMessages] =
-        useState([]);
+    const userId =
+        Number(localStorage.getItem("userId"));
 
-    const [text, setText] =
-        useState("");
+    const [selectedUser, setSelectedUser] =
+        useState(null);
 
-    useEffect(() => {
+    const [refreshKey, setRefreshKey] =
+        useState(0);
 
-        connectSocket((message) => {
+    const refreshChats = () => {
 
-            setMessages((prev) => [
-                ...prev,
-                message
-            ]);
+        setRefreshKey(prev => prev + 1);
+        //log
+        console.log("REFRESH CHATS");
 
-        });
-
-    }, []);
-
-    const handleSend = () => {
-
-        if (!text.trim()) return;
-
-        const msg = {
-
-            senderId: 1,
-            receiverId: 2,
-            senderName: "Kasun",
-            content: text
-
-        };
-
-        sendMessage(msg);
-
-        setText("");
     };
+
+    const [onlineUsers, setOnlineUsers] = useState([]);
 
     return (
 
-        <div className="message">
+        <div className="message-page">
 
-            <h1>Messages</h1>
+            <ChatList
 
-            <div className="chat-box">
+                currentUserId={userId}
 
-                {messages.map((msg, index) => (
+                selectedUser={selectedUser}
 
-                    <div
-                        key={index}
-                        className="message-item"
-                    >
+                onSelect={setSelectedUser}
 
-                        <strong>
-                            {msg.senderName}
-                        </strong>
+                refreshKey={refreshKey}
 
-                        <p>
-                            {msg.content}
-                        </p>
+                onlineUsers={onlineUsers}
 
-                    </div>
+                
 
-                ))}
+            />
 
-            </div>
+            <ChatWindow
 
-            <div className="input-box">
+                currentUserId={userId}
 
-                <input
-                    type="text"
-                    value={text}
-                    onChange={(e) =>
-                        setText(e.target.value)
-                    }
-                    placeholder="Type message..."
-                />
+                selectedUser={selectedUser}
 
-                <button
-                    onClick={handleSend}
-                >
-                    Send
-                </button>
+                onNewMessage={refreshChats}
 
-            </div>
+                onlineUsers={onlineUsers}
+
+                setOnlineUsers={setOnlineUsers}
+
+            />
 
         </div>
+
     );
+
 }

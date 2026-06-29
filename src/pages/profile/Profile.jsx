@@ -1,153 +1,357 @@
-import React from "react";
-import "./profile.css";
-import Navbar from "../../components/navbar/Navbar";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-import {
-  FiMail,
-  FiBookOpen,
-  FiCode,
-  FiUsers,
-  FiEdit
-} from "react-icons/fi";
+import Navbar from "../../components/navbar/Navbar";
+import PostCard from "../../components/postCard/PostCard";
+
+import "./profile.css";
+
+import defaultProfile from "../../assets/Default profile.jpg";
+
+import { getProfile } from "../../api/profileApi";
+
+
+import { getFollowerCount, getFollowingCount } from "../../api/followApi";
+
+import { getUserPosts } from "../../api/postApi";
+
+import FollowButton from "../../components/followButton/FollowButton";
+import { FaFacebookMessenger } from "react-icons/fa";
+
+
+//
+
 
 export default function Profile() {
-  return (
-    <div className="profile-page">
 
-      <Navbar />
+    const navigate = useNavigate();
 
-      <div className="profile-container">
+    // const userId = Number(localStorage.getItem("userId"));
+    const { userId } = useParams();
 
-        {/* Cover Section */}
+    const loggedUserId = Number(localStorage.getItem("userId"));
 
-        <div className="cover-section">
-          <img
-            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f"
-            alt="cover"
-            className="cover-image"
-          />
+    const profileUserId = userId
+        ? Number(userId)
+        : loggedUserId;
 
-          <div className="profile-info">
-            <img
-              src="https://i.pravatar.cc/200"
-              alt="profile"
-              className="profile-image"
+    const [profile, setProfile] = useState(null);
+
+    const [followers, setFollowers] = useState(0);
+
+    const [following, setFollowing] = useState(0);
+
+    const [posts, setPosts] = useState([]);
+
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        loadProfile();
+    }, [profileUserId]);
+
+    const loadProfile = async () => {
+
+        try {
+
+            setLoading(true);
+
+            const [
+
+                profileData,
+                followerCount,
+                followingCount,
+                userPosts
+
+            ] = await Promise.all([
+
+                getProfile(profileUserId),
+
+                getFollowerCount(profileUserId),
+
+                getFollowingCount(profileUserId),
+
+                getUserPosts(profileUserId)
+
+            ]);
+
+            setProfile(profileData);
+
+            setFollowers(followerCount);
+
+            setFollowing(followingCount);
+
+            setPosts(userPosts);
+
+        } catch (err) {
+
+            console.log(err);
+
+        } finally {
+
+            setLoading(false);
+
+        }
+
+    };
+
+    if (loading) {
+
+        return (
+
+            <>
+                <Navbar />
+
+                <div
+                    style={{
+                        textAlign: "center",
+                        marginTop: "70px"
+                    }}
+                >
+                    <h2>Loading Profile...</h2>
+                </div>
+
+            </>
+
+        );
+
+    }
+
+    if (!profile) {
+
+        return (
+
+            <>
+                <Navbar />
+
+                <div
+                    style={{
+                        textAlign: "center",
+                        marginTop: "70px"
+                    }}
+                >
+                    <h2>Profile Not Found</h2>
+                </div>
+
+            </>
+
+        );
+
+    }
+
+    return (
+
+        <>
+
+            <Navbar />
+
+            <div className="profile-container">
+
+                {/* COVER */}
+
+                <div className="cover">
+
+                    <img
+
+                        src={
+                            profile.coverImage ||
+                            "https://images.unsplash.com/photo-1503264116251-35a269479413"
+                        }
+
+                        alt="cover"
+
+                    />
+
+                </div>
+
+                {/* PROFILE */}
+
+                <div className="profile-box">
+
+                    <img
+
+                        src={
+                            profile.profileImage ||
+                            defaultProfile
+                        }
+
+                        alt="profile"
+
+                        className="profile-pic"
+
+                        onError={(e) => {
+
+                            e.target.src = defaultProfile;
+
+                        }}
+
+                    />
+
+                    <h2>
+
+                        {profile.fullName}
+
+                    </h2>
+
+                    <p className="email">
+
+                        {profile.email}
+
+                    </p>
+
+                    {
+                        profile.major && (
+
+                            <p>
+
+                                {profile.major}
+
+                            </p>
+
+                        )
+                    }
+
+                    <p>
+
+                        {profile.bio || "No bio available"}
+
+                    </p>
+
+                    {/* STATS */}
+
+                    <div className="profile-stats">
+
+                        <div>
+
+                            <h3>
+
+                                {posts.length}
+
+                            </h3>
+
+                            <p>Posts</p>
+
+                        </div>
+
+                        <div>
+
+                            <h3>
+
+                                {followers}
+
+                            </h3>
+
+                            <p>Followers</p>
+
+                        </div>
+
+                        <div>
+
+                            <h3>
+
+                                {following}
+
+                            </h3>
+
+                            <p>Following</p>
+
+                        </div>
+
+                    </div>
+
+                    {/* EDIT BUTTON */}
+
+                    <div className="profile-buttons">
+
+    {loggedUserId === profileUserId ? (
+
+        <button
+            onClick={() => navigate("/profile/edit")}
+        >
+            Edit Profile
+        </button>
+
+    ) : (
+
+        <>
+            <FollowButton
+                followerId={loggedUserId}
+                followingId={profileUserId}
             />
 
-            <div className="profile-details">
-              <h2>Dananjaya Sandaruwan</h2>
-              <p>Higher National Diploma in Information Technology</p>
-            </div>
-
-            <button className="edit-btn">
-              <FiEdit />
-              Edit Profile
+            <button
+                className="message-btn"
+                onClick={() =>
+                    navigate(`/message/${profileUserId}`)
+                }
+            >
+                <FaFacebookMessenger />
+                Message
             </button>
+        </>
 
-          </div>
-        </div>
+    )}
 
-        {/* Content */}
+</div>
 
-        <div className="profile-content">
+                </div>
 
-          {/* LEFT */}
+                {/* POSTS */}
 
-          <div className="profile-left">
+                <div className="profile-posts">
 
-            <div className="card">
-              <h3>About</h3>
+                    <h2 style={{ marginBottom: "20px" }}>
+                        {loggedUserId === profileUserId
+                            ? "My Posts"
+                            : `${profile.fullName}'s Posts`}
+                    </h2>
+                    {posts.length === 0 ? (
 
-              <p>
-                Passionate software developer interested in
-                Full Stack Development, UI/UX Design and
-                Cloud Technologies.
-              </p>
+                        <div
+                            style={{
+                                background: "#ffffff",
+                                padding: "30px",
+                                borderRadius: "12px",
+                                textAlign: "center",
+                                boxShadow: "0 2px 10px rgba(0,0,0,0.08)"
+                            }}
+                        >
+                            <h3
+                                style={{
+                                    marginBottom: "10px"
+                                }}
+                            >
+                                No Posts Yet
+                            </h3>
 
-              <div className="info-item">
-                <FiMail />
-                <span>dananjaya@campus.edu</span>
-              </div>
+                            <p
+                                style={{
+                                    color: "#777"
+                                }}
+                            >
+                                You haven't shared any posts yet.
+                            </p>
+                        </div>
 
-            </div>
+                    ) : (
 
-            <div className="card">
-              <h3>Skills</h3>
+                        posts.map((post) => (
 
-              <div className="skills">
-                <span>React</span>
-                <span>Spring Boot</span>
-                <span>Java</span>
-                <span>MySQL</span>
-                <span>JavaScript</span>
-                <span>HTML</span>
-                <span>CSS</span>
-                <span>Git</span>
-              </div>
-            </div>
+                            <PostCard
+                                key={post.postId}
+                                post={post}
+                                currentUserId={userId}
+                            />
 
-          </div>
+                        ))
 
-          {/* RIGHT */}
+                    )}
 
-          <div className="profile-right">
-
-            <div className="stats-grid">
-
-              <div className="stat-card">
-                <h2>45</h2>
-                <p>Posts</p>
-              </div>
-
-              <div className="stat-card">
-                <h2>320</h2>
-                <p>Followers</p>
-              </div>
-
-              <div className="stat-card">
-                <h2>180</h2>
-                <p>Following</p>
-              </div>
+                </div>
 
             </div>
 
-            <div className="card">
+        </>
 
-              <h3>
-                <FiBookOpen />
-                Followed Courses
-              </h3>
+    );
 
-              <ul className="course-list">
-                <li>Software Engineering</li>
-                <li>Database Management Systems</li>
-                <li>Web Development</li>
-                <li>Mobile Application Development</li>
-                <li>Cloud Computing</li>
-              </ul>
-
-            </div>
-
-            <div className="card">
-
-              <h3>
-                <FiCode />
-                Academic Interests
-              </h3>
-
-              <p>
-                Full Stack Development, Artificial Intelligence,
-                Cyber Security, UI/UX Design and Cloud Architecture.
-              </p>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-  );
 }

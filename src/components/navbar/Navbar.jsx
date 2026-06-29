@@ -1,56 +1,186 @@
-import { Link } from "react-router-dom";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import MenuIcon from "@mui/icons-material/Menu";
 import "./navbar.css";
+import React, { useState, useEffect } from "react";
+import { searchUsers } from "../../api/searchApi";
+import { FiBell } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import { getProfile } from "../../api/profileApi";
+import defaultProfile from "../../assets/Default profile.jpg";
 
 export default function Navbar() {
+
+    const userId = localStorage.getItem("userId");
+
+    const [profile, setProfile] = useState(null);
+
+    useEffect(() => {
+        loadProfile();
+    }, []);
+
+    const loadProfile = async () => {
+        try {
+            const data = await getProfile(userId);
+            setProfile(data);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const navigate =
+        useNavigate();
+
+    const [keyword,
+        setKeyword] =
+        useState("");
+
+    const [users,
+        setUsers] =
+        useState([]);
+
+    const handleSearch =
+        async (e) => {
+
+            const value =
+                e.target.value;
+
+            setKeyword(value);
+
+            if (
+                value.length < 2
+            ) {
+
+                setUsers([]);
+
+                return;
+            }
+
+            try {
+
+                const res =
+                    await searchUsers(
+                        value
+                    );
+
+                setUsers(res);
+
+            } catch (err) {
+
+                console.log(err);
+
+            }
+        };
+
+    const logout = () => {
+
+        localStorage.clear();
+
+        navigate("/");
+    };
+
     return (
-        <nav className="navbar">
+
+        <div className="navbar">
 
             <div className="navbar-left">
 
-                <button className="menu-btn">
-                    <MenuIcon />
-                </button>
-
-                <h1 className="logo">
+                <h2 className="logo">
                     CampusConnect
-                </h1>
+                </h2>
 
             </div>
 
             <div className="navbar-center">
 
                 <input
-                    type="text"
-                    placeholder="Search posts, students..."
                     className="search-input"
+                    type="text"
+                    placeholder="Search users..."
+                    value={keyword}
+                    onChange={handleSearch}
+
+                    onBlur={() => {
+                        setTimeout(() => {
+                            setUsers([]);
+                        }, 200);
+                    }}
                 />
+
+                {
+                    users.length > 0 && (
+
+                        <div
+                            className="search-result"
+                        >
+
+                            {
+                                users.map(
+                                    (user) => (
+
+                                        <div
+                                            key={user.userId}
+                                            className="search-user"
+                                            onClick={() => {
+
+                                                navigate(`/profile/${user.userId}`);
+
+                                                setKeyword("");
+
+                                                setUsers([]);
+
+                                            }}
+                                        >
+
+                                            <h4>
+                                                {
+                                                    user.fullName
+                                                }
+                                            </h4>
+
+                                            <p>
+                                                {
+                                                    user.email
+                                                }
+                                            </p>
+
+                                        </div>
+
+                                    )
+                                )
+                            }
+
+                        </div>
+
+                    )
+                }
 
             </div>
 
             <div className="navbar-right">
 
-                <div className="notification">
-
-                    <NotificationsNoneIcon />
-
-                    <span className="notification-badge">
-                        3
-                    </span>
-
+                <div
+                    className="notification"
+                >
+                    <FiBell />
                 </div>
 
-                <Link to="/profile">
-                    <img
-                        src="https://i.pravatar.cc/150"
-                        alt="profile"
-                        className="profile-image"
-                    />
-                </Link>
+                <img
+                    src={
+                        profile?.profileImage
+                            ? profile.profileImage
+                            : defaultProfile
+                    }
+                    alt=""
+                    className="profile-image"
+                    onClick={() => navigate("/profile")}
+                />
+
+                <button
+                    onClick={logout}
+                >
+                    Logout
+                </button>
 
             </div>
 
-        </nav>
+        </div>
     );
 }

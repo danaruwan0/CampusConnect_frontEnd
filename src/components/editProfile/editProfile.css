@@ -1,0 +1,234 @@
+/* ==========================
+   EDIT PROFILE PAGE
+========================== */
+
+body{
+    background:#f4f6f9;
+    margin:0;
+    padding:0;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.edit-profile-container{
+    width:90%;
+    max-width:900px;
+    margin:40px auto;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
+}
+
+/* ==========================
+   COVER IMAGE
+========================== */
+
+.cover-section{
+    position:relative;
+    width:100%;
+    height:260px;
+    overflow:hidden;
+}
+
+.cover-preview{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    pointer-events:none;
+}
+
+/* Cover Button */
+
+.cover-section .upload-btn{
+    position:absolute;
+    right:20px;
+    bottom:20px;
+    z-index:999;
+}
+
+/* ==========================
+   PROFILE IMAGE
+========================== */
+
+.profile-section{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-top:-75px;
+    z-index:10;
+}
+
+.profile-preview{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    object-fit:cover;
+    object-position:center;
+    border:6px solid #fff;
+    background:#fff;
+    box-shadow:0 5px 15px rgba(0,0,0,.25);
+}
+
+.profile-section .upload-btn{
+    margin-top:15px;
+}
+
+/* ==========================
+   BUTTONS
+========================== */
+
+.upload-btn{
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+
+    background:#1877f2;
+    color:#fff;
+
+    padding:10px 18px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    user-select:none;
+}
+
+.upload-btn:hover{
+    background:#145ec9;
+}
+
+.upload-btn input{
+    display:none;
+}
+
+.save-btn,
+.cancel-btn{
+    padding:12px 28px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.save-btn{
+    background:#1877f2;
+    color:white;
+}
+
+.save-btn:hover{
+    background:#145ec9;
+}
+
+.cancel-btn{
+    background:#e4e6eb;
+    color:#333;
+}
+
+.cancel-btn:hover{
+    background:#d5d7dc;
+}
+
+/* ==========================
+   FORM
+========================== */
+
+.edit-form{
+    padding:35px 45px 45px;
+}
+
+.form-group{
+    margin-bottom:20px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+}
+
+.form-group input,
+.form-group textarea{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:15px;
+    box-sizing:border-box;
+    transition:.3s;
+}
+
+.form-group textarea{
+    min-height:120px;
+    resize:vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus{
+    outline:none;
+    border-color:#1877f2;
+    box-shadow:0 0 5px rgba(24,119,242,.3);
+}
+
+.form-group input:disabled{
+    background:#f5f5f5;
+}
+
+/* ==========================
+   ACTION BUTTONS
+========================== */
+
+.button-group{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin-top:30px;
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media(max-width:768px){
+
+    .edit-profile-container{
+        width:95%;
+    }
+
+    .cover-section{
+        height:180px;
+    }
+
+    .profile-section{
+        margin-top:-60px;
+    }
+
+    .profile-preview{
+        width:120px;
+        height:120px;
+    }
+
+    .edit-form{
+        padding:20px;
+    }
+
+    .button-group{
+        flex-direction:column;
+    }
+
+    .save-btn,
+    .cancel-btn{
+        width:100%;
+    }
+
+}

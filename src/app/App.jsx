@@ -6,6 +6,9 @@ import Home from '../pages/home/Home'
 import Profile from '../pages/profile/Profile'
 import Message from '../pages/message/Message'
 
+
+import EditProfile from '../components/editProfile/EditProfile'
+
 function App() {
   return (
     <BrowserRouter>
@@ -28,9 +31,18 @@ function App() {
 
         {/* PROFILE PAGE */}
         <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/edit" element={<EditProfile />} />
 
         {/* MESSAGE PAGE */}
         <Route path="/message" element={<Message />} />
+
+        
+
+        <Route path="/profile/:userId" element={<Profile />} />
+
+        <Route path="/message/:userId" element={<Message />} />
+
+
         
 
       </Routes>

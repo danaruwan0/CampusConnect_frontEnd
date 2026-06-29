@@ -1,0 +1,141 @@
+/* ===============================
+   REACTION BAR
+================================ */
+
+.reaction-bar{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-top:15px;
+
+    padding-top:10px;
+
+    border-top:1px solid #ececec;
+
+    gap:8px;
+
+}
+
+/* Button */
+
+.reaction-btn{
+
+    flex:1;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    border:none;
+
+    background:white;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    color:#555;
+
+}
+
+.reaction-btn:hover{
+
+    background:#f2f3f5;
+
+}
+
+/* Icon */
+
+.icon{
+
+    font-size:20px;
+
+}
+
+/* Colors */
+
+.like{
+
+    color:#1877F2;
+
+}
+
+.love{
+
+    color:#F02849;
+
+}
+
+.haha{
+
+    color:#F7B125;
+
+}
+
+.comment{
+
+    color:#606770;
+
+}
+
+/* Click */
+
+.reaction-btn:active{
+
+    transform:scale(.96);
+
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+    .reaction-bar{
+
+        gap:5px;
+
+    }
+
+    .reaction-btn{
+
+        padding:10px;
+
+        font-size:13px;
+
+    }
+
+    .icon{
+
+        font-size:17px;
+
+    }
+
+}
+
+@media(max-width:500px){
+
+    .reaction-btn{
+
+        flex-direction:column;
+
+        gap:5px;
+
+    }
+
+}

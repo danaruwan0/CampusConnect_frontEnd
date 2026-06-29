@@ -1,0 +1,110 @@
+/* ==========================
+   FOLLOW BUTTON
+========================== */
+
+.follow-btn,
+.unfollow-btn {
+
+    border: none;
+    outline: none;
+
+    padding: 8px 18px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition: all .25s ease;
+
+    min-width: 105px;
+
+}
+
+/* Follow */
+
+.follow-btn {
+
+    background: #1877f2;
+
+    color: #fff;
+
+    box-shadow: 0 2px 8px rgba(24,119,242,.25);
+
+}
+
+.follow-btn:hover {
+
+    background: #166fe5;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 6px 16px rgba(24,119,242,.30);
+
+}
+
+.follow-btn:active {
+
+    transform: scale(.97);
+
+}
+
+/* Following */
+
+.unfollow-btn {
+
+    background: #f0f2f5;
+
+    color: #333;
+
+    border: 1px solid #d8dbe2;
+
+}
+
+.unfollow-btn:hover {
+
+    background: #ffebeb;
+
+    color: #d93025;
+
+    border-color: #ffb3b3;
+
+    transform: translateY(-2px);
+
+}
+
+.unfollow-btn:active {
+
+    transform: scale(.97);
+
+}
+
+/* Disabled */
+
+.follow-btn:disabled,
+.unfollow-btn:disabled {
+
+    opacity: .6;
+
+    cursor: not-allowed;
+
+}
+
+/* Mobile */
+
+@media (max-width:768px){
+
+    .follow-btn,
+    .unfollow-btn{
+
+        width:100%;
+
+        padding:10px 18px;
+
+        font-size:15px;
+
+    }
+
+}

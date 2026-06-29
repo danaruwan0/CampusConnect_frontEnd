@@ -1,118 +1,114 @@
-import React, { useState } from 'react'
-import './login.css'
-import { loginUser } from '../../api/authApi'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import './login.css';
+import { loginUser } from '../../api/authApi';
+import { useNavigate } from 'react-router-dom';
 
-import Button from '../../components/button/Button'
-import LabelInput from '../../components/labelInput/LabelInput'
-import Logo from '../../components/logo/Logo'
+import Button from '../../components/button/Button';
+import LabelInput from '../../components/labelInput/LabelInput';
+import Logo from '../../components/logo/Logo';
 
-import RegisterImage from '../../assets/register.png'
-import LoginImage from '../../assets/login.png'
-import Register from '../register/Register'
-import Home from '../home/Home'
-
-
+import LoginImage from '../../assets/login.png';
 
 export default function Login() {
 
-    const navigate = useNavigate()
-
-    // const [showLogin, setShowLogin] = useState(false)
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        universityEmail: '',
+        email: '',
         password: ''
-    })
+    });
 
-    const [errors, setErrors] = useState({})
+    const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target
+        const { name, value } = e.target;
 
         setFormData({
             ...formData,
-            [name]: type === 'checkbox' ? checked : value
-        })
+            [name]: value
+        });
 
         setErrors({
             ...errors,
             [name]: ''
-        })
-    }
+        });
+    };
 
     const validate = () => {
-        let newErrors = {}
+        let newErrors = {};
 
-        if (!formData.universityEmail.trim()) {
-            newErrors.universityEmail = 'University Email is required'
+        if (!formData.email.trim()) {
+            newErrors.email = 'Email is required';
         }
 
         if (!formData.password.trim()) {
-            newErrors.password = 'Password is required'
+            newErrors.password = 'Password is required';
         }
 
-        return newErrors
-    }
+        return newErrors;
+    };
 
     const handleSubmit = async () => {
-        const validationErrors = validate()
+
+        const validationErrors = validate();
 
         if (Object.keys(validationErrors).length > 0) {
-            setErrors(validationErrors)
-            return
+            setErrors(validationErrors);
+            return;
         }
 
         try {
-            const res = await loginUser(
-                formData.universityEmail,
+
+            // ✅ LOGIN API CALL
+            const data = await loginUser(
+                formData.email,
                 formData.password
-            )
+            );
 
-            console.log("Login Success:", res.data)
+            // ✅ SAVE TOKEN + USER INFO
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("userId", data.userId);
+            localStorage.setItem("fullName", data.fullName);
+            localStorage.setItem("email", data.email);
 
-            alert("Login Successful")
+            alert("Login Successful");
 
-            // redirect to dashboard (change if needed)
-            navigate("/home")
+            navigate("/home");
 
         } catch (error) {
-            console.log("Login Error:", error.response?.data || error.message)
-            alert("Invalid email or password")
+            console.log(error);
+            alert("Invalid email or password");
         }
-    }
-
-    // 👉 LOGIN SCREEN
-    // if (showLogin) {
-    //     return <Login />
-    // }
+    };
 
     return (
         <div className="register-container">
 
+            {/* LEFT IMAGE */}
             <div className="register-image-container">
+
                 <img
                     src={LoginImage}
                     alt="Login"
                     className="register-image"
                 />
 
-                <div className='templogo'>
+                <div className="templogo">
                     <Logo />
                 </div>
 
                 <div className="register-image-text">
-                    <div className='register-image-text-content'>
+                    <div className="register-image-text-content">
                         <h1>Empowering Student Success</h1>
                         <p>
-                            Join thousands of students and faculty members in
-                            a secure, centralized academic hub designed for the
-                            modern university experience.
+                            Join thousands of students in a secure academic platform.
                         </p>
                     </div>
                 </div>
+
             </div>
 
+            {/* RIGHT FORM */}
             <div className="register-form-container">
 
                 <div className="register-form">
@@ -120,52 +116,43 @@ export default function Login() {
                     <Logo />
 
                     <h2>Welcome Back</h2>
-                    <p>Sign in to access your dashboard and courses.</p>
+                    <p>Sign in to continue</p>
 
-
+                    {/* EMAIL */}
                     <LabelInput
                         label="University Email"
                         type="email"
-                        name="universityEmail"
-                        value={formData.universityEmail}
+                        name="email"
+                        value={formData.email}
                         onChange={handleChange}
-                        placeholder="Enter your university email"
+                        placeholder="Enter your email"
                     />
-                    {errors.universityEmail && <span className="error-text">{errors.universityEmail}</span>}
+                    {errors.email && (
+                        <span className="error-text">{errors.email}</span>
+                    )}
 
+                    {/* PASSWORD */}
+                    <LabelInput
+                        label="Password"
+                        type="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        placeholder="Enter password"
+                    />
+                    {errors.password && (
+                        <span className="error-text">{errors.password}</span>
+                    )}
 
-                    <div>
-                        <LabelInput
-                            label="Password"
-                            type="password"
-                            placeholder="Enter Your Password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                        />
-                        {errors.password && <span className="error-text">{errors.password}</span>}
-                    </div>
-
-
-
-
-
-
-
-
-                    {/* {errors.terms && (
-                        <span className="error-text">{errors.terms}</span>
-                    )} */}
-
+                    {/* BUTTON */}
                     <Button
                         text="Sign In"
                         className="register-button"
                         onClick={handleSubmit}
                     />
 
-
                     <p className="login-link">
-                        dont have an account?{" "}
+                        Don't have an account?{" "}
                         <span
                             onClick={() => navigate('/register')}
                             style={{ color: '#0058BE', cursor: 'pointer' }}
@@ -175,7 +162,8 @@ export default function Login() {
                     </p>
 
                 </div>
+
             </div>
         </div>
-    )
+    );
 }

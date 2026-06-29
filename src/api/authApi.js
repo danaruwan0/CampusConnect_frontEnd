@@ -22,10 +22,12 @@ export const verifyOtp = async (email, otp) => {
 
 // LOGIN
 export const loginUser = async (email, password) => {
-    return await axios.post(`${BASE_URL}/login`, {
+    const res = await axios.post(`${BASE_URL}/login`, {
         email,
         password
     });
+
+    return res.data;
 };
 
 // RESEND OTP
