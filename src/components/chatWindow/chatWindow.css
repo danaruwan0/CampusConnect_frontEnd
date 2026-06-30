@@ -308,3 +308,67 @@
     margin:0 8px;
     flex-shrink:0;
 }
+
+
+.message-footer{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    align-items:center;
+
+    gap:4px;
+
+    margin-top:4px;
+
+}
+
+.message-status{
+
+    display:flex;
+
+    align-items:center;
+
+    font-size:16px;
+
+}
+
+.sent{
+
+    color:#9e9e9e;
+}
+
+.delivered{
+
+    color:#9e9e9e;
+}
+
+.seen{
+
+    color:#53bdeb;
+}
+
+
+/* //////////////// */
+.message-footer{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:5px;
+    margin-top:4px;
+}
+
+.message-status{
+    display:flex;
+    align-items:center;
+    font-size:16px;
+}
+
+.sent{
+    color:#bdbdbd;
+}
+
+.seen{
+    color:#34B7F1;
+}

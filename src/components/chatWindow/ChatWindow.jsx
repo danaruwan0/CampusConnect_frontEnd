@@ -1,12 +1,6 @@
-import React, {
-    useEffect,
-    useRef,
-    useState,
-    useCallback
-} from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 
 import { getConversation, markConversationAsRead } from "../../api/messageApi";
-// import { connectSocket, sendMessage } from "../../services/websocket";
 import defaultProfile from "../../assets/Default profile.jpg";
 
 import "./chatWindow.css";
@@ -14,8 +8,19 @@ import "./chatWindow.css";
 import { getProfile } from "../../api/profileApi";
 
 import { connectSocket, sendMessage, disconnectSocket } from "../../services/websocket";
+import { sendTyping, stopTyping, subscribeTyping } from "../../services/typingSocket";
 
-export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, onlineUsers, setOnlineUsers }) {
+import { MdDone, MdDoneAll } from "react-icons/md";
+
+import { sendSeen, subscribeSeen } from "../../services/seenSocket";
+
+import { getOnlineUsers } from "../../api/statusApi";
+
+export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, onlineUsers, setOnlineUsers, setTypingUsers }) {
+
+    const [typing, setTyping] = useState(false);
+
+    const typingTimeout = useRef(null);
 
     const [messages, setMessages] = useState([]);
     const [text, setText] = useState("");
@@ -68,12 +73,34 @@ export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, 
 
             // Read messages only for selected chat
             await markConversationAsRead(
+
                 currentUserId,
                 selectedUser.userId
+
             );
 
-            // Refresh chat list
+            const hasUnread = data.some(
+
+                msg =>
+
+                    msg.senderId === selectedUser.userId &&
+                    !msg.readStatus
+
+            );
+
+            if (hasUnread) {
+
+                sendSeen(
+
+                    selectedUser.userId,
+                    currentUserId
+
+                );
+
+            }
+
             onNewMessage();
+            // Refresh chat list
 
         } catch (err) {
 
@@ -97,7 +124,36 @@ export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, 
 
     // ---------------- WEBSOCKET ----------------
 
+
     useEffect(() => {
+
+    const loadOnlineUsers = async () => {
+
+        try {
+
+            const users = await getOnlineUsers();
+
+            setOnlineUsers(users);
+
+        } catch (e) {
+
+            console.log(e);
+
+        }
+
+    };
+
+    if(currentUserId){
+
+        loadOnlineUsers();
+
+    }
+
+}, [currentUserId]);
+
+    useEffect(() => {
+
+        
 
         connectSocket(
 
@@ -106,11 +162,17 @@ export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, 
                 onNewMessage();
 
                 if (
+
                     selectedUser &&
+
                     (
+
                         message.senderId === selectedUser.userId ||
+
                         message.receiverId === selectedUser.userId
+
                     )
+
                 ) {
 
                     loadConversation();
@@ -126,7 +188,9 @@ export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, 
                     if (status.online) {
 
                         if (prev.includes(status.userId)) {
+
                             return prev;
+
                         }
 
                         return [...prev, status.userId];
@@ -134,7 +198,9 @@ export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, 
                     }
 
                     return prev.filter(
+
                         id => id !== status.userId
+
                     );
 
                 });
@@ -153,6 +219,107 @@ export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, 
 
     }, [currentUserId]);
 
+
+    useEffect(() => {
+
+        if (!currentUserId) return;
+
+        const subscription = subscribeTyping(
+
+            currentUserId,
+
+            (typingStatus) => {
+
+                // Chat Header
+                if (
+
+                    selectedUser &&
+
+                    typingStatus.senderId === selectedUser.userId
+
+                ) {
+
+                    setTyping(typingStatus.typing);
+
+                }
+
+                // Chat List
+                setTypingUsers(prev => {
+
+                    if (typingStatus.typing) {
+
+                        if (prev.includes(typingStatus.senderId)) {
+
+                            return prev;
+
+                        }
+
+                        return [
+
+                            ...prev,
+
+                            typingStatus.senderId
+
+                        ];
+
+                    }
+
+                    return prev.filter(
+
+                        id => id !== typingStatus.senderId
+
+                    );
+
+                });
+
+            }
+
+        );
+
+        return () => {
+
+            subscription?.unsubscribe();
+
+        };
+
+    }, [
+
+        currentUserId,
+
+        selectedUser,
+
+        setTypingUsers
+
+    ]);
+
+
+
+    useEffect(() => {
+
+        if (!currentUserId) return;
+
+        const subscription = subscribeSeen(
+
+            currentUserId,
+
+            (status) => {
+
+                loadConversation();
+
+                onNewMessage();
+
+            }
+
+        );
+
+        return () => {
+
+            subscription?.unsubscribe();
+
+        };
+
+    }, [currentUserId, loadConversation]);
+
     // ---------------- LOAD WHEN USER CHANGES ----------------
 
 
@@ -166,39 +333,52 @@ export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, 
 
     }, [messages]);
 
+
+    useEffect(() => {
+
+        return () => {
+
+            clearTimeout(typingTimeout.current);
+
+        };
+
+    }, []);
+
     // ---------------- SEND ----------------
 
     const handleSend = () => {
 
         if (!text.trim()) return;
 
-        // sendMessage({
-
-        //     senderId: currentUserId,
-        //     receiverId: selectedUser.userId,
-        //     content: text
-
-        // });
-
-        // setText("");
-
-
-        //test uda
         sendMessage({
 
             senderId: currentUserId,
+
             receiverId: selectedUser.userId,
+
             content: text
 
         });
+
+        stopTyping(
+
+            currentUserId,
+
+            selectedUser.userId
+
+        );
+
+        clearTimeout(typingTimeout.current);
+
+        setTyping(false);
+
+        setText("");
 
         setTimeout(() => {
 
             onNewMessage();
 
         }, 500);
-
-        setText("");
 
     };
 
@@ -256,11 +436,15 @@ export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, 
 
                         {
 
-                            onlineUsers.includes(selectedUser.userId)
+                            typing
 
-                                ? "Online"
+                                ? "Typing..."
 
-                                : "Offline"
+                                : onlineUsers.includes(selectedUser.userId)
+
+                                    ? "Online"
+
+                                    : "Offline"
 
                         }
 
@@ -340,21 +524,45 @@ export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, 
 
                                         msg.sentAt && (
 
-                                            <small>
+                                            <div className="message-footer">
+
+                                                <small>
+
+                                                    {
+
+                                                        new Date(msg.sentAt).toLocaleTimeString(
+                                                            [],
+                                                            {
+                                                                hour: "2-digit",
+                                                                minute: "2-digit"
+                                                            }
+                                                        )
+
+                                                    }
+
+                                                </small>
 
                                                 {
 
-                                                    new Date(msg.sentAt).toLocaleTimeString(
-                                                        [],
-                                                        {
-                                                            hour: "2-digit",
-                                                            minute: "2-digit"
-                                                        }
+                                                    mine && (
+
+                                                        <span className="message-status">
+
+                                                            {
+
+                                                                msg.readStatus
+                                                                    ? <MdDoneAll className="seen" />
+                                                                    : <MdDone className="sent" />
+
+                                                            }
+
+                                                        </span>
+
                                                     )
 
                                                 }
 
-                                            </small>
+                                            </div>
 
                                         )
 
@@ -410,9 +618,58 @@ export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, 
 
                     placeholder="Type message..."
 
-                    onChange={(e) =>
-                        setText(e.target.value)
-                    }
+                    // onChange={(e) =>
+                    //     setText(e.target.value)
+                    // }
+
+                    onChange={(e) => {
+
+                        const value = e.target.value;
+
+                        setText(value);
+
+                        if (!selectedUser) return;
+
+                        if (value.trim()) {
+
+                            sendTyping(
+
+                                currentUserId,
+
+                                selectedUser.userId
+
+                            );
+
+                        } else {
+
+                            stopTyping(
+
+                                currentUserId,
+
+                                selectedUser.userId
+
+                            );
+
+                        }
+
+                        clearTimeout(typingTimeout.current);
+
+                        typingTimeout.current = setTimeout(() => {
+
+                            stopTyping(
+
+                                currentUserId,
+
+                                selectedUser.userId
+
+                            );
+
+                        }, 1000);
+
+                    }}
+
+
+                    //up
 
                     onKeyDown={(e) => {
 

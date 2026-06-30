@@ -26,38 +26,28 @@ export default function Message() {
 
     const [onlineUsers, setOnlineUsers] = useState([]);
 
+    const [typingUsers, setTypingUsers] = useState([]);
+
     return (
 
         <div className="message-page">
 
             <ChatList
-
                 currentUserId={userId}
-
                 selectedUser={selectedUser}
-
                 onSelect={setSelectedUser}
-
                 refreshKey={refreshKey}
-
                 onlineUsers={onlineUsers}
-
-                
-
+                typingUsers={typingUsers}
             />
 
             <ChatWindow
-
                 currentUserId={userId}
-
                 selectedUser={selectedUser}
-
                 onNewMessage={refreshChats}
-
                 onlineUsers={onlineUsers}
-
                 setOnlineUsers={setOnlineUsers}
-
+                setTypingUsers={setTypingUsers}
             />
 
         </div>

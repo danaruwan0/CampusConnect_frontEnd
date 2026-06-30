@@ -1,7 +1,8 @@
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 
-let stompClient = null;
+// let stompClient = null;
+export let stompClient = null;
 
 export const connectSocket = (
     onMessageReceived,
@@ -24,32 +25,18 @@ export const connectSocket = (
             console.log("WebSocket Connected");
 
             // messages
-            // stompClient.subscribe(
-
-            //     `/topic/messages/${userId}`,
-
-            //     (message) => {
-
-            //         onMessageReceived(
-            //             JSON.parse(message.body)
-            //         );
-
-            //     }
-
-            // );
             stompClient.subscribe(
+
                 `/topic/messages/${userId}`,
+
                 (message) => {
-
-                    console.log("SOCKET RECEIVED");
-
-                    console.log(JSON.parse(message.body));
 
                     onMessageReceived(
                         JSON.parse(message.body)
                     );
 
                 }
+
             );
 
             // online users
@@ -79,7 +66,7 @@ export const connectSocket = (
 
                 });
 
-            }, 100);
+            },100);
 
         }
 
@@ -89,15 +76,15 @@ export const connectSocket = (
 
 };
 
-export const sendMessage = (message) => {
+export const sendMessage = (message)=>{
 
-    if (stompClient?.connected) {
+    if(stompClient?.connected){
 
         stompClient.publish({
 
-            destination: "/app/sendMessage",
+            destination:"/app/sendMessage",
 
-            body: JSON.stringify(message)
+            body:JSON.stringify(message)
 
         });
 
@@ -105,15 +92,15 @@ export const sendMessage = (message) => {
 
 };
 
-export const disconnectSocket = (userId) => {
+export const disconnectSocket=(userId)=>{
 
-    if (stompClient?.connected) {
+    if(stompClient?.connected){
 
         stompClient.publish({
 
-            destination: "/app/offline",
+            destination:"/app/offline",
 
-            body: JSON.stringify({
+            body:JSON.stringify({
                 userId
             })
 

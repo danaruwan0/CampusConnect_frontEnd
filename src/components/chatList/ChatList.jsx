@@ -15,7 +15,9 @@ export default function ChatList({
 
     refreshKey,
 
-    onlineUsers = []
+    onlineUsers = [],
+
+    typingUsers = []
 
 }) {
 
@@ -111,6 +113,10 @@ export default function ChatList({
 
                         onlineUsers.includes(chat.userId);
 
+                    const isTyping =
+
+                        typingUsers.includes(chat.userId);
+
                     return (
 
                         <div
@@ -173,9 +179,35 @@ export default function ChatList({
 
                                 </h4>
 
-                                <p>
+                                <p
+                                    style={
 
-                                    {chat.lastMessage || "No messages"}
+                                        isTyping
+
+                                            ? {
+
+                                                color: "#1877f2",
+
+                                                // fontStyle: "italic",
+
+                                                fontWeight: "600"
+
+                                            }
+
+                                            : {}
+
+                                    }
+                                >
+
+                                    {
+
+                                        isTyping
+
+                                            ? "Typing..."
+
+                                            : chat.lastMessage || "No messages"
+
+                                    }
 
                                 </p>
 
