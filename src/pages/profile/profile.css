@@ -224,4 +224,109 @@
     font-size:18px;
 
 }
+
+
+/* ==========================
+   PROFILE NOT FOUND
+========================== */
+
+.profile-not-found{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
+    padding:70px 20px;
+
+}
+
+.profile-not-found-img{
+
+    width:260px;
+
+    max-width:100%;
+
+    margin-bottom:25px;
+
+    user-select:none;
+
+    pointer-events:none;
+
+}
+
+.profile-not-found h2{
+
+    font-size:34px;
+
+    color:#333;
+
+    margin-bottom:10px;
+
+}
+
+.profile-not-found p{
+
+    color:#777;
+
+    font-size:16px;
+
+}
+
+/* ==========================
+   NO POSTS
+========================== */
+
+.no-posts-card{
+
+    background:#fff;
+
+    border-radius:15px;
+
+    padding:35px;
+
+    text-align:center;
+
+    box-shadow:0 3px 12px rgba(0,0,0,.08);
+
+}
+
+.no-posts-img{
+
+    width:230px;
+
+    max-width:100%;
+
+    margin-bottom:20px;
+
+    user-select:none;
+
+    pointer-events:none;
+
+}
+
+.no-posts-card h3{
+
+    font-size:28px;
+
+    color:#333;
+
+    margin-bottom:10px;
+
+}
+
+.no-posts-card p{
+
+    color:#777;
+
+    font-size:15px;
+
+    line-height:1.6;
+
+}
 ```

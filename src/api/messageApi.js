@@ -27,3 +27,23 @@ export const markConversationAsRead = async (
     );
 
 };
+
+// new api add delate 
+
+export const deleteForMe = async (messageId, userId) => {
+
+    const res = await api.put(
+        `/api/messages/delete/me/${messageId}/${userId}`
+    );
+
+    return res.data;
+};
+
+export const deleteForEveryone = async (messageId, userId) => {
+
+    const res = await api.put(
+        `/api/messages/delete/everyone/${messageId}/${userId}`
+    );
+
+    return res.data;
+};

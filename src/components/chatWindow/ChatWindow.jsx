@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 
-import { getConversation, markConversationAsRead } from "../../api/messageApi";
+import { getConversation, markConversationAsRead, deleteForMe, deleteForEveryone } from "../../api/messageApi";
 import defaultProfile from "../../assets/Default profile.jpg";
+import emptyChat from "../../assets/empty-chat.png";
 
 import "./chatWindow.css";
 
@@ -10,11 +11,14 @@ import { getProfile } from "../../api/profileApi";
 import { connectSocket, sendMessage, disconnectSocket } from "../../services/websocket";
 import { sendTyping, stopTyping, subscribeTyping } from "../../services/typingSocket";
 
-import { MdDone, MdDoneAll } from "react-icons/md";
+import { MdDone, MdDoneAll, MdMoreVert, MdDelete } from "react-icons/md";
+import { IoSend } from "react-icons/io5";
 
 import { sendSeen, subscribeSeen } from "../../services/seenSocket";
 
 import { getOnlineUsers } from "../../api/statusApi";
+
+
 
 export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, onlineUsers, setOnlineUsers, setTypingUsers }) {
 
@@ -29,6 +33,80 @@ export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, 
 
 
     const [myProfile, setMyProfile] = useState(null);
+
+
+    const [menuMessage, setMenuMessage] = useState(null);
+
+    const [menuPosition, setMenuPosition] = useState({
+        x: 0,
+        y: 0
+    });
+
+
+    const handleDeleteForMe = async () => {
+
+        console.log("DELETE CLICK");
+
+        try {
+
+            await deleteForMe(menuMessage.id, currentUserId);
+
+            console.log("DELETE SUCCESS");
+
+            setMenuMessage(null);
+
+            loadConversation();
+
+            onNewMessage();
+
+        } catch (err) {
+
+            console.log(err);
+
+        }
+    };
+
+    const handleDeleteForEveryone = async () => {
+
+        try {
+
+            await deleteForEveryone(
+                menuMessage.id,
+                currentUserId
+            );
+
+            setMenuMessage(null);
+
+            loadConversation();
+
+            onNewMessage();
+
+        } catch (err) {
+
+            console.log(err);
+
+        }
+
+    };
+
+
+    useEffect(() => {
+
+        const closeMenu = () => {
+
+            setMenuMessage(null);
+
+        };
+
+        window.addEventListener("click", closeMenu);
+
+        return () => {
+
+            window.removeEventListener("click", closeMenu);
+
+        };
+
+    }, []);
 
     useEffect(() => {
 
@@ -127,52 +205,47 @@ export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, 
 
     useEffect(() => {
 
-    const loadOnlineUsers = async () => {
+        const loadOnlineUsers = async () => {
 
-        try {
+            try {
 
-            const users = await getOnlineUsers();
+                const users = await getOnlineUsers();
 
-            setOnlineUsers(users);
+                setOnlineUsers(users);
 
-        } catch (e) {
+            } catch (e) {
 
-            console.log(e);
+                console.log(e);
+
+            }
+
+        };
+
+        if (currentUserId) {
+
+            loadOnlineUsers();
 
         }
 
-    };
-
-    if(currentUserId){
-
-        loadOnlineUsers();
-
-    }
-
-}, [currentUserId]);
+    }, [currentUserId]);
 
     useEffect(() => {
 
-        
+
 
         connectSocket(
 
+            // Message
             (message) => {
 
                 onNewMessage();
 
                 if (
-
                     selectedUser &&
-
                     (
-
                         message.senderId === selectedUser.userId ||
-
                         message.receiverId === selectedUser.userId
-
                     )
-
                 ) {
 
                     loadConversation();
@@ -181,29 +254,67 @@ export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, 
 
             },
 
+            // Online
             (status) => {
 
                 setOnlineUsers(prev => {
 
                     if (status.online) {
 
-                        if (prev.includes(status.userId)) {
-
+                        if (prev.includes(status.userId))
                             return prev;
-
-                        }
 
                         return [...prev, status.userId];
 
                     }
 
                     return prev.filter(
-
                         id => id !== status.userId
-
                     );
 
                 });
+
+            },
+
+            // Typing
+            (typingStatus) => {
+
+                if (
+                    selectedUser &&
+                    typingStatus.senderId === selectedUser.userId
+                ) {
+
+                    setTyping(typingStatus.typing);
+
+                }
+
+                setTypingUsers(prev => {
+
+                    if (typingStatus.typing) {
+
+                        if (prev.includes(typingStatus.senderId))
+                            return prev;
+
+                        return [
+                            ...prev,
+                            typingStatus.senderId
+                        ];
+
+                    }
+
+                    return prev.filter(
+                        id => id !== typingStatus.senderId
+                    );
+
+                });
+
+            },
+
+            // Seen
+            () => {
+
+                loadConversation();
+                onNewMessage();
 
             },
 
@@ -229,6 +340,8 @@ export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, 
             currentUserId,
 
             (typingStatus) => {
+                console.log(typingStatus);
+
 
                 // Chat Header
                 if (
@@ -390,14 +503,23 @@ export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, 
 
             <div className="chat-window empty">
 
+                <img
+                    src={emptyChat}
+                    alt="Select Chat"
+                    className="empty-chat-image"
+                />
+
                 <h2>Select a chat</h2>
+
+                <p>
+                    Choose a conversation from the left or start a new chat.
+                </p>
 
             </div>
 
         );
 
     }
-
     // ---------------- UI ----------------
 
     return (
@@ -512,6 +634,46 @@ export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, 
                                             ? "mine"
                                             : "other"
                                     }
+
+                                    onContextMenu={(e) => {
+
+                                        e.preventDefault();
+
+                                        const menuWidth = 220;
+                                        const menuHeight = 110;
+                                        const padding = 16;
+
+                                        let x = e.clientX;
+                                        let y = e.clientY;
+
+                                        // Right edge
+                                        if (x + menuWidth > window.innerWidth) {
+                                            x = window.innerWidth - menuWidth - padding;
+                                        }
+
+                                        // Bottom edge
+                                        if (y + menuHeight > window.innerHeight) {
+                                            y = window.innerHeight - menuHeight - padding;
+                                        }
+
+                                        // Left edge
+                                        if (x < padding) {
+                                            x = padding;
+                                        }
+
+                                        // Top edge
+                                        if (y < padding) {
+                                            y = padding;
+                                        }
+
+                                        setMenuMessage(msg);
+
+                                        setMenuPosition({
+                                            x,
+                                            y
+                                        });
+
+                                    }}
                                 >
 
                                     <div>
@@ -625,14 +787,17 @@ export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, 
                     onChange={(e) => {
 
                         const value = e.target.value;
+                        console.log("Typing...", value);
 
                         setText(value);
 
                         if (!selectedUser) return;
 
                         if (value.trim()) {
+                            console.log("Sending typing event");
 
                             sendTyping(
+
 
                                 currentUserId,
 
@@ -683,13 +848,59 @@ export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, 
 
                 />
 
-                <button onClick={handleSend}>
 
-                    Send
-
+                {/* //send btn */}
+                <button onClick={handleSend} className="send-btn">
+                    <IoSend size={22} />
                 </button>
 
             </div>
+
+
+
+            {/* //? */}
+            {
+                menuMessage &&
+
+                <div
+                    className="message-menu"
+                    style={{
+                        left: menuPosition.x,
+                        top: menuPosition.y
+                    }}
+                >
+
+                    <div
+                        className="menu-item"
+                        onClick={handleDeleteForMe}
+                    >
+
+                        <MdDelete />
+
+                        Delete for me
+
+                    </div>
+
+                    {
+                        menuMessage.senderId === currentUserId &&
+
+                        <div
+                            className="menu-item"
+                            onClick={handleDeleteForEveryone}
+                        >
+
+                            <MdDelete />
+
+                            Delete for everyone
+
+                        </div>
+
+                    }
+
+                </div>
+
+            }
+
 
         </div>
 

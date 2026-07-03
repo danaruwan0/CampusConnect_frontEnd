@@ -1,12 +1,13 @@
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 
-// let stompClient = null;
 export let stompClient = null;
 
 export const connectSocket = (
     onMessageReceived,
     onOnlineStatus,
+    onTypingReceived,
+    onSeenReceived,
     userId
 ) => {
 
@@ -24,7 +25,9 @@ export const connectSocket = (
 
             console.log("WebSocket Connected");
 
-            // messages
+            // ==========================
+            // Messages
+            // ==========================
             stompClient.subscribe(
 
                 `/topic/messages/${userId}`,
@@ -39,7 +42,9 @@ export const connectSocket = (
 
             );
 
-            // online users
+            // ==========================
+            // Online Status
+            // ==========================
             stompClient.subscribe(
 
                 "/topic/online",
@@ -54,6 +59,43 @@ export const connectSocket = (
 
             );
 
+            // ==========================
+            // Typing
+            // ==========================
+            stompClient.subscribe(
+
+                `/topic/typing/${userId}`,
+
+                (message) => {
+
+                    onTypingReceived(
+                        JSON.parse(message.body)
+                    );
+
+                }
+
+            );
+
+            // ==========================
+            // Seen
+            // ==========================
+            stompClient.subscribe(
+
+                `/topic/seen/${userId}`,
+
+                (message) => {
+
+                    onSeenReceived(
+                        JSON.parse(message.body)
+                    );
+
+                }
+
+            );
+
+            // ==========================
+            // Notify Online
+            // ==========================
             setTimeout(() => {
 
                 stompClient.publish({
@@ -66,7 +108,21 @@ export const connectSocket = (
 
                 });
 
-            },100);
+            }, 100);
+
+        },
+
+        onDisconnect: () => {
+
+            console.log("WebSocket Disconnected");
+
+        },
+
+        onStompError: (frame) => {
+
+            console.log("Broker Error");
+            console.log(frame.headers["message"]);
+            console.log(frame.body);
 
         }
 
@@ -76,39 +132,42 @@ export const connectSocket = (
 
 };
 
-export const sendMessage = (message)=>{
+// =========================================
+// Send Message
+// =========================================
 
-    if(stompClient?.connected){
+export const sendMessage = (message) => {
 
-        stompClient.publish({
+    if (!stompClient?.connected) return;
 
-            destination:"/app/sendMessage",
+    stompClient.publish({
 
-            body:JSON.stringify(message)
+        destination: "/app/sendMessage",
 
-        });
+        body: JSON.stringify(message)
 
-    }
-
-};
-
-export const disconnectSocket=(userId)=>{
-
-    if(stompClient?.connected){
-
-        stompClient.publish({
-
-            destination:"/app/offline",
-
-            body:JSON.stringify({
-                userId
-            })
-
-        });
-
-        stompClient.deactivate();
-
-    }
+    });
 
 };
 
+// =========================================
+// Disconnect
+// =========================================
+
+export const disconnectSocket = (userId) => {
+
+    if (!stompClient?.connected) return;
+
+    stompClient.publish({
+
+        destination: "/app/offline",
+
+        body: JSON.stringify({
+            userId
+        })
+
+    });
+
+    stompClient.deactivate();
+
+};

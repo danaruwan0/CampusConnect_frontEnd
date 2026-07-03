@@ -7,6 +7,11 @@ import { getSuggestions, followUser } from "../../api/followApi";
 import { getProfile } from "../../api/profileApi";
 import PostCard from "../../components/postCard/PostCard";
 
+// defaultProfile image
+import defaultProfile from "../../assets/Default profile.jpg";
+import noSuggestions from "../../assets/No suggestions.png";
+
+
 
 export default function Home() {
 
@@ -17,7 +22,7 @@ export default function Home() {
     const [suggestions, setSuggestions] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const handleComment = () => {};
+    const handleComment = () => { };
 
     useEffect(() => {
         loadData();
@@ -81,7 +86,7 @@ export default function Home() {
         // react API call
     };
 
-    
+
 
     return (
         <div>
@@ -92,10 +97,16 @@ export default function Home() {
                 {/* LEFT PROFILE */}
                 <div className="left-card">
 
+                    {/* //youse not hane prophile piccher , set defult prophile picher */}
+                    {/* <defaultProfile/> */}
+
                     <img
-                        src={profile?.profileImage || "https://i.pravatar.cc/150"}
-                        className="profile-img"
+                        src={profile?.profileImage || defaultProfile}
                         alt="profile"
+                        className="profile-img"
+                        onError={(e) => {
+                            e.target.src = defaultProfile;
+                        }}
                     />
 
                     <h3>{profile?.fullName}</h3>
@@ -126,25 +137,51 @@ export default function Home() {
 
                 </div>
 
-              
+
 
                 {/* RIGHT SUGGESTIONS */}
                 <div className="right-card">
 
+
+
+
                     <h3>People You May Know</h3>
 
                     {suggestions.length === 0 ? (
-                        <p>No suggestions</p>
+
+                        <div className="no-suggestions">
+
+                            <img
+                                src={noSuggestions}
+                                alt="No Suggestions"
+                                className="no-suggestions-img"
+                            />
+                            
+
+                            <h4>No Suggestions</h4>
+
+                            <p>
+                                You're connected with everyone for now.
+                            </p>
+
+                        </div>
+
+                        
+
                     ) : (
+
                         suggestions.map(user => (
+
                             <div key={user.userId} className="suggestion">
 
                                 <div>
+
                                     <p style={{ margin: 0 }}>
                                         {user.fullName}
                                     </p>
 
                                     <small>{user.email}</small>
+
                                 </div>
 
                                 <button
@@ -154,8 +191,11 @@ export default function Home() {
                                 </button>
 
                             </div>
+
                         ))
+
                     )}
+
 
                 </div>
 

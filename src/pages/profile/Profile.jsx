@@ -7,6 +7,8 @@ import PostCard from "../../components/postCard/PostCard";
 import "./profile.css";
 
 import defaultProfile from "../../assets/Default profile.jpg";
+import profilenotfound from "../../assets/Profile Not Found.png";
+import noPostsYet from "../../assets/No Posts Yet.png";
 
 import { getProfile } from "../../api/profileApi";
 
@@ -123,13 +125,20 @@ export default function Profile() {
             <>
                 <Navbar />
 
-                <div
-                    style={{
-                        textAlign: "center",
-                        marginTop: "70px"
-                    }}
-                >
+                <div className="profile-not-found">
+
+                    <img
+                        src={profilenotfound}
+                        alt="Profile Not Found"
+                        className="profile-not-found-img"
+                    />
+
                     <h2>Profile Not Found</h2>
+
+                    <p>
+                        The profile you're looking for doesn't exist.
+                    </p>
+
                 </div>
 
             </>
@@ -262,36 +271,36 @@ export default function Profile() {
 
                     <div className="profile-buttons">
 
-    {loggedUserId === profileUserId ? (
+                        {loggedUserId === profileUserId ? (
 
-        <button
-            onClick={() => navigate("/profile/edit")}
-        >
-            Edit Profile
-        </button>
+                            <button
+                                onClick={() => navigate("/profile/edit")}
+                            >
+                                Edit Profile
+                            </button>
 
-    ) : (
+                        ) : (
 
-        <>
-            <FollowButton
-                followerId={loggedUserId}
-                followingId={profileUserId}
-            />
+                            <>
+                                <FollowButton
+                                    followerId={loggedUserId}
+                                    followingId={profileUserId}
+                                />
 
-            <button
-                className="message-btn"
-                onClick={() =>
-                    navigate(`/message/${profileUserId}`)
-                }
-            >
-                <FaFacebookMessenger />
-                Message
-            </button>
-        </>
+                                <button
+                                    className="message-btn"
+                                    onClick={() =>
+                                        navigate(`/message/${profileUserId}`)
+                                    }
+                                >
+                                    <FaFacebookMessenger />
+                                    Message
+                                </button>
+                            </>
 
-    )}
+                        )}
 
-</div>
+                    </div>
 
                 </div>
 
@@ -306,32 +315,21 @@ export default function Profile() {
                     </h2>
                     {posts.length === 0 ? (
 
-                        <div
-                            style={{
-                                background: "#ffffff",
-                                padding: "30px",
-                                borderRadius: "12px",
-                                textAlign: "center",
-                                boxShadow: "0 2px 10px rgba(0,0,0,0.08)"
-                            }}
-                        >
-                            <h3
-                                style={{
-                                    marginBottom: "10px"
-                                }}
-                            >
-                                No Posts Yet
-                            </h3>
+                        <div className="no-posts-card">
 
-                            <p
-                                style={{
-                                    color: "#777"
-                                }}
-                            >
+                            <img
+                                src={noPostsYet}
+                                alt="No Posts Yet"
+                                className="no-posts-img"
+                            />
+
+                            <h3>No Posts Yet</h3>
+
+                            <p>
                                 You haven't shared any posts yet.
                             </p>
-                        </div>
 
+                        </div>
                     ) : (
 
                         posts.map((post) => (

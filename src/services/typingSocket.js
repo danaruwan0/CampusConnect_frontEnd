@@ -3,7 +3,14 @@ import { stompClient } from "./websocket";
 // Send Typing
 export const sendTyping = (senderId, receiverId) => {
 
-    if (!stompClient?.connected) return;
+    console.log("sendTyping() called");
+
+    if (!stompClient?.connected) {
+        console.log("Socket NOT connected");
+        return;
+    }
+
+    console.log("Socket connected");
 
     stompClient.publish({
 
@@ -19,12 +26,20 @@ export const sendTyping = (senderId, receiverId) => {
 
     });
 
+    console.log("Typing Event Sent");
+
 };
+
 
 // Stop Typing
 export const stopTyping = (senderId, receiverId) => {
 
-    if (!stompClient?.connected) return;
+    console.log("stopTyping() called");
+
+    if (!stompClient?.connected) {
+        console.log("Socket NOT connected");
+        return;
+    }
 
     stompClient.publish({
 
@@ -45,13 +60,15 @@ export const stopTyping = (senderId, receiverId) => {
 // Subscribe
 export const subscribeTyping = (userId, callback) => {
 
-    if (!stompClient?.connected) return;
+    if (!stompClient?.connected) return null;
 
-    stompClient.subscribe(
+    return stompClient.subscribe(
 
         `/topic/typing/${userId}`,
 
         (message) => {
+
+            console.log("Typing event received", message.body);
 
             callback(JSON.parse(message.body));
 
@@ -60,4 +77,3 @@ export const subscribeTyping = (userId, callback) => {
     );
 
 };
-

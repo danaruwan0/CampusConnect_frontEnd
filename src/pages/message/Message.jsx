@@ -1,14 +1,19 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 import ChatList from "../../components/chatList/ChatList";
 import ChatWindow from "../../components/chatWindow/ChatWindow";
+
+import { getProfile } from "../../api/profileApi";
 
 import "./message.css";
 
 export default function Message() {
 
-    const userId =
+    const currentUserId =
         Number(localStorage.getItem("userId"));
+
+    const { userId: chatUserId } = useParams();
 
     const [selectedUser, setSelectedUser] =
         useState(null);
@@ -16,38 +21,100 @@ export default function Message() {
     const [refreshKey, setRefreshKey] =
         useState(0);
 
+    const [onlineUsers, setOnlineUsers] =
+        useState([]);
+
+    const [typingUsers, setTypingUsers] =
+        useState([]);
+
+    // ----------------------------
+    // Refresh Chat List
+    // ----------------------------
+
     const refreshChats = () => {
 
         setRefreshKey(prev => prev + 1);
-        //log
+
         console.log("REFRESH CHATS");
 
     };
 
-    const [onlineUsers, setOnlineUsers] = useState([]);
+    // ----------------------------
+    // Open chat directly from Profile
+    // ----------------------------
 
-    const [typingUsers, setTypingUsers] = useState([]);
+    useEffect(() => {
+
+        if (!chatUserId) return;
+
+        const loadSelectedUser = async () => {
+
+            try {
+
+                const profile = await getProfile(
+                    Number(chatUserId)
+                );
+
+                setSelectedUser({
+
+                    userId: Number(chatUserId),
+
+                    fullName: profile.fullName,
+
+                    email: profile.email,
+
+                    profileImage: profile.profileImage,
+
+                    major: profile.major
+
+                });
+
+            } catch (err) {
+
+                console.log(err);
+
+            }
+
+        };
+
+        loadSelectedUser();
+
+    }, [chatUserId]);
 
     return (
 
         <div className="message-page">
 
             <ChatList
-                currentUserId={userId}
+
+                currentUserId={currentUserId}
+
                 selectedUser={selectedUser}
+
                 onSelect={setSelectedUser}
+
                 refreshKey={refreshKey}
+
                 onlineUsers={onlineUsers}
+
                 typingUsers={typingUsers}
+
             />
 
             <ChatWindow
-                currentUserId={userId}
+
+                currentUserId={currentUserId}
+
                 selectedUser={selectedUser}
+
                 onNewMessage={refreshChats}
+
                 onlineUsers={onlineUsers}
+
                 setOnlineUsers={setOnlineUsers}
+
                 setTypingUsers={setTypingUsers}
+
             />
 
         </div>
