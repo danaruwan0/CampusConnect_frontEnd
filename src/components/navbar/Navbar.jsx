@@ -6,6 +6,20 @@ import { useNavigate } from "react-router-dom";
 import { getProfile } from "../../api/profileApi";
 import defaultProfile from "../../assets/Default profile.jpg";
 
+import { FiCpu } from "react-icons/fi";
+import { FiMessageCircle } from "react-icons/fi";
+import { FaRobot } from "react-icons/fa6";
+import { GiArtificialIntelligence } from "react-icons/gi";
+
+import { HiSparkles } from "react-icons/hi2";
+
+// import { Astroid } from 'lucide-react';
+// import { Sparkles } from "lucide-react";
+// import { Stars } from "lucide-react";
+
+
+
+
 export default function Navbar() {
 
     const userId = localStorage.getItem("userId");
@@ -160,6 +174,16 @@ export default function Navbar() {
                     className="notification"
                 >
                     <FiBell />
+                </div>
+
+                {/* add ai chat page  */}
+                <div 
+                    className="notification"
+                    onClick={() => navigate("/ai")}
+
+                >
+                     {/* <Astroid /> */}
+                     <HiSparkles  />
                 </div>
 
                 <img

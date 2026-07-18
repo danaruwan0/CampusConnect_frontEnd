@@ -1,0 +1,307 @@
+/* =========================
+   OVERLAY
+========================= */
+
+.create-post-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    padding: 10px;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.create-post-modal {
+    width: 100%;
+    max-width: 600px;
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    animation: popup 0.2s ease-in-out;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* animation */
+@keyframes popup {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.create-post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 18px;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+}
+
+.create-post-header h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #1877f2;
+}
+
+.close-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: none;
+    background: #f0f2f5;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.close-btn:hover {
+    background: #ddd;
+}
+
+/* =========================
+   USER SECTION
+========================= */
+
+.create-post-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 18px;
+}
+
+.create-post-user img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #1877f2;
+}
+
+.create-post-user h4 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.create-post-user span {
+    font-size: 12px;
+    color: gray;
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+.post-title {
+    width: calc(100% - 36px);
+    margin: 10px 18px;
+    padding: 12px;
+    font-size: 14px;
+    outline: none;
+}
+
+.post-title:focus {
+    border-color: #1877f2;
+}
+
+.post-content {
+    width: calc(100% - 36px);
+    margin: 10px 18px;
+    padding: 12px;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+}
+
+.post-content:focus {
+    border-color: #1877f2;
+}
+
+/* =========================
+   PREVIEW BOX (IMPORTANT PART 🔥)
+========================= */
+
+.preview-box {
+    position: relative;
+    width: calc(100% - 36px);
+    margin: 12px 18px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+    border: 1px solid #ddd;
+}
+
+/* IMAGE - IMPORTANT FIX */
+.preview-box img {
+    width: 100%;
+    height: auto;
+    max-height: 450px;
+    object-fit: contain;
+    display: block;
+}
+
+/* VIDEO */
+.preview-box video {
+    width: 100%;
+    height: auto;
+    max-height: 450px;
+    object-fit: contain;
+    display: block;
+}
+
+/* REMOVE BUTTON */
+.remove-media-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 35px;
+    height: 35px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.remove-media-btn:hover {
+    background: red;
+}
+
+/* =========================
+   UPLOAD AREA
+========================= */
+
+.upload-area {
+    margin: 12px 18px;
+    padding: 20px;
+    border: 2px dashed #bbb;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    background: #fafafa;
+    transition: 0.2s;
+}
+
+.upload-area:hover {
+    border-color: #1877f2;
+    background: #f5f9ff;
+}
+
+.upload-icons {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    font-size: 28px;
+    color: #1877f2;
+    margin-bottom: 8px;
+}
+
+.upload-area p {
+    font-size: 13px;
+    color: #555;
+    margin: 0;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.post-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 14px 18px;
+    border-top: 1px solid #eee;
+}
+
+.cancel-post {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #e4e6eb;
+    cursor: pointer;
+}
+
+.cancel-post:hover {
+    background: #d6d8dc;
+}
+
+.submit-post {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #1877f2;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.submit-post:hover {
+    background: #145fd1;
+}
+
+.submit-post:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* =========================
+   🔥 MOBILE FULL SCREEN (425px)
+========================= */
+
+@media (max-width: 425px) {
+
+    .create-post-overlay {
+        padding: 0;
+        align-items: stretch;
+    }
+
+    .create-post-modal {
+        width: 100%;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+
+    .preview-box img,
+    .preview-box video {
+        max-height: 300px;
+    }
+
+    .post-buttons {
+        flex-direction: column;
+    }
+
+    .cancel-post,
+    .submit-post {
+        width: 100%;
+        justify-content: center;
+    }
+}

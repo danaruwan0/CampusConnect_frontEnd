@@ -102,6 +102,15 @@
 
 }
 
+
+.reaction-btn.active{
+
+    background:#e7f3ff;
+
+    color:#1877f2;
+
+}
+
 /* Responsive */
 
 @media(max-width:768px){

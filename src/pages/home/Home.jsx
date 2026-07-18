@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../components/navbar/Navbar";
 import "./home.css";
 
-import { getFeed } from "../../api/postApi";
+// import { getFeed } from "../../api/postApi";
+import { getFeed, reactPost, removeReaction, sharePost } from "../../api/postApi";
 import { getSuggestions, followUser } from "../../api/followApi";
 import { getProfile } from "../../api/profileApi";
 import PostCard from "../../components/postCard/PostCard";
@@ -76,16 +77,53 @@ export default function Home() {
 
     console.log("USER ID:", userId);
 
-    const handleReact = async (
-        postId,
-        type
-    ) => {
+    const handleReact = async (postId, type) => {
 
-        console.log(postId, type);
+        try {
 
-        // react API call
+            await reactPost(postId, userId, type);
+
+            setFeed(prevFeed =>
+
+                prevFeed.map(post =>
+
+                    post.postId === postId
+                        ? {
+                            ...post,
+                            reactionCount: post.reactionCount + 1
+                        }
+                        : post
+
+                )
+
+            );
+
+        } catch (err) {
+
+            console.log(err);
+
+        }
+
     };
 
+
+
+    //new 
+    const handleShare = async (postId) => {
+
+        try {
+
+            await sharePost(postId, userId);
+
+            loadData();
+
+        } catch (err) {
+
+            console.log(err);
+
+        }
+
+    };
 
 
     return (
@@ -97,8 +135,7 @@ export default function Home() {
                 {/* LEFT PROFILE */}
                 <div className="left-card">
 
-                    {/* //youse not hane prophile piccher , set defult prophile picher */}
-                    {/* <defaultProfile/> */}
+                    
 
                     <img
                         src={profile?.profileImage || defaultProfile}
@@ -131,6 +168,8 @@ export default function Home() {
                             currentUserId={userId}
                             onReact={handleReact}
                             onComment={handleComment}
+                        // onShare={loadFeed}
+                            onShare={handleShare}
                         />
 
                     ))}
@@ -156,7 +195,7 @@ export default function Home() {
                                 alt="No Suggestions"
                                 className="no-suggestions-img"
                             />
-                            
+
 
                             <h4>No Suggestions</h4>
 
@@ -166,7 +205,7 @@ export default function Home() {
 
                         </div>
 
-                        
+
 
                     ) : (
 

@@ -7,47 +7,196 @@ import {
     FaRegCommentDots
 } from "react-icons/fa";
 
+
+import {
+    reactPost,
+    removeReaction
+} from "../../api/postApi";
+
+
+import { useState } from "react";
+
+
 export default function ReactionBar({
     post,
-    onReact,
-    onComment
+    onComment,
+    onReact
 }) {
+
+
+    const userId =
+        Number(localStorage.getItem("userId"));
+
+
+    const [selectedReaction, setSelectedReaction] =
+        useState(null);
+
+
+
+    const handleReaction = async(type)=>{
+
+
+        try{
+
+
+            if(selectedReaction === type){
+
+
+                await removeReaction(
+                    post.postId,
+                    userId
+                );
+
+
+                setSelectedReaction(null);
+
+
+            }
+
+            else{
+
+
+                await reactPost(
+                    post.postId,
+                    userId,
+                    type
+                );
+
+
+                setSelectedReaction(type);
+
+
+            }
+
+
+            // refresh profile data
+            if(onReact){
+                onReact(
+                    post.postId,
+                    type
+                );
+            }
+
+
+        }
+
+        catch(err){
+
+            console.log(err);
+
+        }
+
+
+    };
+
+
+
 
     return (
 
         <div className="reaction-bar">
 
-            <button
-                className="reaction-btn"
-                onClick={() => onReact(post.postId, "LIKE")}
-            >
-                <FaRegThumbsUp className="icon like" />
-                <span>Like</span>
-            </button>
 
             <button
-                className="reaction-btn"
-                onClick={() => onReact(post.postId, "LOVE")}
+
+                className={
+                    selectedReaction==="LIKE"
+                    ?
+                    "reaction-btn active"
+                    :
+                    "reaction-btn"
+                }
+
+                onClick={()=>
+                    handleReaction("LIKE")
+                }
+
             >
-                <FaHeart className="icon love" />
-                <span>Love</span>
+
+                <FaRegThumbsUp/>
+
+                <span>
+                    Like
+                </span>
+
             </button>
 
-            <button
-                className="reaction-btn"
-                onClick={() => onReact(post.postId, "HAHA")}
-            >
-                <FaLaughSquint className="icon haha" />
-                <span>Haha</span>
-            </button>
+
+
 
             <button
-                className="reaction-btn"
-                onClick={() => onComment(post.postId)}
+
+                className={
+                    selectedReaction==="LOVE"
+                    ?
+                    "reaction-btn active"
+                    :
+                    "reaction-btn"
+                }
+
+
+                onClick={()=>
+                    handleReaction("LOVE")
+                }
+
             >
-                <FaRegCommentDots className="icon comment" />
-                <span>Comment</span>
+
+                <FaHeart/>
+
+                <span>
+                    Love
+                </span>
+
             </button>
+
+
+
+
+            <button
+
+                className={
+                    selectedReaction==="HAHA"
+                    ?
+                    "reaction-btn active"
+                    :
+                    "reaction-btn"
+                }
+
+
+                onClick={()=>
+                    handleReaction("HAHA")
+                }
+
+            >
+
+                <FaLaughSquint/>
+
+                <span>
+                    Haha
+                </span>
+
+            </button>
+
+
+
+
+            <button
+
+                className="reaction-btn"
+
+                onClick={onComment}
+
+            >
+
+                <FaRegCommentDots/>
+
+                <span>
+                    Comment
+                </span>
+
+            </button>
+
+
 
         </div>
 

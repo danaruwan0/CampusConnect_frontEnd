@@ -20,11 +20,15 @@ import { getUserPosts } from "../../api/postApi";
 import FollowButton from "../../components/followButton/FollowButton";
 import { FaFacebookMessenger } from "react-icons/fa";
 
+import CreatePostModal from "../../components/createPost/CreatePostModal";
+
+import { reactPost,  sharePost } from "../../api/postApi";
+
 
 //
 
-
 export default function Profile() {
+
 
     const navigate = useNavigate();
 
@@ -46,6 +50,9 @@ export default function Profile() {
     const [posts, setPosts] = useState([]);
 
     const [loading, setLoading] = useState(true);
+
+    //new state for create post modal
+    const [showCreatePost, setShowCreatePost] = useState(false);
 
     useEffect(() => {
         loadProfile();
@@ -75,6 +82,8 @@ export default function Profile() {
                 getUserPosts(profileUserId)
 
             ]);
+
+            console.log("USER POSTS =", userPosts);
 
             setProfile(profileData);
 
@@ -147,6 +156,84 @@ export default function Profile() {
 
     }
 
+    // Function to handle post deletion
+    const handleDeletePost = (postId) => {
+
+        setPosts(prevPosts =>
+            prevPosts.filter(post => post.postId !== postId)
+        );
+
+    };
+
+
+
+    // Function to handle reactions  TODAY ADD
+    const handleReaction = async (
+        postId,
+        reactionType
+    ) => {
+
+        try {
+
+            await reactPost(
+                postId,
+                loggedUserId,
+                reactionType
+            );
+
+
+            loadProfile();
+
+
+        } catch (err) {
+
+            console.log(err);
+
+        }
+
+    };
+
+
+    //new add
+    const handleCommentAdded = (postId) => {
+
+        setPosts(prevPosts =>
+
+            prevPosts.map(post =>
+
+                post.postId === postId
+                    ? {
+                        ...post,
+                        commentCount: post.commentCount + 1
+                    }
+                    : post
+
+            )
+
+        );
+
+    };
+
+
+    const handleShare = async (postId) => {
+
+    try {
+
+        await sharePost(postId, loggedUserId);
+
+        loadProfile();
+
+    } catch (err) {
+
+        console.log(err);
+
+    }
+
+};
+
+
+
+
     return (
 
         <>
@@ -201,10 +288,8 @@ export default function Profile() {
 
                     </h2>
 
-                    <p className="email">
-
+                    <p className="email" style={{ color: "#1877f2" }}>
                         {profile.email}
-
                     </p>
 
                     {
@@ -224,6 +309,56 @@ export default function Profile() {
                         {profile.bio || "No bio available"}
 
                     </p>
+
+
+                    <div className="profile-details">
+
+                        <p>
+                            <strong>University</strong>
+                            <span>{profile.university}</span>
+                        </p>
+
+                        <p>
+                            <strong>Batch</strong>
+                            <span>{profile.batchYear}</span>
+                        </p>
+
+                        <p>
+                            <strong>Location</strong>
+                            <span>{profile.location}</span>
+                        </p>
+
+                        <p>
+                            <strong>Phone</strong>
+                            <span>{profile.phone}</span>
+                        </p>
+
+                        <p>
+                            <strong>Skills</strong>
+                            <span>{profile.skills}</span>
+                        </p>
+
+                        <p>
+                            <strong >GitHub</strong>
+                            <a href={profile.githubUrl} target="_blank" rel="noreferrer">
+                                Visit GitHub
+                            </a>
+                        </p>
+
+                        <p>
+                            <strong >LinkedIn</strong>
+                            <a href={profile.linkedinUrl} target="_blank" rel="noreferrer">
+                                Visit LinkedIn
+                            </a>
+                        </p>
+
+                        <p>
+                            <strong >Portfolio</strong>
+                            <a href={profile.website} target="_blank" rel="noreferrer">
+                                Visit Website
+                            </a>
+                        </p>
+                    </div>
 
                     {/* STATS */}
 
@@ -273,11 +408,23 @@ export default function Profile() {
 
                         {loggedUserId === profileUserId ? (
 
-                            <button
-                                onClick={() => navigate("/profile/edit")}
-                            >
-                                Edit Profile
-                            </button>
+                            <>
+                                <button
+                                    onClick={() => navigate("/profile/edit")}
+                                >
+                                    Edit Profile
+                                </button>
+
+                                <button
+                                    className="create-post-btn"
+                                    onClick={() => setShowCreatePost(true)}
+                                >
+                                    Create Post
+                                </button>
+                            </>
+
+
+
 
                         ) : (
 
@@ -337,7 +484,20 @@ export default function Profile() {
                             <PostCard
                                 key={post.postId}
                                 post={post}
-                                currentUserId={userId}
+                                // currentUserId={userId}
+                                currentUserId={loggedUserId}
+
+
+                                //new add
+                                onCommentAdded={handleCommentAdded}
+
+                                //new add
+                                onReact={handleReaction}
+                                
+                                //new add
+                                onDelete={handleDeletePost}
+
+                                onShare={handleShare}
                             />
 
                         ))
@@ -345,6 +505,17 @@ export default function Profile() {
                     )}
 
                 </div>
+
+
+                <CreatePostModal
+
+                    open={showCreatePost}
+
+                    onClose={() => setShowCreatePost(false)}
+
+                    onSuccess={loadProfile}
+
+                />
 
             </div>
 

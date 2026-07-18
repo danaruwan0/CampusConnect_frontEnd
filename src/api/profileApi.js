@@ -1,26 +1,6 @@
-// import axios from "axios";
-
-// const API =
-//     "http://localhost:8081/api/profile";
-
-// export const getProfile =
-//     async (userId) => {
-
-//         const res =
-//             await axios.get(
-//                 `${API}/${userId}`
-//             );
-
-//         return res.data;
-//     };
 
 
 import api from "./axios";
-
-// export const getProfile = async (userId) => {
-//     const res = await api.get(`/api/profile/${userId}`);
-//     return res.data;
-// };
 
 
 

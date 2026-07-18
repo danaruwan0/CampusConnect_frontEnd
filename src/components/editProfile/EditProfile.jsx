@@ -31,12 +31,27 @@ export default function EditProfile() {
         "https://images.unsplash.com/photo-1503264116251-35a269479413"
     );
 
+    // const [formData, setFormData] = useState({
+    //     fullName: "",
+    //     email: "",
+    //     bio: "",
+    //     major: "",
+    //     batchYear: ""
+    // });
+
     const [formData, setFormData] = useState({
         fullName: "",
         email: "",
-        bio: "",
         major: "",
-        batchYear: ""
+        batchYear: "",
+        university: "",
+        location: "",
+        phone: "",
+        bio: "",
+        skills: "",
+        githubUrl: "",
+        linkedinUrl: "",
+        website: ""
     });
 
     useEffect(() => {
@@ -51,12 +66,29 @@ export default function EditProfile() {
 
             const data = await getProfile(userId);
 
+            // setFormData({
+            //     fullName: data.fullName || "",
+            //     email: data.email || "",
+            //     bio: data.bio || "",
+            //     major: data.major || "",
+            //     batchYear: data.batchYear || ""
+            // });
+
             setFormData({
+
                 fullName: data.fullName || "",
                 email: data.email || "",
-                bio: data.bio || "",
                 major: data.major || "",
-                batchYear: data.batchYear || ""
+                batchYear: data.batchYear || "",
+                university: data.university || "",
+                location: data.location || "",
+                phone: data.phone || "",
+                bio: data.bio || "",
+                skills: data.skills || "",
+                githubUrl: data.githubUrl || "",
+                linkedinUrl: data.linkedinUrl || "",
+                website: data.website || ""
+
             });
 
             if (data.profileImage) {
@@ -119,12 +151,29 @@ export default function EditProfile() {
 
             setSaving(true);
 
+            // await updateProfile(userId, {
+
+            //     fullName: formData.fullName,
+            //     bio: formData.bio,
+            //     major: formData.major,
+            //     batchYear: formData.batchYear
+
+            // });
+
             await updateProfile(userId, {
 
                 fullName: formData.fullName,
                 bio: formData.bio,
                 major: formData.major,
-                batchYear: formData.batchYear
+                batchYear: formData.batchYear,
+
+                university: formData.university,
+                location: formData.location,
+                phone: formData.phone,
+                skills: formData.skills,
+                githubUrl: formData.githubUrl,
+                linkedinUrl: formData.linkedinUrl,
+                website: formData.website
 
             });
 
@@ -252,8 +301,7 @@ export default function EditProfile() {
                     </div>
 
                     <div className="form-group">
-
-                        <label>Email</label>
+                        <label>Campus Email</label>
 
                         <input
                             type="email"
@@ -261,6 +309,9 @@ export default function EditProfile() {
                             disabled
                         />
 
+                        <small className="field-note">
+                            This is your verified campus email and cannot be changed.
+                        </small>
                     </div>
 
                     <div className="form-group">
@@ -300,6 +351,89 @@ export default function EditProfile() {
                             onChange={handleChange}
                         />
 
+                    </div>
+
+                    {/* //new add part */}
+
+                    <div className="form-group">
+                        <label>University</label>
+
+                        <input
+                            type="text"
+                            name="university"
+                            value={formData.university}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Location</label>
+
+                        <input
+                            type="text"
+                            name="location"
+                            value={formData.location}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Phone Number</label>
+
+                        <input
+                            type="text"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Skills</label>
+
+                        <input
+                            type="text"
+                            name="skills"
+                            value={formData.skills}
+                            onChange={handleChange}
+                            placeholder="Java, React, Spring Boot"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>GitHub</label>
+
+                        <input
+                            type="url"
+                            name="githubUrl"
+                            value={formData.githubUrl}
+                            onChange={handleChange}
+                            placeholder="https://github.com/username"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>LinkedIn</label>
+
+                        <input
+                            type="url"
+                            name="linkedinUrl"
+                            value={formData.linkedinUrl}
+                            onChange={handleChange}
+                            placeholder="https://linkedin.com/in/username"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Portfolio Website</label>
+
+                        <input
+                            type="url"
+                            name="website"
+                            value={formData.website}
+                            onChange={handleChange}
+                            placeholder="https://yourwebsite.com"
+                        />
                     </div>
 
                     <div className="button-group">

@@ -9,6 +9,8 @@ import Message from '../pages/message/Message'
 
 import EditProfile from '../components/editProfile/EditProfile'
 
+import Ai from '../pages/ai/Ai'
+
 function App() {
   return (
     <BrowserRouter>
@@ -41,6 +43,8 @@ function App() {
         <Route path="/profile/:userId" element={<Profile />} />
 
         <Route path="/message/:userId" element={<Message />} />
+
+        <Route path="/ai" element={<Ai />} />
 
 
         
