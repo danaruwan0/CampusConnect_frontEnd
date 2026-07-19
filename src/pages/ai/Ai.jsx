@@ -1,56 +1,157 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./ai.css";
+
+import Navbar from "../../components/navbar/Navbar";
+
 import api from "../../api/axios";
+import { getProfile } from "../../api/profileApi";
 
-
-// compornet import
-import TypingIndicator from "../../components/ai/TypingIndicator";
 import ChatBubble from "../../components/ai/ChatBubble";
 import ChatHeader from "../../components/ai/ChatHeader";
 import ChatInput from "../../components/ai/ChatInput";
+import TypingIndicator from "../../components/ai/TypingIndicator";
+
+import defaultProfile from "../../assets/Default profile.jpg";
+import aiAvatar from "../../assets/ai.png";
+
+import { HiSparkles } from "react-icons/hi2";
 
 export default function Ai() {
 
+    const loggedUserId = Number(localStorage.getItem("userId"));
+
+    const [profile, setProfile] = useState(null);
+
+    const [messages, setMessages] = useState([]);
+
     const [input, setInput] = useState("");
-    const [reply, setReply] = useState("");
+
     const [loading, setLoading] = useState(false);
+
+    const bottomRef = useRef(null);
+
+    useEffect(() => {
+        loadProfile();
+    }, []);
+
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({
+            behavior: "smooth"
+        });
+    }, [messages, loading]);
+
+    const loadProfile = async () => {
+
+        try {
+
+            const data = await getProfile(loggedUserId);
+
+            setProfile(data);
+
+        } catch (err) {
+
+            console.log(err);
+
+        }
+
+    };
 
     const sendMessage = async () => {
 
         if (input.trim() === "") return;
 
+        const userMessage = {
+
+            id: Date.now(),
+
+            sender: "user",
+
+            text: input,
+
+            time: new Date().toLocaleTimeString([], {
+
+                hour: "2-digit",
+
+                minute: "2-digit"
+
+            })
+
+        };
+
+        setMessages(prev => [...prev, userMessage]);
+
+        const question = input;
+
+        setInput("");
+
         setLoading(true);
-        setReply("");
 
         try {
 
             const response = await api.post("/api/ai/chat", {
-                message: input
+
+                message: question
+
             });
 
-            console.log(response.data);
+            let aiReply = "No response.";
 
-            // Hugging Face Chat Completion Response
             if (
+
                 response.data &&
                 response.data.choices &&
                 response.data.choices.length > 0
+
             ) {
-                setReply(response.data.choices[0].message.content);
-            } else {
-                setReply("No response received.");
+
+                aiReply =
+                    response.data.choices[0].message.content;
+
             }
+
+            const aiMessage = {
+
+                id: Date.now() + 1,
+
+                sender: "ai",
+
+                text: aiReply,
+
+                time: new Date().toLocaleTimeString([], {
+
+                    hour: "2-digit",
+
+                    minute: "2-digit"
+
+                })
+
+            };
+
+            setMessages(prev => [...prev, aiMessage]);
 
         } catch (err) {
 
-            console.error(err);
+            console.log(err);
 
-            if (err.response) {
-                console.log(err.response.data);
-                setReply("Error : " + JSON.stringify(err.response.data));
-            } else {
-                setReply("Unable to connect to server.");
-            }
+            const errorMessage = {
+
+                id: Date.now() + 2,
+
+                sender: "ai",
+
+                text: "Unable to connect to AI server.",
+
+                time: new Date().toLocaleTimeString([], {
+
+                    hour: "2-digit",
+
+                    minute: "2-digit"
+
+                })
+
+            };
+
+            setMessages(prev => [...prev, errorMessage]);
 
         } finally {
 
@@ -62,61 +163,107 @@ export default function Ai() {
 
     return (
 
-        <div
-            style={{
-                width: "700px",
-                margin: "40px auto",
-                padding: "20px",
-                border: "1px solid #ccc",
-                borderRadius: "10px"
-            }}
-        >
+        <>
 
-            <h2>CampusConnect AI Assistant</h2>
+            {/* <Navbar /> */}
 
-            <textarea
-                rows={6}
-                style={{
-                    width: "100%",
-                    padding: "10px",
-                    fontSize: "16px"
-                }}
-                placeholder="Ask anything..."
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-            />
+            <div className="ai-page">
 
-            <br /><br />
+                <ChatHeader />
 
-            <button
-                onClick={sendMessage}
-                disabled={loading}
-                style={{
-                    padding: "10px 25px",
-                    fontSize: "16px",
-                    cursor: "pointer"
-                }}
-            >
-                {loading ? "Generating..." : "Send"}
-            </button>
+                <div className="chat-body">
 
-            <hr />
+                    {messages.length === 0 && (
 
-            <h3>AI Reply</h3>
+                        <div className="welcome-box">
 
-            <div
-                style={{
-                    whiteSpace: "pre-wrap",
-                    background: "#f5f5f5",
-                    padding: "15px",
-                    borderRadius: "8px",
-                    minHeight: "120px"
-                }}
-            >
-                {reply}
+                            <img
+
+                                src={aiAvatar}
+
+                                alt="AI"
+
+                                className="welcome-ai-image"
+
+                            />
+
+                            <h2>
+
+                                CampusConnect AI
+
+                            </h2>
+
+                            <p className="welcome-text">
+
+                                Welcome
+
+                                {profile ? ` ${profile.fullName}` : ""}
+
+                                <HiSparkles className="welcome-icon" />
+
+                            </p>
+                            <p>
+
+                                Ask me anything.
+
+                            </p>
+
+                        </div>
+
+                    )}
+
+                    {messages.map((message) => (
+
+                        <ChatBubble
+
+                            key={message.id}
+
+                            message={message}
+
+                            profileImage={
+
+                                profile?.profileImage ||
+
+                                defaultProfile
+
+                            }
+
+                            fullName={
+
+                                profile?.fullName ||
+
+                                "User"
+
+                            }
+
+                            aiImage={aiAvatar}
+
+                        />
+
+                    ))}
+
+                    {loading && <TypingIndicator />}
+
+                    <div ref={bottomRef}></div>
+
+                </div>
+
+                <ChatInput
+
+                    input={input}
+
+                    setInput={setInput}
+
+                    sendMessage={sendMessage}
+
+                    loading={loading}
+
+                />
+
             </div>
 
-        </div>
+        </>
 
     );
+
 }

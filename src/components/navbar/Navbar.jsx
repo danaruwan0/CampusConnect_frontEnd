@@ -13,6 +13,12 @@ import { GiArtificialIntelligence } from "react-icons/gi";
 
 import { HiSparkles } from "react-icons/hi2";
 
+import { FiLogOut } from "react-icons/fi";
+
+
+import aiImage from "../../assets/ai.png";
+
+
 // import { Astroid } from 'lucide-react';
 // import { Sparkles } from "lucide-react";
 // import { Stars } from "lucide-react";
@@ -96,9 +102,16 @@ export default function Navbar() {
 
             <div className="navbar-left">
 
-                <h2 className="logo">
+                {/* <h2 className="logo">
                     CampusConnect
-                </h2>
+                </h2> */}
+
+                {/* logo image */}
+                <img
+                    src={aiImage}
+                    alt="AI"
+                    className="header-avatar"
+                />
 
             </div>
 
@@ -177,13 +190,13 @@ export default function Navbar() {
                 </div>
 
                 {/* add ai chat page  */}
-                <div 
+                <div
                     className="notification"
                     onClick={() => navigate("/ai")}
 
                 >
-                     {/* <Astroid /> */}
-                     <HiSparkles  />
+                    {/* <Astroid /> */}
+                    <HiSparkles />
                 </div>
 
                 <img
@@ -197,11 +210,19 @@ export default function Navbar() {
                     onClick={() => navigate("/profile")}
                 />
 
-                <button
+                {/* <button onClick={logout}>
+                    
+                    <BsStars className="logout-icon" />
+                   
+                </button> */}
+
+
+                <div
+                    className="logout"
                     onClick={logout}
                 >
-                    Logout
-                </button>
+                    <FiLogOut />
+                </div>
 
             </div>
 
