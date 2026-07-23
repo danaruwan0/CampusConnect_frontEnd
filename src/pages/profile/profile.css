@@ -65,6 +65,9 @@
 .profile-box p {
     margin: 8px 0;
     color: #444;
+     white-space:pre-line;
+
+    line-height:1.6;
 }
 
 /* Stats */

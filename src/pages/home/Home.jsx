@@ -135,7 +135,7 @@ export default function Home() {
                 {/* LEFT PROFILE */}
                 <div className="left-card">
 
-                    
+
 
                     <img
                         src={profile?.profileImage || defaultProfile}
@@ -168,7 +168,7 @@ export default function Home() {
                             currentUserId={userId}
                             onReact={handleReact}
                             onComment={handleComment}
-                        // onShare={loadFeed}
+                            // onShare={loadFeed}
                             onShare={handleShare}
                         />
 
@@ -181,7 +181,27 @@ export default function Home() {
                 {/* RIGHT SUGGESTIONS */}
                 <div className="right-card">
 
+                    {/* <div className="left-card"> */}
 
+
+
+                        {/* <img
+                            src={profile?.profileImage || defaultProfile}
+                            alt="profile"
+                            className="profile-img"
+                            onError={(e) => {
+                                e.target.src = defaultProfile;
+                            }}
+                        />
+
+                        <h3>{profile?.fullName}</h3>
+                        <p>{profile?.email}</p>
+
+                        <p style={{ fontSize: "13px", color: "gray" }}>
+                            {profile?.major || "Student"}
+                        </p> */}
+
+                    {/* </div> */}
 
 
                     <h3>People You May Know</h3>

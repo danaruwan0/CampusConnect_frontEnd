@@ -64,7 +64,7 @@
    HEADER
 ================================================== */
 
-.chat-header{
+.chat-header1{
 
     height:72px;
 
@@ -84,7 +84,7 @@
 
 }
 
-.chat-header-left{
+.chat-header-left1{
 
     display:flex;
     align-items:center;
@@ -94,7 +94,7 @@
 
 /* avatar */
 
-.avatar-wrapper{
+.avatar-wrapper1{
 
     position:relative;
 
@@ -103,7 +103,7 @@
 
 }
 
-.header-avatar{
+.header-avatar1{
 
     width:50px;
     height:50px;
@@ -115,15 +115,15 @@
 
 /* online dot */
 
-.online-dot{
+.online-dot1{
 
     position:absolute;
 
-    right:-3px;
-    bottom:33px;
+    right:10px;
+    bottom:14px;
 
-    width:13px;
-    height:13px;
+    width:10px;
+    height:10px;
 
     background:#22c55e;
 
@@ -135,7 +135,7 @@
 
 }
 
-.online-dot::after{
+.online-dot1::after{
 
     content:"";
 
@@ -169,14 +169,14 @@
 
 }
 
-.chat-header h3{
+.chat-header1 h3{
 
     font-size:18px;
     font-weight:700;
 
 }
 
-.chat-header p{
+.chat-header1 p{
 
     margin-top:3px;
 
@@ -606,7 +606,7 @@
 
 @media (max-width:768px){
 
-    .chat-header{
+    .chat-header1{
 
         height:60px;
 
@@ -614,7 +614,7 @@
 
     }
 
-    .avatar-wrapper{
+    /* .avatar-wrapper{
 
         width:42px;
         height:42px;
@@ -633,15 +633,15 @@
         width:10px;
         height:10px;
 
-    }
+    } */
 
-    .chat-header h3{
+    .chat-header1 h3{
 
         font-size:16px;
 
     }
 
-    .chat-header p{
+    .chat-header1 p{
 
         font-size:12px;
 

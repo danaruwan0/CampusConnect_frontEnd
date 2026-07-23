@@ -15,6 +15,18 @@ import { registerUser, verifyOtp, resendOtp } from '../../api/authApi'
 import Swal from 'sweetalert2'
 
 export default function Register() {
+
+    const majors = [
+        "HDIT Batch 1",
+        "HDIT Batch 2",
+        "HDIT Batch 3",
+        "QS Batch 1",
+        "QS Batch 2",
+        "QS Batch 3",
+        "CBIT Batch 1",
+        "CBIT Batch 2"
+    ];
+
     const navigate = useNavigate()
 
     const [showOtpModal, setShowOtpModal] = useState(false)
@@ -115,46 +127,57 @@ export default function Register() {
     }
 
 
-
-
-
-
     const handleVerifyOtp = async (otp) => {
-        try {
-            const res = await verifyOtp(
-                formData.universityEmail,
-                otp
-            )
+    try {
 
-            if (res.data === "Registration successful") {
+        const res = await verifyOtp(
+            formData.universityEmail,
+            otp
+        );
 
-                Swal.fire({
-                    icon: "success",
-                    title: "Success",
-                    text: "Account created successfully"
-                })
+        localStorage.setItem(
+            "token",
+            res.data.token
+        );
 
-                setShowOtpModal(false)
-                navigate("/home")
+        localStorage.setItem(
+            "userId",
+            res.data.userId
+        );
 
-            } else {
+        localStorage.setItem(
+            "fullName",
+            res.data.fullName
+        );
 
-                Swal.fire({
-                    icon: "error",
-                    title: "Verification Failed",
-                    text: res.data
-                })
-            }
+        localStorage.setItem(
+            "email",
+            res.data.email
+        );
 
-        } catch (error) {
 
-            Swal.fire({
-                icon: "error",
-                title: "Server Error",
-                text: "Please try again"
-            })
-        }
+        Swal.fire({
+            icon:"success",
+            title:"Success",
+            text:"Account created successfully"
+        });
+
+
+        setShowOtpModal(false);
+
+        navigate("/home");
+
+
+    } catch(error){
+
+        Swal.fire({
+            icon:"error",
+            title:"Verification Failed",
+            text:error.response?.data || "Invalid OTP"
+        });
+
     }
+}
 
 
     const handleResendOtp = async () => {
@@ -229,7 +252,7 @@ export default function Register() {
 
                         <LabelInput
                             label="University Email"
-                            placeholder="032502090@icst.edu.lk"
+                            placeholder="032502010@icst.edu.lk"
                             type="email"
                             name="universityEmail"
                             value={formData.universityEmail}
@@ -241,14 +264,25 @@ export default function Register() {
 
                         <div className="left-right-tow-label-input">
                             <div>
-                                <LabelInput
-                                    label="Major"
-                                    placeholder="HDIT"
-                                    type="text"
-                                    name="major"
-                                    value={formData.major}
-                                    onChange={handleChange}
-                                />
+                                <div className="major-container">
+                                    <label className="major-label">Major</label>
+
+                                    <input
+                                        type="text"
+                                        list="major-options"
+                                        name="major"
+                                        placeholder="Your Major"
+                                        value={formData.major}
+                                        onChange={handleChange}
+                                        className="major-input"
+                                    />
+
+                                    <datalist id="major-options">
+                                        {majors.map((major, index) => (
+                                            <option key={index} value={major} />
+                                        ))}
+                                    </datalist>
+                                </div>
                                 {errors.major && (
                                     <span className="error-text">{errors.major}</span>
                                 )}

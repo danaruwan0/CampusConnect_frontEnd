@@ -147,6 +147,33 @@ body {
 }
 
 
+.major-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.major-label {
+    font-size: 14px;
+    /* font-weight: 600; */
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.major-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: 0.3s;
+    box-sizing: border-box;
+}
+
+.major-input:focus {
+    border-color: #0058BE;
+}
+
 
 /* MOBILE */
 @media (max-width: 768px) {

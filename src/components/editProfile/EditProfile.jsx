@@ -6,12 +6,7 @@ import "./editProfile.css";
 
 import defaultProfile from "../../assets/Default profile.jpg";
 
-import {
-    getProfile,
-    updateProfile,
-    uploadProfileImage,
-    uploadCoverImage
-} from "../../api/profileApi";
+import { getProfile, updateProfile, uploadProfileImage, uploadCoverImage } from "../../api/profileApi";
 
 export default function EditProfile() {
 
@@ -31,13 +26,17 @@ export default function EditProfile() {
         "https://images.unsplash.com/photo-1503264116251-35a269479413"
     );
 
-    // const [formData, setFormData] = useState({
-    //     fullName: "",
-    //     email: "",
-    //     bio: "",
-    //     major: "",
-    //     batchYear: ""
-    // });
+    //majors dropdown valuves
+    const majors = [
+        "HDIT Batch 1",
+        "HDIT Batch 2",
+        "HDIT Batch 3",
+        "QS Batch 1",
+        "QS Batch 2",
+        "QS Batch 3",
+        "CBIT Batch 1",
+        "CBIT Batch 2"
+    ];
 
     const [formData, setFormData] = useState({
         fullName: "",
@@ -66,14 +65,6 @@ export default function EditProfile() {
 
             const data = await getProfile(userId);
 
-            // setFormData({
-            //     fullName: data.fullName || "",
-            //     email: data.email || "",
-            //     bio: data.bio || "",
-            //     major: data.major || "",
-            //     batchYear: data.batchYear || ""
-            // });
-
             setFormData({
 
                 fullName: data.fullName || "",
@@ -100,14 +91,11 @@ export default function EditProfile() {
             }
 
         } catch (err) {
-
             console.log(err);
             alert("Failed to load profile.");
 
         } finally {
-
             setLoading(false);
-
         }
 
     };
@@ -150,15 +138,6 @@ export default function EditProfile() {
         try {
 
             setSaving(true);
-
-            // await updateProfile(userId, {
-
-            //     fullName: formData.fullName,
-            //     bio: formData.bio,
-            //     major: formData.major,
-            //     batchYear: formData.batchYear
-
-            // });
 
             await updateProfile(userId, {
 
@@ -316,14 +295,34 @@ export default function EditProfile() {
 
                     <div className="form-group">
 
-                        <label>Major</label>
+                        <label>
+                            Major
+                        </label>
 
-                        <input
-                            type="text"
+
+                        <select
                             name="major"
                             value={formData.major}
                             onChange={handleChange}
-                        />
+                            className="select-input"
+                        >
+
+                            <option value="">
+                                Select Your Major
+                            </option>
+
+
+                            {majors.map((major, index) => (
+                                <option
+                                    key={index}
+                                    value={major}
+                                >
+                                    {major}
+                                </option>
+                            ))}
+
+
+                        </select>
 
                     </div>
 
