@@ -1,0 +1,565 @@
+.side-navbar{
+
+    width:260px;
+
+    height:calc(100vh - 90px);
+
+    background:#ffffff;
+
+    border-right:1px solid #e5e5e5;
+
+    display:flex;
+
+    flex-direction:column;
+
+    position:sticky;
+
+    top:90px;
+
+    padding:20px;
+
+    overflow-y:auto;
+
+    transition:0.3s ease;
+
+}
+
+
+/* ==========================
+   PROFILE SECTION
+========================== */
+
+
+.side-profile{
+
+    text-align:center;
+
+    margin-bottom:40px;
+
+}
+
+
+.side-profile img{
+
+    width:90px;
+
+    height:90px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:3px solid #1877f2;
+
+}
+
+
+.side-profile h3{
+
+    margin-top:15px;
+
+    margin-bottom:5px;
+
+    font-size:20px;
+
+    font-weight:600;
+
+}
+
+
+.side-profile p{
+
+    color:#777;
+
+    font-size:14px;
+
+}
+
+
+
+/* ==========================
+   MENU
+========================== */
+
+
+.side-menu{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+    flex:1;
+
+}
+
+
+
+.side-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:14px 18px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:17px;
+
+    color:#111;
+
+    transition:0.3s ease;
+
+}
+
+
+
+.side-item svg{
+
+    font-size:22px;
+
+}
+
+
+
+.side-item:hover{
+
+    background:#D0E1FB;
+
+}
+
+
+
+.side-item.active{
+
+    background:#D0E1FB;
+
+    border-left:4px solid #1877f2;
+
+}
+
+
+
+/* ==========================
+   LOGOUT
+========================== */
+
+
+.side-logout{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:15px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    color:#ff3b3b;
+
+    transition:0.3s ease;
+
+}
+
+
+.side-logout svg{
+
+    font-size:22px;
+
+}
+
+
+
+.side-logout:hover{
+
+    background:#ffecec;
+
+}
+
+
+
+/* ==========================
+   CLOSE BUTTON
+========================== */
+
+
+.close-btn{
+
+    display:none;
+
+}
+
+
+
+/* ==========================
+   OVERLAY
+========================== */
+
+
+.sidebar-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,0.4);
+
+    z-index:99998;
+
+}
+
+
+
+/* =================================================
+   TABLET RESPONSIVE (769px - 1024px)
+================================================= */
+
+
+@media(max-width:1024px){
+
+
+    .side-navbar{
+
+        width:220px;
+
+        padding:15px;
+
+    }
+
+
+
+    .side-profile{
+
+        margin-bottom:25px;
+
+    }
+
+
+
+    .side-profile img{
+
+        width:75px;
+
+        height:75px;
+
+    }
+
+
+
+    .side-profile h3{
+
+        font-size:17px;
+
+        margin-top:10px;
+
+    }
+
+
+
+    .side-profile p{
+
+        font-size:13px;
+
+    }
+
+
+
+    .side-menu{
+
+        gap:9px;
+
+    }
+
+
+
+    .side-item{
+
+        padding:11px 13px;
+
+        gap:12px;
+
+        font-size:15px;
+
+        border-radius:10px;
+
+    }
+
+
+
+    .side-item svg{
+
+        font-size:19px;
+
+    }
+
+
+
+    .side-item.active{
+
+        border-left:3px solid #1877f2;
+
+    }
+
+
+
+    .side-logout{
+
+        padding:12px;
+
+        gap:12px;
+
+        font-size:15px;
+
+    }
+
+
+
+    .side-logout svg{
+
+        font-size:19px;
+
+    }
+
+
+}
+
+
+
+
+
+/* =================================================
+   MOBILE RESPONSIVE
+================================================= */
+
+
+@media(max-width:768px){
+
+
+    .side-navbar{
+
+
+        position:fixed;
+
+
+        top:0;
+
+        left:0;
+
+
+        width:240px;
+
+
+        height:100vh;
+
+
+        padding:15px;
+
+
+        z-index:99999;
+
+
+        transform:translateX(-100%);
+
+
+        box-shadow:0 10px 30px rgba(0,0,0,0.25);
+
+
+    }
+
+
+
+
+    .side-navbar.show{
+
+
+        transform:translateX(0);
+
+    }
+
+
+
+
+
+    .close-btn{
+
+
+        display:flex;
+
+
+        justify-content:flex-end;
+
+
+        margin-bottom:15px;
+
+
+        cursor:pointer;
+
+
+    }
+
+
+
+
+
+    .close-btn svg{
+
+
+        font-size:25px;
+
+
+    }
+
+
+
+
+
+    .side-profile{
+
+
+        margin-bottom:20px;
+
+
+    }
+
+
+
+
+
+    .side-profile img{
+
+
+        width:65px;
+
+
+        height:65px;
+
+
+    }
+
+
+
+
+
+    .side-profile h3{
+
+
+        font-size:15px;
+
+
+        margin-top:8px;
+
+
+    }
+
+
+
+
+
+    .side-profile p{
+
+
+        font-size:12px;
+
+
+    }
+
+
+
+
+
+    .side-menu{
+
+
+        gap:8px;
+
+
+    }
+
+
+
+
+
+    .side-item{
+
+
+        padding:10px 12px;
+
+
+        gap:10px;
+
+
+        font-size:14px;
+
+
+        border-radius:10px;
+
+
+    }
+
+
+
+
+
+    .side-item svg{
+
+
+        font-size:18px;
+
+
+    }
+
+
+
+
+
+    .side-item.active{
+
+
+        border-left:3px solid #1877f2;
+
+
+    }
+
+
+
+
+
+    .side-logout{
+
+
+        padding:11px;
+
+
+        gap:10px;
+
+
+        font-size:14px;
+
+
+    }
+
+
+
+
+
+    .side-logout svg{
+
+
+        font-size:18px;
+
+
+    }
+
+
+
+}

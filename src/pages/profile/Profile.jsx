@@ -1,34 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
 import Navbar from "../../components/navbar/Navbar";
 import PostCard from "../../components/postCard/PostCard";
-
 import "./profile.css";
-
 import defaultProfile from "../../assets/Default profile.jpg";
 import profilenotfound from "../../assets/Profile Not Found.png";
 import noPostsYet from "../../assets/No Posts Yet.png";
-
 import { getProfile } from "../../api/profileApi";
-
-
 import { getFollowerCount, getFollowingCount } from "../../api/followApi";
-
 import { getUserPosts } from "../../api/postApi";
-
 import FollowButton from "../../components/followButton/FollowButton";
 import { FaFacebookMessenger } from "react-icons/fa";
-
 import CreatePostModal from "../../components/createPost/CreatePostModal";
-
-import { reactPost,  sharePost } from "../../api/postApi";
-
-
-//
+import { reactPost, sharePost } from "../../api/postApi";
 
 export default function Profile() {
-
 
     const navigate = useNavigate();
 
@@ -51,7 +37,6 @@ export default function Profile() {
 
     const [loading, setLoading] = useState(true);
 
-    //new state for create post modal
     const [showCreatePost, setShowCreatePost] = useState(false);
 
     useEffect(() => {
@@ -110,7 +95,7 @@ export default function Profile() {
         return (
 
             <>
-                <Navbar />
+                <Navbar/>
 
                 <div
                     style={{
@@ -166,7 +151,6 @@ export default function Profile() {
     };
 
 
-
     // Function to handle reactions  TODAY ADD
     const handleReaction = async (
         postId,
@@ -217,28 +201,27 @@ export default function Profile() {
 
     const handleShare = async (postId) => {
 
-    try {
+        try {
 
-        await sharePost(postId, loggedUserId);
+            await sharePost(postId, loggedUserId);
 
-        loadProfile();
+            loadProfile();
 
-    } catch (err) {
+        } catch (err) {
 
-        console.log(err);
+            console.log(err);
 
-    }
+        }
 
-};
-
-
-
+    };
 
     return (
 
         <>
 
-            <Navbar />
+            <Navbar
+                onCreatePost={() => setShowCreatePost(true)}
+            />
 
             <div className="profile-container">
 
@@ -309,7 +292,6 @@ export default function Profile() {
                         {profile.bio || "No bio available"}
 
                     </p>
-
 
                     <div className="profile-details">
 
@@ -484,17 +466,13 @@ export default function Profile() {
                             <PostCard
                                 key={post.postId}
                                 post={post}
-                                // currentUserId={userId}
+                                
                                 currentUserId={loggedUserId}
 
-
-                                //new add
                                 onCommentAdded={handleCommentAdded}
 
-                                //new add
                                 onReact={handleReaction}
-                                
-                                //new add
+
                                 onDelete={handleDeletePost}
 
                                 onShare={handleShare}

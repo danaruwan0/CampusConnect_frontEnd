@@ -6,13 +6,7 @@ import defaultProfile from "../../assets/Default profile.jpg";
 import { createPost } from "../../api/postApi";
 import { getProfile } from "../../api/profileApi";
 
-import {
-    FaTimes,
-    FaImage,
-    FaVideo,
-    FaPaperPlane,
-    FaTrash
-} from "react-icons/fa";
+import { FaTimes, FaImage, FaVideo, FaPaperPlane, FaTrash } from "react-icons/fa";
 
 export default function CreatePostModal({
 

@@ -2,6 +2,9 @@ import "./navbar.css";
 import React, { useState, useEffect } from "react";
 import { searchUsers } from "../../api/searchApi";
 import { FiBell } from "react-icons/fi";
+
+import { FaRegSquarePlus } from "react-icons/fa6";
+
 import { useNavigate } from "react-router-dom";
 import { getProfile } from "../../api/profileApi";
 import defaultProfile from "../../assets/Default profile.jpg";
@@ -11,22 +14,23 @@ import { FiMessageCircle } from "react-icons/fi";
 import { FaRobot } from "react-icons/fa6";
 import { GiArtificialIntelligence } from "react-icons/gi";
 
-import { HiSparkles } from "react-icons/hi2";
-
+import { HiSparkles } from "react-icons/hi2"
 import { FiLogOut } from "react-icons/fi";
 
 
+import { FiMenu } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
 import aiImage from "../../assets/ai.png";
 
-
-// import { Astroid } from 'lucide-react';
-// import { Sparkles } from "lucide-react";
-// import { Stars } from "lucide-react";
+import SideNavBar from "../sideNavBar/SideNavBar";
 
 
 
+export default function Navbar({
+    onCreatePost,
+    onMenuClick
+}) {
 
-export default function Navbar() {
 
     const userId = localStorage.getItem("userId");
 
@@ -96,136 +100,139 @@ export default function Navbar() {
         navigate("/");
     };
 
+
+
     return (
 
-        <div className="navbar">
+        <>
+            <div className="navbar">
 
-            <div className="navbar-left">
+                <div className="navbar-left">
 
-                {/* <h2 className="logo">
-                    CampusConnect
-                </h2> */}
+                    {/* logo image */}
+                    <img
+                        src={aiImage}
+                        alt="AI"
+                        className="header-avatar"
+                    />
 
-                {/* logo image */}
-                <img
-                    src={aiImage}
-                    alt="AI"
-                    className="header-avatar"
-                />
-
-            </div>
-
-            <div className="navbar-center">
-
-                <input
-                    className="search-input"
-                    type="text"
-                    placeholder="Search users..."
-                    value={keyword}
-                    onChange={handleSearch}
-
-                    onBlur={() => {
-                        setTimeout(() => {
-                            setUsers([]);
-                        }, 200);
-                    }}
-                />
-
-                {
-                    users.length > 0 && (
-
-                        <div
-                            className="search-result"
-                        >
-
-                            {
-                                users.map(
-                                    (user) => (
-
-                                        <div
-                                            key={user.userId}
-                                            className="search-user"
-                                            onClick={() => {
-
-                                                navigate(`/profile/${user.userId}`);
-
-                                                setKeyword("");
-
-                                                setUsers([]);
-
-                                            }}
-                                        >
-
-                                            <h4>
-                                                {
-                                                    user.fullName
-                                                }
-                                            </h4>
-
-                                            <p>
-                                                {
-                                                    user.email
-                                                }
-                                            </p>
-
-                                        </div>
-
-                                    )
-                                )
-                            }
-
-                        </div>
-
-                    )
-                }
-
-            </div>
-
-            <div className="navbar-right">
-
-                <div
-                    className="notification"
-                >
-                    <FiBell />
                 </div>
 
-                {/* add ai chat page  */}
-                <div
-                    className="notification"
-                    onClick={() => navigate("/ai")}
-
-                >
-                    {/* <Astroid /> */}
-                    <HiSparkles />
-                </div>
-
-                <img
-                    src={
-                        profile?.profileImage
-                            ? profile.profileImage
-                            : defaultProfile
-                    }
-                    alt=""
-                    className="profile-image"
-                    onClick={() => navigate("/profile")}
-                />
-
-                {/* <button onClick={logout}>
+                <div className="navbar-center">
                     
-                    <BsStars className="logout-icon" />
-                   
-                </button> */}
+                    <input
+                        className="search-input"
+                        type="text"
+                        placeholder="Search users..."
+                        value={keyword}
+                        onChange={handleSearch}
+
+                        onBlur={() => {
+                            setTimeout(() => {
+                                setUsers([]);
+                            }, 200);
+                        }}
+                    />
+
+                    {
+                        users.length > 0 && (
+
+                            <div
+                                className="search-result"
+                            >
+
+                                {
+                                    users.map(
+                                        (user) => (
+
+                                            <div
+                                                key={user.userId}
+                                                className="search-user"
+                                                onClick={() => {
+
+                                                    navigate(`/profile/${user.userId}`);
+
+                                                    setKeyword("");
+
+                                                    setUsers([]);
+
+                                                }}
+                                            >
+
+                                                <h4>
+                                                    {
+                                                        user.fullName
+                                                    }
+                                                </h4>
+
+                                                <p>
+                                                    {
+                                                        user.email
+                                                    }
+                                                </p>
+
+                                            </div>
+
+                                        )
+                                    )
+                                }
+
+                            </div>
+
+                        )
+                    }
+
+                </div>
+
+                <div className="navbar-right">
 
 
-                <div
-                    className="logout"
-                    onClick={logout}
-                >
-                    <FiLogOut />
+                    <img
+                        src={
+                            profile?.profileImage
+                                ? profile.profileImage
+                                : defaultProfile
+                        }
+                        alt=""
+                        className="profile-image"
+                        onClick={() => navigate("/profile")}
+                    />
+
+                    <div
+                        className="notification"
+                        onClick={onCreatePost}
+                    >
+                        <FaRegSquarePlus />
+                    </div>
+
+                    {/* add ai chat page  */}
+                    <div
+                        className="notification"
+                        onClick={() => navigate("/ai")}
+
+                    >
+                        <HiSparkles />
+                    </div>
+
+                    <div
+                        className="notification"
+                    >
+                        <FiBell />
+                    </div>
+
+                    <div
+                        className="menu-icon"
+                        onClick={onMenuClick}
+                    >
+                        <FiMenu />
+                    </div>
+
+
                 </div>
 
             </div>
 
-        </div>
+        </>
     );
+
 }

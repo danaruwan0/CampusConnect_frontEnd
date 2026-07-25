@@ -1,512 +1,672 @@
 /* ==========================================
-   NAVBAR
+   MAIN NAVBAR
 ========================================== */
+
 
 .navbar {
 
-    width: 100%;
-    height: 70px;
+    width:100%;
+    height:64px;
 
-    background: #ffffff;
+    background:#ffffff;
 
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom:1px solid #e5e7eb;
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display:flex;
 
-    padding: 0 25px;
+    align-items:center;
 
-    position: sticky;
-    top: 0;
-    z-index: 11999;
+    justify-content:space-between;
 
-    box-sizing: border-box;
+    padding:0 20px;
 
-    box-shadow: 0 2px 8px rgba(0, 0, 0, .04);
+    position:sticky;
+
+    top:0;
+
+    z-index:9999;
+
+    box-shadow:0 2px 8px rgba(0,0,0,0.06);
+
+    box-sizing:border-box;
 
 }
 
+
+
 /* ==========================================
-   LEFT
+   LEFT LOGO
 ========================================== */
+
 
 .navbar-left {
 
-    flex: 1;
+    flex:1;
 
-    display: flex;
-    align-items: center;
+    display:flex;
+
+    align-items:center;
+
+}
+
+
+.header-avatar {
+
+    width:38px;
+
+    height:38px;
+
+    object-fit:contain;
+
+    cursor:pointer;
+
+    transition:.25s;
 
 }
 
-.logo {
 
-    color: #1877f2;
+.header-avatar:hover {
 
-    font-size: 26px;
-
-    font-weight: 700;
-
-    cursor: pointer;
-
-    user-select: none;
+    transform:scale(1.05);
 
 }
+
+
 
 /* ==========================================
-   CENTER
+   CENTER SEARCH
 ========================================== */
+
 
 .navbar-center {
 
-    flex: 2;
+    flex:2;
 
-    display: flex;
+    display:flex;
 
-    justify-content: center;
+    justify-content:center;
 
-    align-items: center;
-
-    position: relative;
+    position:relative;
 
 }
+
+
 
 .search-input {
 
-    width: 100%;
-    max-width: 460px;
 
-    height: 44px;
+    width:100%;
 
-    padding: 0 18px;
+    max-width:420px;
 
-    border-radius: 25px;
+    height:38px;
 
-    border: 1px solid #d8dce5;
 
-    background: #f5f6f7;
+    border-radius:22px;
 
-    outline: none;
 
-    font-size: 15px;
+    border:1px solid #ddd;
 
-    transition: .25s;
+
+    background:#f5f6f7;
+
+
+    padding:0 16px;
+
+
+    font-size:14px;
+
+
+    outline:none;
+
+
+    transition:.25s;
+
 
 }
+
+
 
 .search-input:focus {
 
-    background: #fff;
 
-    border-color: #1877f2;
+    background:#fff;
 
-    box-shadow: 0 0 0 4px rgba(24, 119, 242, .12);
+    border-color:#1877f2;
+
+    box-shadow:0 0 0 3px rgba(24,119,242,.12);
+
 
 }
+
+
 
 /* ==========================================
    SEARCH RESULT
 ========================================== */
 
+
 .search-result {
 
-    position: absolute;
 
-    top: 55px;
+    position:absolute;
 
-    left: 50%;
+    top:48px;
 
-    transform: translateX(-50%);
+    width:100%;
 
-    width: 100%;
-    max-width: 460px;
+    max-width:420px;
 
-    background: #fff;
 
-    border-radius: 12px;
+    background:white;
 
-    border: 1px solid #ececec;
 
-    box-shadow: 0 10px 30px rgba(0, 0, 0, .12);
+    border-radius:12px;
 
-    overflow: hidden;
 
-    z-index: 9999;
+    box-shadow:0 8px 25px rgba(0,0,0,.15);
 
-    max-height: 320px;
 
-    overflow-y: auto;
+    overflow:hidden;
 
-}
 
-/* Scroll */
+    max-height:300px;
 
-.search-result::-webkit-scrollbar {
+    overflow-y:auto;
 
-    width: 8px;
 
 }
 
-.search-result::-webkit-scrollbar-thumb {
 
-    background: #c7c7c7;
-
-    border-radius: 20px;
-
-}
-
-.search-result::-webkit-scrollbar-thumb:hover {
-
-    background: #9f9f9f;
-
-}
-
-/* ==========================================
-   SEARCH USER
-========================================== */
 
 .search-user {
 
-    padding: 14px 18px;
 
-    cursor: pointer;
+    padding:12px 15px;
 
-    transition: .2s;
+    cursor:pointer;
 
-    border-bottom: 1px solid #f1f1f1;
+    border-bottom:1px solid #eee;
 
-}
+    transition:.2s;
 
-.search-user:last-child {
-
-    border-bottom: none;
 
 }
+
+
 
 .search-user:hover {
 
-    background: #f5f8ff;
+
+    background:#f5f8ff;
+
 
 }
+
 
 .search-user h4 {
 
-    margin: 0;
 
-    color: #111827;
+    margin:0;
 
-    font-size: 15px;
+    font-size:14px;
 
-    font-weight: 700;
+    color:#222;
+
 
 }
+
 
 .search-user p {
 
-    margin-top: 5px;
 
-    margin-bottom: 0;
+    margin:4px 0 0;
 
-    color: #1877f2;
+    font-size:12px;
 
-    font-size: 13px;
+    color:#777;
 
-    font-weight: 500;
 
 }
 
+
+
 /* ==========================================
-   RIGHT
+   RIGHT SECTION
 ========================================== */
+
 
 .navbar-right {
 
-    flex: 1;
 
-    display: flex;
+    flex:1;
 
-    justify-content: flex-end;
+    display:flex;
 
-    align-items: center;
+    align-items:center;
 
-    gap: 18px;
+    justify-content:flex-end;
 
-}
 
-/* Notification */
+    gap:12px;
 
-.notification {
-
-    width: 42px;
-    height: 42px;
-
-    border-radius: 50%;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    background: #f5f6f7;
-
-    cursor: pointer;
-
-    transition: .25s;
 
 }
 
-.notification:hover {
 
-    background: #1877f2;
 
-}
+/* ==========================================
+   PROFILE IMAGE
+========================================== */
 
-.notification svg {
-
-    font-size: 23px;
-
-    color: #444;
-
-    transition: .25s;
-
-}
-
-.notification:hover svg {
-
-    color: #fff;
-
-}
-
-/* Profile */
 
 .profile-image {
 
-    width: 42px;
 
-    height: 42px;
+    width:38px;
 
-    border-radius: 50%;
+    height:38px;
 
-    object-fit: cover;
 
-    object-position: center;
+    border-radius:50%;
 
-    border: 2px solid #1877f2;
 
-    cursor: pointer;
+    object-fit:cover;
 
-    /* transition:.25s; */
+
+    border:2px solid #1877f2;
+
+
+    cursor:pointer;
+
+
+    transition:.25s;
+
 
 }
 
-/* .profile-image:hover{
 
-    transform:scale(1.06);
 
-} */
+.profile-image:hover {
 
-/* Logout Button */
-.navbar-right button {
-    width: 42px;
-    height: 42px;
-    border: none;
-    border-radius: 50%;
-    background: #f5f6f7;
 
-    /* display: flex; */
-    justify-content: center;
-    align-items: center;
+    transform:scale(1.05);
 
-    cursor: pointer;
-    transition: .25s;
-}
 
-.navbar-right button:hover {
-    background: #dc2626;
-}
-
-.navbar-right button .logout-icon {
-    font-size: 23px;
-    color: #444;
-    transition: .25s;
-}
-
-.navbar-right button:hover .logout-icon {
-    color: #fff;
 }
 
 
-/* Notification */
-
-.logout {
-
-    width: 42px;
-    height: 42px;
-
-    border-radius: 50%;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    background: #f5f6f7;
-
-    cursor: pointer;
-
-    transition: .25s;
-
-}
-
-.logout:hover {
-
-    background: #dc2626;
-
-}
-
-.logout svg {
-
-    font-size: 23px;
-
-    color: #444;
-
-    transition: .25s;
-
-}
-
-.logout:hover svg {
-
-    color: #fff;
-
-}
 
 /* ==========================================
-   TABLET
+   ICON BUTTONS
 ========================================== */
 
-@media(max-width:992px) {
 
-    .navbar {
+.notification {
 
-        padding: 0 15px;
 
-    }
+    width:38px;
 
-    .navbar-center {
+    height:38px;
 
-        flex: 1.5;
 
-    }
+    border-radius:50%;
 
-    .search-input {
 
-        max-width: 320px;
+    display:flex;
 
-    }
+    align-items:center;
+
+    justify-content:center;
+
+
+    background:#f3f4f6;
+
+
+    cursor:pointer;
+
+
+    transition:.25s;
+
 
 }
+
+
+
+.notification:hover {
+
+
+    background:#1877f2;
+
+
+}
+
+
+
+.notification svg {
+
+
+    font-size:20px;
+
+
+    color:#555;
+
+
+    transition:.25s;
+
+
+}
+
+
+
+.notification:hover svg {
+
+
+    color:white;
+
+
+}
+
+
+
 
 /* ==========================================
-   MOBILE
+   MENU ICON
 ========================================== */
 
-@media(max-width:768px) {
 
-    .navbar {
+.menu-icon {
 
-        height: 65px;
 
-        padding: 0 12px;
+    width:38px;
 
-    }
+    height:38px;
 
-    .logo {
 
-        font-size: 22px;
+    border-radius:50%;
 
-    }
 
-    .search-input {
+    background:#f3f4f6;
 
-        max-width: 210px;
 
-        height: 40px;
+    display:none;
 
-        font-size: 14px;
 
-    }
+    align-items:center;
 
-    .notification {
+    justify-content:center;
 
-        width: 38px;
 
-        height: 38px;
+    cursor:pointer;
 
-    }
-
-    .notification svg {
-
-        font-size: 20px;
-
-    }
-
-    .profile-image {
-
-        width: 38px;
-
-        height: 38px;
-
-    }
-
-    .navbar-right button {
-
-        padding: 8px 12px;
-
-        font-size: 13px;
-
-    }
 
 }
+
+
+
+.menu-icon svg {
+
+
+    font-size:21px;
+
+    color:#444;
+
+
+}
+
+
+
+
+/* ==========================================
+   TABLET & MOBILE LAYOUT
+========================================== */
+
+@media (max-width: 768px) {
+
+    .navbar{
+
+        display:grid;
+        grid-template-columns:1fr;
+        grid-template-rows:auto auto;
+
+        height:auto;
+
+        padding:12px;
+
+        row-gap:12px;
+    }
+
+    /* ---------- First Row ---------- */
+
+    .navbar-left{
+
+        grid-row:1;
+        grid-column:1;
+
+        display:flex;
+        align-items:center;
+    }
+
+    .navbar-right{
+
+        grid-row:1;
+        grid-column:1;
+
+        display:flex;
+        justify-content:flex-end;
+        align-items:center;
+
+        gap:10px;
+    }
+
+    /* ---------- Second Row ---------- */
+
+    .navbar-center{
+
+        grid-row:2;
+        grid-column:1;
+
+        width:100%;
+        display:flex;
+        justify-content:center;
+    }
+
+    .search-input{
+
+        display:block;
+
+        width:100%;
+
+        max-width:100%;
+
+        height:42px;
+    }
+
+    .search-result{
+
+        width:100%;
+
+        max-width:100%;
+
+        top:48px;
+    }
+
+    /* Sizes */
+
+    .header-avatar{
+
+        width:36px;
+        height:36px;
+    }
+
+    .profile-image{
+
+        width:35px;
+        height:35px;
+    }
+
+    .notification{
+
+        width:35px;
+        height:35px;
+    }
+
+    .notification svg{
+
+        font-size:18px;
+    }
+
+    .menu-icon{
+
+        display:flex;
+
+        width:35px;
+        height:35px;
+    }
+
+
+
+    .navbar-center{
+    position: relative;
+    z-index: 999999;
+}
+
+.search-input{
+    position: relative;
+    z-index: 999999;
+}
+}
+
+
 
 /* ==========================================
    SMALL MOBILE
 ========================================== */
 
-@media(max-width:576px) {
+@media (max-width:520px){
 
-    .search-input {
+    .navbar{
 
-        display: none;
+        padding:10px;
 
+        row-gap:10px;
     }
 
-    .navbar-center {
+    .navbar-left{
 
-        flex: 0;
-
+        flex:none;
     }
 
-    .logo {
+    .navbar-right{
 
-        font-size: 20px;
+        flex:none;
 
+        gap:8px;
     }
 
-    .navbar-right {
+    .navbar-center{
 
-        gap: 10px;
-
+        width:100%;
     }
 
-    .navbar-right button {
+    .search-input{
 
-        padding: 7px 10px;
+        display:block;
 
-        font-size: 12px;
+        width:100%;
 
+        max-width:100%;
+
+        height:40px;
+
+        font-size:14px;
+    }
+
+    .search-result{
+
+        width:100%;
+
+        max-width:100%;
+    }
+
+    .header-avatar{
+
+        width:34px;
+        height:34px;
+    }
+
+    .profile-image{
+
+        width:34px;
+        height:34px;
+    }
+
+    .notification{
+
+        width:34px;
+        height:34px;
+    }
+
+    .notification svg{
+
+        font-size:17px;
+    }
+
+    .menu-icon{
+
+        width:34px;
+        height:34px;
+    }
+}
+
+
+
+/* ==========================================
+   VERY SMALL DEVICE
+========================================== */
+
+@media (max-width:380px){
+
+    .navbar{
+
+        padding:8px;
+    }
+
+    .navbar-right{
+
+        gap:6px;
+    }
+
+    .notification{
+
+        width:32px;
+        height:32px;
+    }
+
+    .notification svg{
+
+        font-size:16px;
+    }
+
+    .profile-image{
+
+        width:32px;
+        height:32px;
+    }
+
+    .header-avatar{
+
+        width:32px;
+        height:32px;
+    }
+
+    .search-input{
+
+        height:38px;
+
+        font-size:13px;
     }
 
 }
+
+
