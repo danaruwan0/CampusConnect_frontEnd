@@ -13,6 +13,9 @@ export const connectSocket = (
 
     const socket = new SockJS(
         "http://localhost:8081/chat"
+
+        // "http://10.159.4.97:8081/chat"
+        
     );
 
     stompClient = new Client({

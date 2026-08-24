@@ -8,6 +8,7 @@ import SideNavBar from "../../components/sideNavBar/SideNavBar";
 import PostCard from "../../components/postCard/PostCard";
 import CreatePostModal from "../../components/createPost/CreatePostModal";
 
+
 import {
     getFeed,
     reactPost,
@@ -21,6 +22,8 @@ import {
 
 
 import noSuggestions from "../../assets/No suggestions.png";
+
+import Loader from "../../components/loader/Loader";
 
 
 export default function Home() {
@@ -92,7 +95,7 @@ export default function Home() {
 
 
 
-        } catch(error){
+        } catch (error) {
 
             console.log(
                 "HOME LOAD ERROR : ",
@@ -116,9 +119,9 @@ export default function Home() {
     // FOLLOW USER
     // ==========================
 
-    const handleFollow = async(targetId)=>{
+    const handleFollow = async (targetId) => {
 
-        try{
+        try {
 
 
             await followUser(
@@ -130,7 +133,7 @@ export default function Home() {
             loadData();
 
 
-        }catch(error){
+        } catch (error) {
 
             console.log(error);
 
@@ -146,13 +149,13 @@ export default function Home() {
     // REACTION
     // ==========================
 
-    const handleReact = async(
+    const handleReact = async (
         postId,
         type
-    )=>{
+    ) => {
 
 
-        try{
+        try {
 
 
             await reactPost(
@@ -169,20 +172,20 @@ export default function Home() {
 
                     post.postId === postId
 
-                    ?
+                        ?
 
-                    {
+                        {
 
-                        ...post,
+                            ...post,
 
-                        reactionCount:
-                        (post.reactionCount || 0)+1
+                            reactionCount:
+                                (post.reactionCount || 0) + 1
 
-                    }
+                        }
 
-                    :
+                        :
 
-                    post
+                        post
 
                 )
 
@@ -190,7 +193,7 @@ export default function Home() {
 
 
 
-        }catch(error){
+        } catch (error) {
 
             console.log(error);
 
@@ -207,10 +210,10 @@ export default function Home() {
     // SHARE POST
     // ==========================
 
-    const handleShare = async(postId)=>{
+    const handleShare = async (postId) => {
 
 
-        try{
+        try {
 
 
             await sharePost(
@@ -222,7 +225,7 @@ export default function Home() {
             loadData();
 
 
-        }catch(error){
+        } catch (error) {
 
             console.log(error);
 
@@ -239,7 +242,7 @@ export default function Home() {
     // COMMENT PLACEHOLDER
     // ==========================
 
-    const handleComment = ()=>{};
+    const handleComment = () => { };
 
 
 
@@ -249,19 +252,19 @@ export default function Home() {
     // LOADING UI
     // ==========================
 
-    if(loading){
+    if (loading) {
 
 
-        return(
+        return (
 
             <>
 
                 <Navbar
-                    onCreatePost={()=>
+                    onCreatePost={() =>
                         setShowCreatePost(true)
                     }
 
-                    onMenuClick={()=>
+                    onMenuClick={() =>
                         setShowMenu(true)
                     }
 
@@ -270,7 +273,13 @@ export default function Home() {
 
                 <div className="loading-text">
 
-                    Loading feed...
+                    {/* Loading feed... */}
+
+                    <Loader
+                        text="Loading Feed..."
+                    />
+
+
 
                 </div>
 
@@ -297,12 +306,12 @@ export default function Home() {
 
             <Navbar
 
-                onCreatePost={()=>
+                onCreatePost={() =>
                     setShowCreatePost(true)
                 }
 
 
-                onMenuClick={()=>
+                onMenuClick={() =>
                     setShowMenu(true)
                 }
 
@@ -325,7 +334,7 @@ export default function Home() {
 
                     className="sidebar-overlay"
 
-                    onClick={()=>
+                    onClick={() =>
                         setShowMenu(false)
                     }
 
@@ -354,19 +363,12 @@ export default function Home() {
                 ======================= */}
 
 
-                <aside className="left-card">
-
+                <aside className={`left-card ${showMenu ? "show" : ""}`}>
 
                     <SideNavBar
-
                         open={showMenu}
-
-                        onClose={()=>
-                            setShowMenu(false)
-                        }
-
+                        onClose={() => setShowMenu(false)}
                     />
-
 
                 </aside>
 
@@ -384,56 +386,56 @@ export default function Home() {
                     {
                         feed.length === 0
 
-                        ?
+                            ?
 
-                        (
+                            (
 
-                            <div className="empty-feed">
+                                <div className="empty-feed">
 
-                                <h3>
-                                    No Posts Yet
-                                </h3>
+                                    <h3>
+                                        No Posts Yet
+                                    </h3>
 
-                                <p>
-                                    Start sharing something with your campus community.
-                                </p>
-
-
-                            </div>
+                                    <p>
+                                        Start sharing something with your campus community.
+                                    </p>
 
 
-                        )
-
-                        :
-
-                        feed.map(post=>(
+                                </div>
 
 
-                            <PostCard
+                            )
 
-                                key={
-                                    post.postId
-                                }
+                            :
 
-                                post={post}
+                            feed.map(post => (
 
-                                currentUserId={
-                                    userId
-                                }
 
-                                onReact={
-                                    handleReact
-                                }
+                                <PostCard
 
-                                onComment={
-                                    handleComment
-                                }
+                                    key={
+                                        post.postId
+                                    }
 
-                                onShare={
-                                    handleShare
-                                }
-                            />
-                        ))
+                                    post={post}
+
+                                    currentUserId={
+                                        userId
+                                    }
+
+                                    onReact={
+                                        handleReact
+                                    }
+
+                                    onComment={
+                                        handleComment
+                                    }
+
+                                    onShare={
+                                        handleShare
+                                    }
+                                />
+                            ))
                     }
                 </main>
 
@@ -451,79 +453,78 @@ export default function Home() {
                     {
                         suggestions.length === 0
 
-                        ?
+                            ?
 
-                        (
+                            (
 
-                            <div className="no-suggestions">
+                                <div className="no-suggestions">
 
-                                <img
+                                    <img
 
-                                    src={
-                                        noSuggestions
-                                    }
-                                    alt="No Suggestions"
-                                    className="no-suggestions-img"
-                                />
+                                        src={
+                                            noSuggestions
+                                        }
+                                        alt="No Suggestions"
+                                        className="no-suggestions-img"
+                                    />
 
-                                <h4>
-                                    No Suggestions
-                                </h4>
-
-                                <p>
-                                    You're connected with everyone for now.
-                                </p>
-
-
-                            </div>
-
-                        )
-                        :
-                        suggestions.map(user=>(
-
-                            <div
-
-                                className="suggestion"
-
-                                key={
-                                    user.userId
-                                }
-                            >
-                                <div>
-
+                                    <h4>
+                                        No Suggestions
+                                    </h4>
 
                                     <p>
-                                        {
-                                            user.fullName
-                                        }
+                                        You're connected with everyone for now.
                                     </p>
 
 
-                                    <small>
+                                </div>
 
-                                        {
-                                            user.email
+                            )
+                            :
+                            suggestions.map(user => (
+
+                                <div
+
+                                    className="suggestion"
+
+                                    key={
+                                        user.userId
+                                    }
+                                >
+                                    <div>
+
+
+                                        <p>
+                                            {
+                                                user.fullName
+                                            }
+                                        </p>
+
+
+                                        <small>
+
+                                            {
+                                                user.email
+                                            }
+
+                                        </small>
+
+                                    </div>
+
+                                    <button
+
+                                        onClick={() =>
+                                            handleFollow(
+                                                user.userId
+                                            )
                                         }
-
-                                    </small>
+                                    >
+                                        Follow
+                                    </button>
 
                                 </div>
 
-                                <button
-
-                                    onClick={()=>
-                                        handleFollow(
-                                            user.userId
-                                        )
-                                    }
-                                >
-                                    Follow
-                                </button>
-
-                            </div>
-
-                        ))
-
+                            ))
                     }
                 </aside>
             </div>
@@ -537,11 +538,11 @@ export default function Home() {
                     showCreatePost
                 }
 
-                onClose={()=>
+                onClose={() =>
                     setShowCreatePost(false)
                 }
 
-                onSuccess={()=>{
+                onSuccess={() => {
                     loadData();
                     setShowCreatePost(false);
                 }}

@@ -14,7 +14,18 @@ import { FaFacebookMessenger } from "react-icons/fa";
 import CreatePostModal from "../../components/createPost/CreatePostModal";
 import { reactPost, sharePost } from "../../api/postApi";
 
+import { FaRegNewspaper } from "react-icons/fa";
+import { FaStream } from "react-icons/fa";
+
+import Loader from "../../components/loader/Loader";
+
+
+
+
 export default function Profile() {
+
+
+    const [showFullBio, setShowFullBio] = useState(false);
 
     const navigate = useNavigate();
 
@@ -95,7 +106,7 @@ export default function Profile() {
         return (
 
             <>
-                <Navbar/>
+                <Navbar />
 
                 <div
                     style={{
@@ -103,7 +114,12 @@ export default function Profile() {
                         marginTop: "70px"
                     }}
                 >
-                    <h2>Loading Profile...</h2>
+                    {/* <h2>Loading Profile...</h2> */}
+
+
+                    <Loader
+                        text="Loading Profile..."
+                    />
                 </div>
 
             </>
@@ -287,59 +303,170 @@ export default function Profile() {
                         )
                     }
 
-                    <p>
+                    {/* <p>
 
                         {profile.bio || "No bio available"}
 
-                    </p>
+                    </p> */}
 
-                    <div className="profile-details">
+                    <div className="bio-section">
 
-                        <p>
-                            <strong>University</strong>
-                            <span>{profile.university}</span>
+                        <p className={showFullBio ? "bio full" : "bio"}>
+
+                            {profile.bio || "No bio available"}
+
                         </p>
 
-                        <p>
-                            <strong>Batch</strong>
-                            <span>{profile.batchYear}</span>
-                        </p>
 
-                        <p>
-                            <strong>Location</strong>
-                            <span>{profile.location}</span>
-                        </p>
+                        {
+                            profile.bio &&
+                            profile.bio.length > 150 && (
 
-                        <p>
-                            <strong>Phone</strong>
-                            <span>{profile.phone}</span>
-                        </p>
+                                <button
+                                    className="bio-toggle"
+                                    onClick={() =>
+                                        setShowFullBio(!showFullBio)
+                                    }
+                                >
 
-                        <p>
-                            <strong>Skills</strong>
-                            <span>{profile.skills}</span>
-                        </p>
+                                    {
+                                        showFullBio
+                                            ? "Show Less"
+                                            : "Read More"
+                                    }
 
-                        <p>
-                            <strong >GitHub</strong>
-                            <a href={profile.githubUrl} target="_blank" rel="noreferrer">
-                                Visit GitHub
+                                </button>
+
+                            )
+                        }
+
+                    </div>
+
+                    <div className="profile-info">
+
+
+                        <div className="info-item">
+
+                            <strong>
+                                University
+                            </strong>
+
+                            <span>
+                                {profile.university || "-"}
+                            </span>
+
+                        </div>
+
+
+                        <div className="info-item">
+
+                            <strong>
+                                Batch
+                            </strong>
+
+                            <span>
+                                {profile.batchYear || "-"}
+                            </span>
+
+                        </div>
+
+
+
+                        <div className="info-item">
+
+                            <strong>
+                                Location
+                            </strong>
+
+                            <span>
+                                {profile.location || "-"}
+                            </span>
+
+                        </div>
+
+
+
+                        <div className="info-item">
+
+                            <strong>
+                                Phone
+                            </strong>
+
+                            <span>
+                                {profile.phone || "-"}
+                            </span>
+
+                        </div>
+
+
+
+                        <div className="info-item">
+
+                            <strong>
+                                Skills
+                            </strong>
+
+                            <span>
+                                {profile.skills || "-"}
+                            </span>
+
+                        </div>
+
+
+
+                        <div className="info-item">
+
+                            <strong>
+                                GitHub
+                            </strong>
+
+                            <a
+                                href={profile.githubUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                Visit Profile
                             </a>
-                        </p>
 
-                        <p>
-                            <strong >LinkedIn</strong>
-                            <a href={profile.linkedinUrl} target="_blank" rel="noreferrer">
-                                Visit LinkedIn
+                        </div>
+
+
+
+                        <div className="info-item">
+
+                            <strong>
+                                LinkedIn
+                            </strong>
+
+                            <a
+                                href={profile.linkedinUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                Visit Profile
                             </a>
-                        </p>
 
-                        <p>
-                            <strong >Portfolio</strong>
-                            <a href={profile.website} target="_blank" rel="noreferrer">
+                        </div>
+
+
+
+                        <div className="info-item">
+
+                            <strong>
+                                Portfolio
+                            </strong>
+
+                            <a
+                                href={profile.website}
+                                target="_blank"
+                                rel="noreferrer"
+                            >
                                 Visit Website
                             </a>
-                        </p>
+
+                        </div>
+
+
                     </div>
 
                     {/* STATS */}
@@ -437,11 +564,19 @@ export default function Profile() {
 
                 <div className="profile-posts">
 
-                    <h2 style={{ marginBottom: "20px" }}>
-                        {loggedUserId === profileUserId
-                            ? "My Posts"
-                            : `${profile.fullName}'s Posts`}
+                    <h2 className="profile-posts-name">
+
+                        <FaRegNewspaper className="posts-icon" />
+
+                        {
+                            loggedUserId === profileUserId
+                                ? "My Posts"
+                                : `${profile.fullName}'s Posts`
+                        }
+
                     </h2>
+
+
                     {posts.length === 0 ? (
 
                         <div className="no-posts-card">
@@ -466,7 +601,7 @@ export default function Profile() {
                             <PostCard
                                 key={post.postId}
                                 post={post}
-                                
+
                                 currentUserId={loggedUserId}
 
                                 onCommentAdded={handleCommentAdded}

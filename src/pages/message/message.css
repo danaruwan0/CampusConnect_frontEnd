@@ -2,8 +2,60 @@
 
     display:flex;
     height:100vh;
-    margin-top:65px;
+    /* margin-top:65px; */
     background:#f0f2f5;
 
 }
 
+
+.chat-list-wrapper{
+    width:320px;
+    display:flex;
+}
+
+.chat-window-wrapper{
+    flex:1;
+    display:flex;
+}
+
+@media (max-width:768px){
+
+    .message-page{
+
+        /* margin-top:65px; */
+
+        height:calc(100vh - 65px);
+
+        overflow:hidden;
+
+    }
+
+    .chat-list-wrapper{
+
+        width:100%;
+
+        display:flex;
+
+    }
+
+    .chat-window-wrapper{
+
+        display:none;
+
+        width:100%;
+
+    }
+
+    .chat-window-wrapper.show-mobile{
+
+        display:flex;
+
+    }
+
+    .chat-list-wrapper.hide-mobile{
+
+        display:none;
+
+    }
+
+}

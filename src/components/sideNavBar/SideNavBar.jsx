@@ -17,7 +17,20 @@ import {
     FiLogOut
 } from "react-icons/fi";
 
+import { FiCpu } from "react-icons/fi";
+
+import { FiGlobe } from "react-icons/fi";
+
 import { HiSparkles } from "react-icons/hi2";
+
+import { WiDaySunny } from "react-icons/wi";
+
+import { WiDayCloudy } from "react-icons/wi";
+
+import { WiCloud } from "react-icons/wi";
+
+
+
 
 export default function SideNavBar({
     open,
@@ -120,6 +133,17 @@ export default function SideNavBar({
 
 
                 <div
+                    className={`side-item ${location.pathname.startsWith("/news-alerts")
+                            ? "active"
+                            : ""
+                        }`}
+                    onClick={() => navigate("/news-alerts")}
+                >
+                    <FiGlobe />
+                    <span>News</span>
+                </div>
+
+                <div
                     className={`side-item ${location.pathname === "/ai" ? "active" : ""
                         }`}
                     onClick={() => navigate("/ai")}
@@ -127,6 +151,19 @@ export default function SideNavBar({
                     <HiSparkles />
                     <span>AI Chat</span>
                 </div>
+
+
+                <div
+                    className={`side-item ${location.pathname.startsWith("/weather")
+                            ? "active"
+                            : ""
+                        }`}
+                    onClick={() => navigate("/weather")}
+                >
+                     <WiDayCloudy />
+                    <span>Weather</span>
+                </div>
+
 
 
                 <div

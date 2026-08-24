@@ -12,6 +12,10 @@ import EditProfile from '../components/editProfile/EditProfile'
 
 import Ai from '../pages/ai/Ai'
 
+import NewsAlerts from '../pages/newsAlerts/NewsAlerts'
+
+import Weather from '../pages/weather/Weather'
+
 function App() {
   return (
     <BrowserRouter>
@@ -46,8 +50,11 @@ function App() {
         <Route path="/message/:userId" element={<Message />} />
 
         <Route path="/ai" element={<Ai />} />
+    
+        <Route path="/news-alerts" element={<NewsAlerts />} />
+        <Route path="/weather" element={<Weather />} />
         <Route path="/setting" element={<Setting />} />
-
+        
 
       </Routes>
     </BrowserRouter>

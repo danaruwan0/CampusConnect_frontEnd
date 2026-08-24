@@ -1,0 +1,116 @@
+.loader-container{
+
+    width:100%;
+    height:80vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:#f8fafc;
+   
+
+}
+
+
+
+.loader-card{
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+
+}
+
+
+
+/* AI Logo */
+
+.loader-avatar{
+
+    width:80px;
+    height:80px;
+
+    object-fit:contain;
+
+    margin-bottom:25px;
+
+    animation:float 2s ease-in-out infinite;
+    border-radius: 50%;
+
+}
+
+
+
+/* Small spinner */
+
+.loader-spinner{
+
+    width:35px;
+    height:35px;
+
+    border-radius:50%;
+
+    border:3px solid #e5e7eb;
+
+    border-top:3px solid #2563eb;
+
+
+    animation:spin 0.9s linear infinite;
+
+}
+
+
+
+.loader-card p{
+
+    margin-top:20px;
+
+    font-size:15px;
+
+    color:#64748b;
+
+    font-weight:500;
+
+    letter-spacing:.5px;
+
+}
+
+
+
+
+/* Animations */
+
+
+@keyframes spin{
+
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}
+
+
+
+@keyframes float{
+
+    0%{
+        transform:translateY(0);
+    }
+
+
+    50%{
+        transform:translateY(-8px);
+    }
+
+
+    100%{
+        transform:translateY(0);
+    }
+
+}

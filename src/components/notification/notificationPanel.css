@@ -1,0 +1,580 @@
+/* ==========================================
+   NOTIFICATION OVERLAY
+========================================== */
+
+.notification-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,0.25);
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    align-items:stretch;
+
+    z-index:999999;
+
+    backdrop-filter:blur(3px);
+
+}
+
+
+/* ==========================================
+   PANEL
+========================================== */
+
+.notification-panel{
+
+    width:620px;
+
+    max-width:100%;
+
+    height:100vh;
+
+    background:#ffffff;
+
+    display:flex;
+
+    flex-direction:column;
+
+    box-shadow:-10px 0 35px rgba(0,0,0,0.18);
+
+    animation:slideIn .3s ease;
+
+}
+
+
+/* Animation */
+
+@keyframes slideIn{
+
+    from{
+
+        transform:translateX(100%);
+
+        opacity:.5;
+
+    }
+
+
+    to{
+
+        transform:translateX(0);
+
+        opacity:1;
+
+    }
+
+}
+
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+
+.notification-header{
+
+
+    height:75px;
+
+    padding:0 22px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    border-bottom:1px solid #eeeeee;
+
+    background:#ffffff;
+
+}
+
+
+
+.notification-header h2{
+
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    font-size:22px;
+
+    font-weight:700;
+
+    color:#111827;
+
+    margin:0;
+
+}
+
+
+.notification-header h2 svg{
+
+    color:#2563eb;
+
+    font-size:25px;
+
+}
+
+
+
+.notification-header button{
+
+
+    width:38px;
+
+    height:38px;
+
+    border-radius:50%;
+
+    border:none;
+
+    background:#f3f4f6;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    cursor:pointer;
+
+    font-size:22px;
+
+    color:#374151;
+
+    transition:.25s;
+
+}
+
+
+
+.notification-header button:hover{
+
+
+    background:#e5e7eb;
+
+    transform:rotate(90deg);
+
+}
+
+
+/* ==========================================
+   LIST
+========================================== */
+
+
+.notification-list{
+
+    flex:1;
+
+    overflow-y:auto;
+
+    padding:10px 0;
+
+    background:#fafafa;
+
+}
+
+
+/* Scrollbar */
+
+.notification-list::-webkit-scrollbar{
+
+    width:6px;
+
+}
+
+
+.notification-list::-webkit-scrollbar-thumb{
+
+    background:#cbd5e1;
+
+    border-radius:20px;
+
+}
+
+
+
+
+/* ==========================================
+   NOTIFICATION CARD
+========================================== */
+
+
+.notification-card{
+
+
+    display:flex;
+
+    gap:14px;
+
+    padding:16px 20px;
+
+    margin:4px 12px;
+
+    /* border-radius:14px; */
+
+    cursor:pointer;
+
+    background:white;
+
+    border:1px solid transparent;
+
+    transition:.25s ease;
+
+}
+
+
+
+.notification-card:hover{
+
+
+    background:#f8fafc;
+
+    border-color:#dbeafe;
+
+    transform:translateX(-3px);
+
+}
+
+
+
+
+/* unread */
+
+.notification-card.unread{
+
+
+    background:#eff6ff;
+
+    border-left:4px solid #2563eb;
+
+}
+
+
+
+.notification-card img{
+
+
+    width:52px;
+
+    height:52px;
+
+    min-width:52px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:2px solid #1877f2;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+
+}
+
+
+
+/* Content */
+
+
+.notification-card div{
+
+    flex:1;
+
+}
+
+
+
+.notification-card h4{
+
+
+    margin:0 0 5px;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    color:#111827;
+
+}
+
+
+
+.notification-card p{
+
+
+    margin:0 0 5px;
+
+    font-size:14px;
+
+    color:#374151;
+
+    line-height:1.4;
+
+}
+
+
+
+.notification-card small{
+
+
+    color:#6b7280;
+
+    font-size:12px;
+
+    display:block;
+
+    line-height:1.4;
+
+}
+
+
+
+
+
+/* ==========================================
+   EMPTY / LOADING TEXT
+========================================== */
+
+
+.notification-list > p{
+
+
+    height:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:#6b7280;
+
+    font-size:15px;
+
+}
+
+
+
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+
+@media(max-width:768px){
+
+
+    .notification-panel{
+
+
+        width:360px;
+
+    }
+
+
+}
+
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+
+@media(max-width:480px){
+
+
+    .notification-overlay{
+
+
+        justify-content:center;
+
+    }
+
+
+    .notification-panel{
+
+
+        width:100%;
+
+        height:100vh;
+
+        border-radius:0;
+
+    }
+
+
+
+    .notification-header{
+
+
+        height:65px;
+
+        padding:0 16px;
+
+    }
+
+
+
+    .notification-header h2{
+
+
+        font-size:19px;
+
+    }
+
+
+
+    .notification-card{
+
+
+        margin:5px 10px;
+
+        padding:14px;
+
+        gap:12px;
+
+    }
+
+
+
+    .notification-card img{
+
+
+        width:46px;
+
+        height:46px;
+
+        min-width:46px;
+
+    }
+
+
+
+    .notification-card h4{
+
+
+        font-size:14px;
+
+    }
+
+
+
+    .notification-card p{
+
+
+        font-size:13px;
+
+    }
+
+
+
+    .notification-card small{
+
+
+        font-size:11px;
+
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+/* ==========================================
+   DETAIL HEADER
+========================================== */
+
+.notification-detail-header{
+
+    height:75px;
+
+    padding:0 22px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    background:#ffffff;
+
+    border-bottom:1px solid #eeeeee;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.04);
+
+    flex-shrink:0;
+
+}
+
+.notification-detail-header button{
+
+    width:38px;
+
+    height:38px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#f3f4f6;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.notification-detail-header button:hover{
+
+    background:#e5e7eb;
+
+    transform:translateX(-2px);
+
+}
+
+.notification-detail-header button svg{
+
+    font-size:22px;
+
+    color:#374151;
+
+}
+
+.notification-detail-header h2{
+
+    margin:0;
+
+    font-size:22px;
+
+    font-weight:700;
+
+    color:#111827;
+
+}

@@ -2,43 +2,34 @@ import "./navbar.css";
 import React, { useState, useEffect } from "react";
 import { searchUsers } from "../../api/searchApi";
 import { FiBell } from "react-icons/fi";
-
 import { FaRegSquarePlus } from "react-icons/fa6";
-
 import { useNavigate } from "react-router-dom";
 import { getProfile } from "../../api/profileApi";
 import defaultProfile from "../../assets/Default profile.jpg";
-
 import { FiCpu } from "react-icons/fi";
 import { FiMessageCircle } from "react-icons/fi";
 import { FaRobot } from "react-icons/fa6";
 import { GiArtificialIntelligence } from "react-icons/gi";
-
 import { HiSparkles } from "react-icons/hi2"
 import { FiLogOut } from "react-icons/fi";
-
-
 import { FiMenu } from "react-icons/fi";
+import { FaBarsStaggered } from "react-icons/fa6";
+import { RiMenu3Line } from "react-icons/ri";
 import { FiX } from "react-icons/fi";
 import aiImage from "../../assets/ai.png";
-
+import { MdEmergency } from "react-icons/md";
+import { FaTriangleExclamation } from "react-icons/fa6";
 import SideNavBar from "../sideNavBar/SideNavBar";
-
-
+import Emergency from "../../components/emergency/Emergency";
+import NotificationPanel from "../../components/notification/NotificationPanel"
+import { getUnreadCount } from "../../api/notificationApi";
 
 export default function Navbar({
-    onCreatePost,
-    onMenuClick
-}) {
-
+    onCreatePost, onMenuClick }) {
 
     const userId = localStorage.getItem("userId");
 
     const [profile, setProfile] = useState(null);
-
-    useEffect(() => {
-        loadProfile();
-    }, []);
 
     const loadProfile = async () => {
         try {
@@ -49,16 +40,27 @@ export default function Navbar({
         }
     };
 
-    const navigate =
-        useNavigate();
+    useEffect(() => {
 
-    const [keyword,
-        setKeyword] =
-        useState("");
+        loadProfile();
 
-    const [users,
-        setUsers] =
-        useState([]);
+        loadUnreadCount();
+
+        const interval = setInterval(() => {
+
+            loadUnreadCount();
+
+        }, 5000);
+
+        return () => clearInterval(interval);
+
+    }, []);
+
+    const navigate = useNavigate();
+
+    const [keyword, setKeyword] = useState("");
+
+    const [users, setUsers] = useState([]);
 
     const handleSearch =
         async (e) => {
@@ -100,28 +102,42 @@ export default function Navbar({
         navigate("/");
     };
 
+    const [showEmergency, setShowEmergency] = useState(false);
+
+    const [showNotifications, setShowNotifications] = useState(false);
+
+    const [unreadCount, setUnreadCount] = useState(0);
+
+    const loadUnreadCount = async () => {
+        try {
+            const count = await getUnreadCount(userId);
+            setUnreadCount(count);
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
 
     return (
 
         <>
-            <div className="navbar">
+            <div className="nav-navbar">
 
-                <div className="navbar-left">
+                <div className="nav-navbar-left">
 
                     {/* logo image */}
                     <img
                         src={aiImage}
                         alt="AI"
-                        className="header-avatar"
+                        className="nav-header-avatar"
                     />
 
                 </div>
 
-                <div className="navbar-center">
-                    
+                <div className="nav-navbar-center">
+
                     <input
-                        className="search-input"
+                        className="nav-search-input"
                         type="text"
                         placeholder="Search users..."
                         value={keyword}
@@ -138,7 +154,7 @@ export default function Navbar({
                         users.length > 0 && (
 
                             <div
-                                className="search-result"
+                                className="nav-search-result"
                             >
 
                                 {
@@ -147,7 +163,7 @@ export default function Navbar({
 
                                             <div
                                                 key={user.userId}
-                                                className="search-user"
+                                                className="nav-search-user"
                                                 onClick={() => {
 
                                                     navigate(`/profile/${user.userId}`);
@@ -184,7 +200,53 @@ export default function Navbar({
 
                 </div>
 
-                <div className="navbar-right">
+                <div className="nav-navbar-right">
+
+                    <div
+                        className="nav-notification"
+                        onClick={onCreatePost}
+                        title="Create Post"
+                    >
+                        <FaRegSquarePlus />
+                    </div>
+
+                    <div
+                        className="nav-notification"
+                        onClick={() => navigate("/ai")}
+                        title="AI Chat"
+                    >
+                        <HiSparkles />
+                    </div>
+
+                    <div
+                        className="nav-notification"
+                        title="Create Emergency"
+                        onClick={() => setShowEmergency(true)}
+                    >
+                        <FaTriangleExclamation />
+                    </div>
+
+                    <div className="nav-notification-wrapper">
+
+                        <div
+                            className="nav-notification notification-bell"
+                            title="Notifications"
+                            onClick={() => {
+                                setShowNotifications(true);
+                                loadUnreadCount();
+                            }}
+                        >
+                            <FiBell />
+
+                            {unreadCount > 0 && (
+                                <span className="nav-notification-badge">
+                                    {unreadCount > 99 ? "99+" : unreadCount}
+                                </span>
+                            )}
+                        </div>
+
+
+                    </div>
 
 
                     <img
@@ -194,45 +256,44 @@ export default function Navbar({
                                 : defaultProfile
                         }
                         alt=""
-                        className="profile-image"
+                        className="nav-profile-image"
                         onClick={() => navigate("/profile")}
                     />
 
                     <div
-                        className="notification"
-                        onClick={onCreatePost}
-                    >
-                        <FaRegSquarePlus />
-                    </div>
-
-                    {/* add ai chat page  */}
-                    <div
-                        className="notification"
-                        onClick={() => navigate("/ai")}
-
-                    >
-                        <HiSparkles />
-                    </div>
-
-                    <div
-                        className="notification"
-                    >
-                        <FiBell />
-                    </div>
-
-                    <div
-                        className="menu-icon"
+                        className="nav-menu-icon"
                         onClick={onMenuClick}
+                        title="Menu"
                     >
-                        <FiMenu />
+                        <RiMenu3Line />
                     </div>
-
-
                 </div>
-
             </div>
 
+            {
+                showEmergency && (
+                    <Emergency
+                        onClose={() => setShowEmergency(false)}
+                    />
+                )
+            }
+
+
+            {
+                showNotifications && (
+
+                    <NotificationPanel
+                        onClose={() => {
+
+                            setShowNotifications(false);
+
+                            loadUnreadCount();
+
+                        }}
+                    />
+
+                )
+            }
         </>
     );
-
 }

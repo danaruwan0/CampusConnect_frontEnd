@@ -162,3 +162,18 @@
     line-height:1.5;
 
 }
+
+
+
+
+@media(max-width:768px){
+
+    .chat-list{
+
+        width:100%;
+
+        height:100%;
+
+    }
+
+}

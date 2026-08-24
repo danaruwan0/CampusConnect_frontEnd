@@ -106,7 +106,7 @@
 
     padding:14px 18px;
 
-    border-radius:12px;
+    border-radius:0px 12px 12px 0px ;
 
     cursor:pointer;
 
@@ -141,6 +141,7 @@
     background:#D0E1FB;
 
     border-left:4px solid #1877f2;
+
 
 }
 
@@ -290,7 +291,7 @@
 
         font-size:15px;
 
-        border-radius:10px;
+        border-radius:0px 12px 12px 0px ;
 
     }
 
@@ -346,45 +347,20 @@
 
 
     .side-navbar{
-
-
-        position:fixed;
-
-
+        /* position:fixed;
         top:0;
-
-        left:0;
-
-
+        left:0; */
         width:240px;
-
-
         height:100vh;
-
-
         padding:15px;
-
-
         z-index:99999;
-
-
-        transform:translateX(-100%);
-
-
+        /* transform:translateX(-100%); */
         box-shadow:0 10px 30px rgba(0,0,0,0.25);
-
-
     }
 
-
-
-
-    .side-navbar.show{
-
-
+    /* .side-navbar.show{
         transform:translateX(0);
-
-    }
+    } */
 
 
 
@@ -501,7 +477,7 @@
         font-size:14px;
 
 
-        border-radius:10px;
+        border-radius:0px 12px 12px 0px ;
 
 
     }

@@ -1,0 +1,610 @@
+/* ===========================================
+   OVERLAY
+=========================================== */
+
+.emergency-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.55);
+
+    backdrop-filter:blur(3px);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:999999;
+
+    padding:20px;
+
+}
+
+/* ===========================================
+   MODAL
+=========================================== */
+
+.emergency-modal{
+
+    width:100%;
+
+    max-width:650px;
+
+    max-height:92vh;
+
+    overflow-y:auto;
+
+    background:#ffffff;
+
+    border-radius:18px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.25);
+
+    animation:popup .25s ease;
+
+    margin: 20px 4px;
+
+}
+
+@keyframes popup{
+
+    from{
+
+        opacity:0;
+
+        transform:scale(.9);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:scale(1);
+
+    }
+
+}
+
+/* ===========================================
+   HEADER
+=========================================== */
+
+.emergency-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:22px;
+
+    border-bottom:1px solid #ececec;
+
+}
+
+.emergency-title{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.emergency-title h2{
+
+    margin:0;
+
+    font-size:23px;
+
+    font-weight:700;
+
+    color:#222;
+
+}
+
+.emergency-icon{
+
+    font-size:28px;
+
+    color:#dc2626;
+
+}
+
+.close-btn{
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#f3f4f6;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:20px;
+
+}
+
+.close-btn:hover{
+
+    background:#dc2626;
+
+    color:#fff;
+
+}
+
+/* ===========================================
+   FORM
+=========================================== */
+
+.emergency-form{
+
+    padding:25px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:16px;
+
+}
+
+.emergency-form label{
+
+    font-size:14px;
+
+    font-weight:600;
+
+    color:#444;
+
+}
+
+.emergency-form input,
+
+.emergency-form textarea{
+
+    width:100%;
+
+    padding:13px 15px;
+
+    border:1px solid #dcdcdc;
+
+    border-radius:12px;
+
+    outline:none;
+
+    font-size:14px;
+
+    transition:.25s;
+
+    box-sizing:border-box;
+
+    font-family:inherit;
+
+}
+
+.emergency-form textarea{
+
+    resize:vertical;
+
+    min-height:120px;
+
+}
+
+.emergency-form input:focus,
+
+.emergency-form textarea:focus{
+
+    border-color:#2563eb;
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+
+}
+
+/* ===========================================
+   LOCATION BUTTON
+=========================================== */
+
+.location-btn{
+
+    border:none;
+
+    background:#2563eb;
+
+    color:white;
+
+    border-radius:12px;
+
+    padding:13px;
+
+    cursor:pointer;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    font-size:15px;
+
+    transition:.25s;
+
+}
+
+.location-btn:hover{
+
+    background:#1d4ed8;
+
+}
+
+/* ===========================================
+   LAT LNG
+=========================================== */
+
+.location-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:15px;
+
+}
+
+/* ===========================================
+   FILE INPUT
+=========================================== */
+
+input[type=file]{
+
+    border:2px dashed #d8d8d8;
+
+    padding:15px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    background:#fafafa;
+
+    transition:.25s;
+
+}
+
+input[type=file]:hover{
+
+    border-color:#2563eb;
+
+    background:#f4f8ff;
+
+}
+
+/* ===========================================
+   IMAGE
+=========================================== */
+
+.preview-image{
+
+    width:100%;
+
+    max-height:280px;
+
+    object-fit:cover;
+
+    border-radius:12px;
+
+    border:1px solid #ddd;
+
+}
+
+/* ===========================================
+   VIDEO
+=========================================== */
+
+.preview-video{
+
+    width:100%;
+
+    border-radius:12px;
+
+    border:1px solid #ddd;
+
+}
+
+/* ===========================================
+   BUTTONS
+=========================================== */
+
+.emergency-actions{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:12px;
+
+    margin-top:10px;
+
+}
+
+.cancel-btn{
+
+    border:none;
+
+    padding:12px 24px;
+
+    border-radius:10px;
+
+    background:#e5e7eb;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    font-size:14px;
+
+}
+
+.cancel-btn:hover{
+
+    background:#d1d5db;
+
+}
+
+.send-btn{
+
+    border:none;
+
+    padding:12px 25px;
+
+    border-radius:10px;
+
+    background:#dc2626;
+
+    color:white;
+
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    font-size:14px;
+
+    transition:.25s;
+
+}
+
+.send-btn:hover{
+
+    background:#b91c1c;
+
+}
+
+.send-btn:disabled{
+
+    opacity:.6;
+
+    cursor:not-allowed;
+
+}
+
+/* ===========================================
+   SCROLLBAR
+=========================================== */
+
+.emergency-modal::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+.emergency-modal::-webkit-scrollbar-thumb{
+
+    background:#cfcfcf;
+
+    border-radius:20px;
+
+}
+
+/* ===========================================
+   RESPONSIVE
+=========================================== */
+
+@media(max-width:768px){
+
+    .emergency-modal{
+
+        max-width:100%;
+
+        border-radius:15px;
+
+    }
+
+    .location-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .emergency-header{
+
+        padding:18px;
+
+    }
+
+    .emergency-title h2{
+
+        font-size:20px;
+
+    }
+
+    .emergency-form{
+
+        padding:20px;
+
+    }
+
+}
+
+@media(max-width:500px){
+
+    .emergency-overlay{
+
+        padding:10px;
+
+    }
+
+    .emergency-form{
+
+        gap:14px;
+
+    }
+
+    .emergency-actions{
+
+        flex-direction:column;
+
+    }
+
+    .cancel-btn,
+
+    .send-btn{
+
+        width:100%;
+
+        justify-content:center;
+
+    }
+
+    .close-btn{
+
+        width:36px;
+
+        height:36px;
+
+    }
+
+}
+
+
+.emergency-map{
+
+    margin-top:10px;
+
+    overflow:hidden;
+
+    border-radius:15px;
+
+    border:1px solid #ddd;
+
+}
+
+
+.leaflet-container{
+
+    z-index:1;
+
+}
+
+
+
+
+
+/* =====================================
+   EMERGENCY SEND BUTTON
+===================================== */
+
+
+.emergency-send-btn{
+
+    background:#dc2626;
+
+    color:white;
+
+    border:none;
+
+    width:160px;
+
+    height:48px;
+
+    padding:0 25px;
+
+    border-radius:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:all .25s ease;
+
+    box-shadow:
+    0 6px 18px rgba(220,38,38,.25);
+
+}
+
+
+
+.emergency-send-btn:hover{
+
+    background:#b91c1c;
+
+    transform:translateY(-2px);
+
+    box-shadow:
+    0 8px 22px rgba(220,38,38,.35);
+
+}
+
+
+
+.emergency-send-btn:active{
+
+    transform:scale(.96);
+
+}
+
+
+
+.emergency-send-btn:disabled{
+
+    opacity:.6;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+}

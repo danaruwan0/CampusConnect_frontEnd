@@ -6,17 +6,11 @@ import "./chatList.css";
 import noChatImage from "../../assets/noChatImage.webp";
 
 export default function ChatList({
-
     currentUserId,
-
     selectedUser,
-
     onSelect,
-
     refreshKey,
-
     onlineUsers = [],
-
     typingUsers = []
 
 }) {

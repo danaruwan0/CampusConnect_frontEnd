@@ -578,3 +578,41 @@
     line-height: 1.6;
 
 }
+
+
+
+.mobile-back-btn{
+
+    display:none;
+
+    width:38px;
+
+    height:38px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#f2f2f2;
+
+    cursor:pointer;
+
+    font-size:22px;
+
+    margin-right:12px;
+
+}
+
+@media(max-width:768px){
+
+    .mobile-back-btn{
+
+        display:flex;
+
+        justify-content:center;
+
+        align-items:center;
+
+    }
+
+}

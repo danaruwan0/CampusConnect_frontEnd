@@ -27,6 +27,8 @@ export default function Message() {
     const [typingUsers, setTypingUsers] =
         useState([]);
 
+    const [mobileChatOpen, setMobileChatOpen] = useState(false);
+
     // ----------------------------
     // Refresh Chat List
     // ----------------------------
@@ -85,37 +87,44 @@ export default function Message() {
 
         <div className="message-page">
 
-            <ChatList
+            <div
+                className={`chat-list-wrapper ${mobileChatOpen ? "hide-mobile" : ""
+                    }`}
+            >
+                <ChatList
+                    currentUserId={currentUserId}
+                    selectedUser={selectedUser}
+                    refreshKey={refreshKey}
+                    onlineUsers={onlineUsers}
+                    typingUsers={typingUsers}
+                    onSelect={(user) => {
+                        setSelectedUser(user);
+                        setMobileChatOpen(true);
+                    }}
+                />
 
-                currentUserId={currentUserId}
+            </div>
 
-                selectedUser={selectedUser}
 
-                onSelect={setSelectedUser}
 
-                refreshKey={refreshKey}
+            <div
+                className={`chat-window-wrapper ${mobileChatOpen ? "show-mobile" : ""
+                    }`}
+            >
+                <ChatWindow
+                    currentUserId={currentUserId}
+                    selectedUser={selectedUser}
+                    onNewMessage={refreshChats}
+                    onlineUsers={onlineUsers}
+                    setOnlineUsers={setOnlineUsers}
+                    setTypingUsers={setTypingUsers}
+                    mobileChatOpen={mobileChatOpen}
+                    setMobileChatOpen={setMobileChatOpen}
+                />
+            </div>
 
-                onlineUsers={onlineUsers}
 
-                typingUsers={typingUsers}
 
-            />
-
-            <ChatWindow
-
-                currentUserId={currentUserId}
-
-                selectedUser={selectedUser}
-
-                onNewMessage={refreshChats}
-
-                onlineUsers={onlineUsers}
-
-                setOnlineUsers={setOnlineUsers}
-
-                setTypingUsers={setTypingUsers}
-
-            />
 
         </div>
 

@@ -1,0 +1,557 @@
+/* ==========================================
+   NOTIFICATION DETAIL
+========================================== */
+
+.notification-detail{
+
+    width:100%;
+    height:100%;
+
+    display:flex;
+    flex-direction:column;
+
+    overflow-y:auto;
+
+    background:#f8fafc;
+
+}
+
+/* Scrollbar */
+
+.notification-detail::-webkit-scrollbar{
+
+    width:6px;
+
+}
+
+.notification-detail::-webkit-scrollbar-thumb{
+
+    background:#cbd5e1;
+
+    border-radius:20px;
+
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.notification-detail-header{
+
+    position:sticky;
+    top:0;
+
+    background:#ffffff;
+
+    height:72px;
+
+    display:flex;
+    align-items:center;
+    gap:16px;
+
+    padding:10 20px;
+
+    border-bottom:1px solid #e5e7eb;
+
+    z-index:10;
+
+}
+
+.notification-detail-header h2{
+
+    margin:0;
+
+    font-size:22px;
+
+    font-weight:700;
+
+    color:#111827;
+
+}
+
+.notification-back-btn{
+
+    width:42px;
+    height:42px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#eef2f7;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.notification-back-btn:hover{
+
+    background:#dbeafe;
+
+    transform:translateX(-2px);
+
+}
+
+.notification-back-btn svg{
+
+    font-size:22px;
+
+    color:#2563eb;
+
+}
+
+
+/* ==========================================
+   USER CARD
+========================================== */
+
+.notification-user{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    background:white;
+
+    margin:18px;
+
+    padding:18px;
+
+    border-radius:16px;
+
+    box-shadow:0 3px 15px rgba(0,0,0,.05);
+
+}
+
+.notification-user img{
+
+    width:70px;
+
+    height:70px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:3px solid #1877f2;
+
+}
+
+.notification-user h3{
+
+    margin:0;
+
+    font-size:19px;
+
+    font-weight:700;
+
+    color:#111827;
+
+}
+
+.notification-user span{
+
+    margin-top:8px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    color:#6b7280;
+
+    font-size:13px;
+
+}
+
+
+/* ==========================================
+   CONTENT CARD
+========================================== */
+
+.notification-section{
+
+    background:white;
+
+    margin:0 18px 18px;
+
+    padding:22px;
+
+    border-radius:16px;
+
+    box-shadow:0 3px 15px rgba(0,0,0,.05);
+
+}
+
+.notification-section h1{
+
+    margin:0;
+
+    font-size:28px;
+
+    font-weight:700;
+
+    color:#111827;
+
+    line-height:1.4;
+
+}
+
+.notification-section h4{
+
+    margin:0 0 12px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    color:#374151;
+
+    font-size:16px;
+
+    font-weight:700;
+
+}
+
+.notification-section p{
+
+    margin:0;
+
+    font-size:15px;
+
+    color:#4b5563;
+
+    line-height:1.8;
+
+    word-break:break-word;
+
+}
+
+
+/* ==========================================
+   BADGE
+========================================== */
+
+.notification-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:8px 16px;
+
+    margin-bottom:18px;
+
+    border-radius:30px;
+
+    background:#fee2e2;
+
+    color:#dc2626;
+
+    font-size:14px;
+
+    font-weight:700;
+
+}
+
+.notification-badge svg{
+
+    font-size:18px;
+
+}
+
+
+/* ==========================================
+   IMAGE
+========================================== */
+
+.notification-image{
+
+    width:100%;
+
+    max-height:450px;
+
+    object-fit:cover;
+
+    border-radius:14px;
+
+    border:1px solid #e5e7eb;
+
+}
+
+
+/* ==========================================
+   VIDEO
+========================================== */
+
+.notification-video{
+
+    width:100%;
+
+    border-radius:14px;
+
+    background:black;
+
+}
+
+
+/* ==========================================
+   LOADING
+========================================== */
+
+.notification-detail-loading{
+
+    width:100%;
+
+    height:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:17px;
+
+    color:#6b7280;
+
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media(max-width:768px){
+
+    .notification-detail-header{
+
+        height:65px;
+
+        padding:10 16px;
+
+    }
+
+    .notification-detail-header h2{
+
+        font-size:20px;
+
+    }
+
+    .notification-user{
+
+        margin:14px;
+
+        padding:16px;
+
+    }
+
+    .notification-user img{
+
+        width:62px;
+
+        height:62px;
+
+    }
+
+    .notification-user h3{
+
+        font-size:18px;
+
+    }
+
+    .notification-section{
+
+        margin:0 14px 14px;
+
+        padding:18px;
+
+    }
+
+    .notification-section h1{
+
+        font-size:24px;
+
+    }
+
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media(max-width:480px){
+
+    .notification-detail-header{
+
+        height:60px;
+
+        padding:10 14px;
+
+    }
+
+    .notification-detail-header h2{
+
+        font-size:18px;
+
+    }
+
+    .notification-back-btn{
+
+        width:38px;
+
+        height:38px;
+
+    }
+
+    .notification-user{
+
+        margin:12px;
+
+        padding:14px;
+
+        gap:12px;
+
+    }
+
+    .notification-user img{
+
+        width:55px;
+
+        height:55px;
+
+    }
+
+    .notification-user h3{
+
+        font-size:16px;
+
+    }
+
+    .notification-user span{
+
+        font-size:12px;
+
+    }
+
+    .notification-section{
+
+        margin:0 12px 12px;
+
+        padding:16px;
+
+    }
+
+    .notification-section h1{
+
+        font-size:22px;
+
+    }
+
+    .notification-section h4{
+
+        font-size:15px;
+
+    }
+
+    .notification-section p{
+
+        font-size:14px;
+
+        line-height:1.7;
+
+    }
+
+    .notification-image{
+
+        max-height:280px;
+
+    }
+
+}
+
+
+/* ==========================================
+   SMALL MOBILE
+========================================== */
+
+@media(max-width:360px){
+
+    .notification-detail-header{
+
+        padding:20 20px;
+
+    }
+
+    .notification-detail-header h2{
+
+        font-size:17px;
+
+    }
+
+    .notification-user{
+
+        margin:10px;
+
+        padding:12px;
+
+    }
+
+    .notification-user img{
+
+        width:48px;
+
+        height:48px;
+
+    }
+
+    .notification-user h3{
+
+        font-size:15px;
+
+    }
+
+    .notification-section{
+
+        margin:0 10px 10px;
+
+        padding:14px;
+
+    }
+
+    .notification-section h1{
+
+        font-size:20px;
+
+    }
+
+    .notification-section p{
+
+        font-size:13px;
+
+    }
+
+    .notification-badge{
+
+        font-size:12px;
+
+        padding:7px 12px;
+
+    }
+
+}

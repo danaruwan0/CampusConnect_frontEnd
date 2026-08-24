@@ -19,8 +19,20 @@ import { sendSeen, subscribeSeen } from "../../services/seenSocket";
 import { getOnlineUsers } from "../../api/statusApi";
 
 
+export default function ChatWindow({
 
-export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, onlineUsers, setOnlineUsers, setTypingUsers }) {
+    currentUserId,
+    selectedUser,
+    onNewMessage,
+
+    onlineUsers,
+    setOnlineUsers,
+    setTypingUsers,
+
+    mobileChatOpen,
+    setMobileChatOpen
+
+}) {
 
     const [typing, setTyping] = useState(false);
 
@@ -527,6 +539,13 @@ export default function ChatWindow({ currentUserId, selectedUser, onNewMessage, 
         <div className="chat-window">
 
             <div className="chat-header">
+
+                <button
+                    className="mobile-back-btn"
+                    onClick={() => setMobileChatOpen(false)}
+                >
+                    ←
+                </button>
 
                 <div className="header-avatar">
 
