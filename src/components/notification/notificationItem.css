@@ -555,3 +555,33 @@
     }
 
 }
+
+
+.notification-profile-btn {
+
+    margin-top:20px;
+
+    padding:11px 20px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#2563eb;
+
+    color:white;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.notification-profile-btn:hover {
+
+    background:#1d4ed8;
+
+}

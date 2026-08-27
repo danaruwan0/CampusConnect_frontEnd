@@ -21,3 +21,16 @@ export const markAsRead = async (notificationId) => {
 
     return res.data;
 };
+
+
+export const deleteNotification = async (
+    notificationId,
+    userId
+) => {
+
+    const res = await api.delete(
+        `/api/notifications/${notificationId}/${userId}`
+    );
+
+    return res.data;
+};

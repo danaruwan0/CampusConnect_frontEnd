@@ -12,6 +12,9 @@ import defaultProfile from "../../assets/Default profile.jpg";
 
 import { getEmergency } from "../../api/emergencyApi";
 
+
+import { useNavigate } from "react-router-dom";
+
 export default function NotificationItem({
 
     notification,
@@ -19,6 +22,102 @@ export default function NotificationItem({
     onBack
 
 }) {
+
+
+    const navigate = useNavigate();
+
+    if (notification.type === "FOLLOW") {
+
+    return (
+
+        <div className="notification-detail">
+
+            <div className="notification-detail-header">
+
+                <button
+                    className="notification-back-btn"
+                    onClick={onBack}
+                >
+                    <FiArrowLeft />
+                </button>
+
+                <h2>
+                    New Follower
+                </h2>
+
+            </div>
+
+
+            <div className="notification-user">
+
+                <img
+                    src={
+                        notification.senderProfileImage
+                        || defaultProfile
+                    }
+                    alt="Profile"
+                />
+
+                <div>
+
+                    <h3>
+                        {notification.senderName}
+                    </h3>
+
+                    <span>
+                        <FiClock />
+
+                        {" "}
+
+                        {
+                            new Date(
+                                notification.createdAt
+                            ).toLocaleString()
+                        }
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div className="notification-section">
+
+                <div className="notification-badge">
+
+                    New Follower
+
+                </div>
+
+                <h1>
+                    {notification.senderName}
+                    {" "}
+                    started following you
+                </h1>
+
+                <button
+                    className="notification-profile-btn"
+                    onClick={() =>
+                        navigate(
+                            `/profile/${notification.referenceId}`
+                        )
+                    }
+                >
+                    View Profile
+                </button>
+
+            </div>
+
+        </div>
+
+    );
+}
+
+
+
+
+
+    ///////
 
     const [emergency, setEmergency] = useState(null);
 

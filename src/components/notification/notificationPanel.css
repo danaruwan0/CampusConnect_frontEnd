@@ -578,3 +578,45 @@
     color:#111827;
 
 }
+
+
+
+.notification-card {
+    position: relative;
+}
+
+.notification-card-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-delete-btn {
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    border: none;
+    border-radius: 50%;
+
+    background: transparent;
+
+    color: #9ca3af;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.notification-delete-btn:hover {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.notification-delete-btn svg {
+    font-size: 17px;
+}

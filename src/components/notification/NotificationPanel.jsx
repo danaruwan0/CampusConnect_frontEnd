@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import "./notificationPanel.css";
 
-import { FiBell, FiX } from "react-icons/fi";
+import {
+    FiBell,
+    FiX,
+    FiTrash2
+} from "react-icons/fi";
 
 import defaultProfile from "../../assets/Default profile.jpg";
 
 import {
     getNotifications,
-    markAsRead
+    markAsRead,
+    deleteNotification
 } from "../../api/notificationApi";
 
 import NotificationItem from "./NotificationItem";
@@ -78,6 +83,35 @@ export default function NotificationPanel({ onClose }) {
 
         }
 
+    };
+
+
+
+
+    const handleDeleteNotification = async (
+        notificationId
+    ) => {
+
+        try {
+
+            await deleteNotification(
+                notificationId,
+                userId
+            );
+
+            setNotifications(prev =>
+                prev.filter(
+                    notification =>
+                        notification.id !== notificationId
+                )
+            );
+
+        }
+        catch (err) {
+
+            console.log(err);
+
+        }
     };
 
     return (
@@ -179,7 +213,7 @@ export default function NotificationPanel({ onClose }) {
 
                                                         src={
                                                             notification.senderProfileImage
-                                                                || defaultProfile
+                                                            || defaultProfile
                                                         }
 
                                                         alt="Profile"
@@ -213,6 +247,25 @@ export default function NotificationPanel({ onClose }) {
                                                         </small>
 
                                                     </div>
+
+                                                    {/* DELETE BUTTON */}
+
+                                                    <button
+                                                        className="notification-delete-btn"
+                                                        onClick={(e) => {
+
+                                                            e.stopPropagation();
+
+                                                            handleDeleteNotification(
+                                                                notification.id
+                                                            );
+
+                                                        }}
+                                                    >
+
+                                                        <FiTrash2 />
+
+                                                    </button>
 
                                                 </div>
 
