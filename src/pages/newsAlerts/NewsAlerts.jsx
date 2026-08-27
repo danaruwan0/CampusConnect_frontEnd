@@ -9,15 +9,15 @@ import {
     FiExternalLink,
     FiCalendar,
     FiRefreshCw,
-    FiAlertCircle,
-    FiLoader
+    FiAlertCircle
 } from "react-icons/fi";
 
-import news_temp from '../../assets/demo_news.png';
+import news_temp from "../../assets/demo_news.png";
+import Loader from "../../components/loader/Loader";
+import CommonNavBar from "../../components/commonNavBar/CommonNavBar";
 
 export default function NewsAlerts() {
 
-    // Technology news only
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -42,8 +42,8 @@ export default function NewsAlerts() {
             setLoading(false);
 
         }
-
     };
+
 
     useEffect(() => {
 
@@ -51,15 +51,16 @@ export default function NewsAlerts() {
 
     }, []);
 
+
     return (
 
         <div className="news-page">
 
-            <Navbar />
+            {/* <Navbar /> */}
+            <CommonNavBar />
+
 
             <div className="news-container">
-
-                {/* ================= HEADER ================= */}
 
                 <div className="news-topbar">
 
@@ -71,9 +72,11 @@ export default function NewsAlerts() {
 
                     </div>
 
+
                     <button
                         className="refresh-btn"
                         onClick={loadNews}
+                        disabled={loading}
                     >
 
                         <FiRefreshCw />
@@ -84,17 +87,10 @@ export default function NewsAlerts() {
 
                 </div>
 
-                {/* ================= LOADING ================= */}
 
                 {loading ? (
 
-                    <div className="loading-box">
-
-                        <FiLoader className="loading-icon" />
-
-                        <h3>Loading Technology News...</h3>
-
-                    </div>
+                    <Loader text="Loading Technology News..." />
 
                 ) : news.length === 0 ? (
 
@@ -105,10 +101,8 @@ export default function NewsAlerts() {
                         <h2>No News Available</h2>
 
                         <p>
-
                             Technology news is currently unavailable.
                             Please try again later.
-
                         </p>
 
                     </div>
@@ -126,40 +120,22 @@ export default function NewsAlerts() {
 
                                 <div className="news-image">
 
-                                    {/* <img
-                                        src={
-                                            item.image ||
-                                            "https://placehold.co/900x500?text=Technology+News"
-                                        }
-                                        alt={item.title}
-                                        onError={(e) => {
-                                            e.target.src =
-                                                "https://placehold.co/900x500?text=Technology+News";
-                                        }}
-                                    /> */}
-
-
                                     <img
-                                        src={item.image ||
-                                            news_temp}
+                                        src={item.image || news_temp}
                                         alt={item.title}
-                                        // className="register-image"
-
                                         onError={(e) => {
-                                            e.target.src =
-                                                "news_temp";
+                                            e.currentTarget.src = news_temp;
                                         }}
                                     />
 
-
                                     <div className="news-source">
 
-                                        {item.source?.name ||
-                                            "Technology"}
+                                        {item.source?.name || "Technology"}
 
                                     </div>
 
                                 </div>
+
 
                                 <div className="news-body">
 
@@ -173,18 +149,17 @@ export default function NewsAlerts() {
 
                                     </div>
 
+
                                     <h3>
-
                                         {item.title}
-
                                     </h3>
 
-                                    <p>
 
+                                    <p>
                                         {item.description ||
                                             "No description available for this article."}
-
                                     </p>
+
 
                                     <a
                                         href={item.url}
@@ -212,7 +187,5 @@ export default function NewsAlerts() {
             </div>
 
         </div>
-
     );
-
 }

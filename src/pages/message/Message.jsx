@@ -71,6 +71,9 @@ export default function Message() {
 
                 });
 
+                // THIS PART USER CHAT NAVIGATE FROM PROFILE TO MESSAGE PAGE, SO WHEN USER CLICK ON MESSAGE BUTTON, IT WILL OPEN THE CHAT WINDOW DIRECTLY WITH THAT USER. SO I SET THE MOBILE CHAT OPEN TO TRUE.
+                setMobileChatOpen(true);
+
             } catch (err) {
 
                 console.log(err);

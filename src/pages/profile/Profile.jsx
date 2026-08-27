@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
 import Navbar from "../../components/navbar/Navbar";
+
+import CommonNavBar from "../../components/commonNavBar/CommonNavBar";
+
 import PostCard from "../../components/postCard/PostCard";
 import "./profile.css";
 import defaultProfile from "../../assets/Default profile.jpg";
@@ -106,7 +110,9 @@ export default function Profile() {
         return (
 
             <>
-                <Navbar />
+                {/* <Navbar /> */}
+                <CommonNavBar />
+
 
                 <div
                     style={{
@@ -235,7 +241,15 @@ export default function Profile() {
 
         <>
 
-            <Navbar
+
+            {/* im change on this navbar to common navbar, this is pecil
+            paart   */}
+
+            {/* <Navbar
+                onCreatePost={() => setShowCreatePost(true)}
+            /> */}
+
+            <CommonNavBar
                 onCreatePost={() => setShowCreatePost(true)}
             />
 

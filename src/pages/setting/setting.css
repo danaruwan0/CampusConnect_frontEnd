@@ -1,359 +1,528 @@
-.setting-page{
+/* =========================================================
+   CAMPUSCONNECT SETTINGS
+   Production-level UI
+   No animations
+   ========================================================= */
 
-padding:30px;
-
-max-width:900px;
-
-margin:auto;
-
+.setting-page {
+    width: 100%;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 32px 24px 60px;
+    box-sizing: border-box;
 }
 
 
+/* =========================================================
+   HEADER
+   ========================================================= */
 
+.setting-header {
+    margin-bottom: 28px;
+}
 
-.setting-header{
+.setting-header h1 {
+    margin: 0 0 7px;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.4px;
+    color: #111827;
+}
 
-margin-bottom:30px;
-
+.setting-header p {
+    margin: 0;
+    max-width: 700px;
+    color: #65676b;
+    font-size: 14px;
+    line-height: 1.6;
 }
 
 
+/* =========================================================
+   CARD
+   ========================================================= */
 
-.setting-header h1{
+.setting-card {
+    background: #ffffff;
+    border: 1px solid #e4e6eb;
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    box-sizing: border-box;
+}
 
-font-size:32px;
-
-font-weight:700;
-
-margin-bottom:8px;
-
+.setting-card h2 {
+    margin: 0 0 16px;
+    color: #1c1e21;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.4;
 }
 
 
+/* =========================================================
+   ACCOUNT
+   ========================================================= */
 
-.setting-header p{
+.account-box {
+    width: 100%;
+    min-height: 82px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
 
-color:#777;
+    padding: 13px 14px;
+    box-sizing: border-box;
 
-font-size:15px;
+    background: #f7f8fa;
+    border: 1px solid #e4e6eb;
+    border-radius: 12px;
 
-line-height:1.6;
+    cursor: pointer;
+}
 
+.account-box:hover {
+    background: #f0f2f5;
+}
+
+.account-box img {
+    width: 58px;
+    height: 58px;
+    flex-shrink: 0;
+
+    border-radius: 50%;
+    object-fit: cover;
+
+    border: 1px solid #e4e6eb;
+}
+
+.account-box > div {
+    min-width: 0;
+    flex: 1;
+}
+
+.account-box h3 {
+    margin: 0 0 3px;
+
+    color: #1c1e21;
+    font-size: 15px;
+    font-weight: 600;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.account-box p {
+    margin: 0 0 5px;
+
+    color: #65676b;
+    font-size: 13px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.account-box span {
+    color: #1877f2;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.account-box > svg {
+    flex-shrink: 0;
+    color: #8a8d91;
+    font-size: 20px;
 }
 
 
-
-
-.setting-card{
-
-background:white;
-
-padding:22px;
-
-border-radius:18px;
-
-margin-bottom:22px;
-
-box-shadow:0 6px 20px rgba(0,0,0,.08);
-
-}
-
-
-
-
-.setting-card h2{
-
-font-size:19px;
-
-margin-bottom:18px;
-
-}
-
-
-
-
-
-/* ACCOUNT */
-
-
-.account-box{
-
-display:flex;
-
-align-items:center;
-
-gap:15px;
-
-padding:15px;
-
-background:#f7f9fc;
-
-border-radius:15px;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-
-
-.account-box:hover{
-
-background:#eaf2ff;
-
-}
-
-
-
-.account-box img{
-
-width:65px;
-
-height:65px;
-
-border-radius:50%;
-
-object-fit:cover;
-
-}
-
-
-
-.account-box h3{
-
-margin:0;
-
-font-size:17px;
-
-}
-
-
-
-.account-box p{
-
-color:#777;
-
-font-size:13px;
-
-}
-
-
-
-.account-box span{
-
-color:#1877f2;
-
-font-size:12px;
-
-}
-
-
-
-
-
-
-
-/* ITEM */
-
+/* =========================================================
+   SETTING ITEM
+   ========================================================= */
 
 .setting-item,
-.accordion-item{
+.accordion-item {
+    width: 100%;
+    min-height: 64px;
 
-display:flex;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-justify-content:space-between;
+    padding: 12px 4px;
+    box-sizing: border-box;
 
-align-items:center;
+    border-bottom: 1px solid #ebedf0;
+}
 
-padding:16px 5px;
+.setting-card > .setting-item:last-child,
+.setting-card > .accordion-item:last-child {
+    border-bottom: none;
+}
 
-border-bottom:1px solid #eee;
+.setting-item {
+    cursor: default;
+}
 
-cursor:pointer;
+.accordion-item {
+    cursor: pointer;
+}
 
+.accordion-item:hover {
+    background: #f7f8fa;
 }
 
 
+/* =========================================================
+   LEFT CONTENT
+   ========================================================= */
 
-.setting-left{
+.setting-left {
+    min-width: 0;
 
-display:flex;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
 
-align-items:center;
+.setting-left > svg {
+    width: 21px;
+    height: 21px;
+    flex-shrink: 0;
 
-gap:15px;
+    color: #1877f2;
+    stroke-width: 2;
+}
 
+.setting-left > div {
+    min-width: 0;
+}
+
+.setting-left h3 {
+    margin: 0;
+
+    color: #1c1e21;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.setting-left p {
+    margin: 4px 0 0;
+
+    color: #65676b;
+    font-size: 12.5px;
+    line-height: 1.45;
 }
 
 
+/* =========================================================
+   RIGHT CHEVRON
+   ========================================================= */
 
-.setting-left svg{
+.setting-item > svg,
+.accordion-item > svg {
+    flex-shrink: 0;
 
-font-size:23px;
-
-color:#1877f2;
-
+    color: #8a8d91;
+    font-size: 18px;
 }
 
 
+/* =========================================================
+   SELECT
+   ========================================================= */
 
-.setting-left h3{
+.setting-item select {
+    min-width: 110px;
 
-font-size:15px;
+    padding: 8px 30px 8px 11px;
 
-margin:0;
+    color: #1c1e21;
+    background-color: #ffffff;
 
+    border: 1px solid #ccd0d5;
+    border-radius: 8px;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+
+    outline: none;
+    cursor: pointer;
+
+    appearance: auto;
+}
+
+.setting-item select:hover {
+    border-color: #a8abb0;
+}
+
+.setting-item select:focus {
+    border-color: #1877f2;
+    box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.12);
 }
 
 
+/* =========================================================
+   ACCORDION CONTENT
+   ========================================================= */
 
-.setting-left p{
+.accordion-content {
+    margin: 4px 0 10px;
+    padding: 16px 17px;
 
-font-size:13px;
+    background: #f7f9fc;
+    border: 1px solid #e4e8ef;
+    border-radius: 10px;
 
-color:#777;
+    color: #4b5563;
+    font-size: 13px;
+    line-height: 1.7;
+}
 
-margin-top:5px;
+.accordion-content h4 {
+    margin: 0 0 9px;
 
+    color: #1877f2;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.accordion-content p {
+    margin: 0 0 9px;
+}
+
+.accordion-content p:last-child {
+    margin-bottom: 0;
 }
 
 
+/* =========================================================
+   SUPPORT
+   ========================================================= */
 
+.setting-card:last-child .accordion-item {
+    cursor: default;
+}
 
-
-select{
-
-padding:8px 12px;
-
-border-radius:10px;
-
-border:1px solid #ddd;
-
+.setting-card:last-child .accordion-item:hover {
+    background: transparent;
 }
 
 
+/* =========================================================
+   DESKTOP SPACING
+   ========================================================= */
 
+@media (min-width: 769px) {
 
+    .setting-card {
+        padding: 22px 24px;
+    }
 
-/* ACCORDION */
-
-
-.accordion-content{
-
-background:#f8faff;
-
-padding:18px;
-
-border-radius:12px;
-
-margin:10px 0;
-
-font-size:14px;
-
-line-height:1.7;
-
-color:#555;
-
+    .setting-item,
+    .accordion-item {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
 }
 
 
+/* =========================================================
+   TABLET
+   ========================================================= */
 
-.accordion-content h4{
+@media (max-width: 768px) {
 
-color:#1877f2;
+    .setting-page {
+        max-width: 100%;
+        padding: 24px 16px 45px;
+    }
 
-margin-bottom:10px;
+    .setting-header {
+        margin-bottom: 22px;
+    }
 
+    .setting-header h1 {
+        font-size: 26px;
+    }
+
+    .setting-header p {
+        font-size: 13px;
+    }
+
+    .setting-card {
+        padding: 18px;
+        margin-bottom: 15px;
+        border-radius: 13px;
+    }
+
+    .setting-card h2 {
+        font-size: 17px;
+        margin-bottom: 13px;
+    }
+
+    .account-box {
+        padding: 12px;
+        min-height: 76px;
+    }
+
+    .account-box img {
+        width: 54px;
+        height: 54px;
+    }
+
+    .setting-left {
+        gap: 11px;
+    }
+
+    .setting-left > svg {
+        width: 20px;
+        height: 20px;
+    }
 }
 
 
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
+@media (max-width: 520px) {
 
+    .setting-page {
+        padding: 18px 12px 35px;
+    }
 
-/* MOBILE */
+    .setting-header h1 {
+        font-size: 23px;
+        letter-spacing: -0.2px;
+    }
 
+    .setting-header p {
+        font-size: 12.5px;
+        line-height: 1.55;
+    }
 
-@media(max-width:768px){
+    .setting-card {
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 13px;
+    }
 
+    .setting-card h2 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
 
-.setting-page{
+    .account-box {
+        gap: 11px;
+        padding: 10px;
+        border-radius: 10px;
+    }
 
-padding:15px;
+    .account-box img {
+        width: 50px;
+        height: 50px;
+    }
 
+    .account-box h3 {
+        font-size: 14px;
+    }
+
+    .account-box p {
+        font-size: 11.5px;
+    }
+
+    .account-box span {
+        font-size: 11px;
+    }
+
+    .account-box > svg {
+        font-size: 18px;
+    }
+
+    .setting-item,
+    .accordion-item {
+        min-height: 60px;
+        padding: 10px 2px;
+    }
+
+    .setting-left {
+        gap: 10px;
+    }
+
+    .setting-left > svg {
+        width: 19px;
+        height: 19px;
+    }
+
+    .setting-left h3 {
+        font-size: 13px;
+    }
+
+    .setting-left p {
+        font-size: 11.5px;
+        margin-top: 3px;
+    }
+
+    .setting-item select {
+        min-width: 88px;
+        padding: 7px 8px;
+        font-size: 11.5px;
+    }
+
+    .setting-item > svg,
+    .accordion-item > svg {
+        font-size: 17px;
+    }
+
+    .accordion-content {
+        padding: 13px 14px;
+        font-size: 12px;
+        line-height: 1.65;
+        border-radius: 9px;
+    }
+
+    .accordion-content h4 {
+        font-size: 13px;
+    }
 }
 
 
-.setting-header h1{
+/* =========================================================
+   VERY SMALL DEVICES
+   ========================================================= */
 
-font-size:24px;
+@media (max-width: 360px) {
 
-}
+    .setting-page {
+        padding-left: 9px;
+        padding-right: 9px;
+    }
 
+    .setting-card {
+        padding: 13px;
+    }
 
-.setting-header p{
+    .setting-left > svg {
+        width: 18px;
+        height: 18px;
+    }
 
-font-size:13px;
+    .setting-left h3 {
+        font-size: 12.5px;
+    }
 
-}
+    .setting-left p {
+        font-size: 11px;
+    }
 
-
-
-.setting-card{
-
-padding:15px;
-
-}
-
-
-
-.setting-left{
-
-gap:10px;
-
-}
-
-
-
-.setting-left svg{
-
-font-size:20px;
-
-}
-
-
-
-.setting-left h3{
-
-font-size:14px;
-
-}
-
-
-
-.setting-left p{
-
-font-size:12px;
-
-}
-
-
-select{
-
-font-size:12px;
-
-padding:6px 8px;
-
-}
-
-
-.account-box img{
-
-width:55px;
-
-height:55px;
-
-}
-
-
+    .setting-item select {
+        min-width: 78px;
+        font-size: 11px;
+    }
 }

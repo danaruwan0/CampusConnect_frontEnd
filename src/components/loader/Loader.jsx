@@ -10,27 +10,15 @@ export default function Loader({ text = "Loading..." }) {
 
         <div className="loader-container">
 
-
             <div className="loader-card">
 
-
-                {/* <img
-                    src={aiAvatar}
-                    alt="AI Loader"
-                    className="loader-avatar"
-                /> */}
-
-
                 <div className="loader-spinner"></div>
-
 
                 <p>
                     {text}
                 </p>
 
-
             </div>
-
 
         </div>
 

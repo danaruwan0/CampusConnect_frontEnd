@@ -16,6 +16,8 @@ import NewsAlerts from '../pages/newsAlerts/NewsAlerts'
 
 import Weather from '../pages/weather/Weather'
 
+import Demo from '../pages/demo/Demo'
+
 function App() {
   return (
     <BrowserRouter>
@@ -54,6 +56,9 @@ function App() {
         <Route path="/news-alerts" element={<NewsAlerts />} />
         <Route path="/weather" element={<Weather />} />
         <Route path="/setting" element={<Setting />} />
+
+
+        <Route path="/demo" element={<Demo />} />
         
 
       </Routes>

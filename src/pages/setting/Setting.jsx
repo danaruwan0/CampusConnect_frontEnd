@@ -21,809 +21,799 @@ import { getProfile } from "../../api/profileApi";
 
 import { useNavigate } from "react-router-dom";
 
+import CommonNavBar from "../../components/commonNavBar/CommonNavBar";
 
-export default function Setting(){
 
+export default function Setting() {
 
-const navigate = useNavigate();
 
+    const navigate = useNavigate();
 
-const userId = Number(localStorage.getItem("userId"));
 
+    const userId = Number(localStorage.getItem("userId"));
 
-const [profile,setProfile] = useState(null);
 
+    const [profile, setProfile] = useState(null);
 
-const [open,setOpen] = useState("");
 
+    const [open, setOpen] = useState("");
 
 
-useEffect(()=>{
 
-loadProfile();
+    useEffect(() => {
 
-},[]);
+        loadProfile();
 
+    }, []);
 
 
-const loadProfile = async()=>{
 
-try{
+    const loadProfile = async () => {
 
-const data = await getProfile(userId);
+        try {
 
-setProfile(data);
+            const data = await getProfile(userId);
 
-}
+            setProfile(data);
 
-catch(err){
+        }
 
-console.log(err);
+        catch (err) {
 
-}
+            console.log(err);
 
-};
+        }
 
+    };
 
 
-const toggle=(name)=>{
 
+    const toggle = (name) => {
 
-setOpen(
-open === name ? "" : name
-);
 
+        setOpen(
+            open === name ? "" : name
+        );
 
-};
 
+    };
 
 
 
 
-return(
 
-<div className="setting-page">
+    return (
 
 
+        
 
-<div className="setting-header">
+        <div>
 
+            <CommonNavBar />
+            <div className="setting-page">
+            <div className="setting-header">
+                <h1>
+                    Settings
+                </h1>
+                <p>
+                    Customize your CampusConnect experience, manage your account, and control your privacy preferences.
+                </p>
 
-<h1>
-Settings
-</h1>
 
+            </div>
 
-<p>
-Customize your CampusConnect experience, manage your account, and control your privacy preferences.
-</p>
 
 
-</div>
+            {/* ACCOUNT */}
 
 
 
+            <div className="setting-card">
 
 
+                <h2>
+                    Account
+                </h2>
 
 
 
-{/* ACCOUNT */}
+                <div
+                    className="account-box"
+                    onClick={() => navigate("/profile")}
+                >
 
 
+                    <img
 
-<div className="setting-card">
+                        src={
+                            profile?.profileImage || defaultProfile
+                        }
 
+                        onError={(e) => e.target.src = defaultProfile}
 
-<h2>
-Account
-</h2>
+                    />
 
 
 
-<div
-className="account-box"
-onClick={()=>navigate("/profile")}
->
+                    <div>
 
+                        <h3>
+                            {profile?.fullName || "CampusConnect User"}
+                        </h3>
 
-<img
 
-src={
-profile?.profileImage || defaultProfile
-}
+                        <p>
+                            {profile?.email || "student@campusconnect.com"}
+                        </p>
 
-onError={(e)=>e.target.src=defaultProfile}
 
-/>
+                        <span>
+                            View Profile
+                        </span>
 
 
+                    </div>
 
-<div>
 
-<h3>
-{profile?.fullName || "CampusConnect User"}
-</h3>
 
+                    <FiChevronRight />
 
-<p>
-{profile?.email || "student@campusconnect.com"}
-</p>
+                </div>
 
 
-<span>
-View Profile
-</span>
+            </div>
 
 
-</div>
 
 
 
-<FiChevronRight/>
 
-</div>
 
 
-</div>
 
+            {/* APPLICATION */}
 
 
 
+            <div className="setting-card">
 
 
+                <h2>
+                    Application
+                </h2>
 
 
 
-{/* APPLICATION */}
+                <div className="setting-item">
 
+                    <div className="setting-left">
 
+                        <FiInfo />
 
-<div className="setting-card">
 
+                        <div>
 
-<h2>
-Application
-</h2>
+                            <h3>
+                                App Version
+                            </h3>
 
 
+                            <p>
+                                CampusConnect v1.0v
+                            </p>
 
-<div className="setting-item">
 
-<div className="setting-left">
+                        </div>
 
-<FiInfo/>
+                    </div>
 
 
-<div>
+                </div>
 
-<h3>
-App Version
-</h3>
 
 
-<p>
-CampusConnect v1.0v
-</p>
 
 
-</div>
+                <div className="setting-item">
 
-</div>
 
+                    <div className="setting-left">
 
-</div>
+                        <FiRefreshCw />
 
 
+                        <div>
 
+                            <h3>
+                                Application Update
+                            </h3>
 
 
-<div className="setting-item">
+                            <p>
+                                Your app is running latest version
+                            </p>
 
 
-<div className="setting-left">
+                        </div>
 
-<FiRefreshCw/>
 
+                    </div>
 
-<div>
 
-<h3>
-Application Update
-</h3>
 
+                    <FiChevronRight />
 
-<p>
-Your app is running latest version
-</p>
 
+                </div>
 
-</div>
 
 
-</div>
 
+            </div>
 
 
-<FiChevronRight/>
 
 
-</div>
 
 
 
 
-</div>
 
+            {/* PREFERENCE */}
 
 
 
+            <div className="setting-card">
 
 
+                <h2>
+                    Preferences
+                </h2>
 
 
 
-{/* PREFERENCE */}
 
 
+                <div className="setting-item">
 
-<div className="setting-card">
 
+                    <div className="setting-left">
 
-<h2>
-Preferences
-</h2>
+                        <FiGlobe />
 
 
+                        <div>
 
+                            <h3>
+                                Language
+                            </h3>
 
 
-<div className="setting-item">
+                            <p>
+                                English (Default)
+                            </p>
 
 
-<div className="setting-left">
+                        </div>
 
-<FiGlobe/>
 
+                    </div>
 
-<div>
 
-<h3>
-Language
-</h3>
 
+                    <select>
 
-<p>
-English (Default)
-</p>
+                        <option>
+                            English
+                        </option>
 
 
-</div>
+                        <option disabled>
+                            Sinhala (Coming Soon)
+                        </option>
 
 
-</div>
+                        <option disabled>
+                            Tamil (Coming Soon)
+                        </option>
 
 
+                    </select>
 
-<select>
 
-<option>
-English
-</option>
+                </div>
 
 
-<option disabled>
-Sinhala (Coming Soon)
-</option>
 
 
-<option disabled>
-Tamil (Coming Soon)
-</option>
 
 
-</select>
+                <div className="setting-item">
 
 
-</div>
+                    <div className="setting-left">
 
+                        <FiSun />
 
 
+                        <div>
 
+                            <h3>
+                                Theme
+                            </h3>
 
 
-<div className="setting-item">
+                            <p>
+                                Light mode enabled
+                            </p>
 
 
-<div className="setting-left">
+                        </div>
 
-<FiSun/>
 
+                    </div>
 
-<div>
 
-<h3>
-Theme
-</h3>
 
+                    <select>
 
-<p>
-Light mode enabled
-</p>
 
+                        <option>
+                            Light
+                        </option>
 
-</div>
 
+                        <option disabled>
+                            Dark (Coming Soon)
+                        </option>
 
-</div>
 
+                    </select>
 
 
-<select>
 
+                </div>
 
-<option>
-Light
-</option>
 
+            </div>
 
-<option disabled>
-Dark (Coming Soon)
-</option>
 
+            {/* SECURITY */}
 
-</select>
 
 
+            <div className="setting-card">
 
-</div>
 
+                <h2>
+                    Security & Privacy
+                </h2>
 
-</div>
 
 
 
 
 
+                {/* PRIVACY */}
 
 
+                <div
+                    className="accordion-item"
 
+                    onClick={() => toggle("privacy")}
 
-{/* SECURITY */}
+                >
 
 
+                    <div className="setting-left">
 
-<div className="setting-card">
 
+                        <FiShield />
 
-<h2>
-Security & Privacy
-</h2>
 
+                        <div>
 
+                            <h3>
+                                Privacy Policy
+                            </h3>
 
 
+                            <p>
+                                Learn how we protect your data
+                            </p>
 
 
-{/* PRIVACY */}
+                        </div>
 
 
-<div 
-className="accordion-item"
+                    </div>
 
-onClick={()=>toggle("privacy")}
 
->
 
+                    {
 
-<div className="setting-left">
+                        open === "privacy"
 
+                            ?
 
-<FiShield/>
+                            <FiChevronDown />
 
+                            :
 
-<div>
+                            <FiChevronRight />
 
-<h3>
-Privacy Policy
-</h3>
+                    }
 
 
-<p>
-Learn how we protect your data
-</p>
+                </div>
 
 
-</div>
 
 
-</div>
+                {
+                    open === "privacy"
 
+                    &&
 
+                    <div className="accordion-content">
 
-{
 
-open==="privacy"
+                        <h4>
+                            Your Privacy Matters
+                        </h4>
 
-?
 
-<FiChevronDown/>
+                        <p>
 
-:
+                            CampusConnect respects your privacy and protects your personal information.
 
-<FiChevronRight/>
+                        </p>
 
-}
 
+                        <p>
 
-</div>
+                            We collect only required information such as your profile details, posts, messages, and account activities to provide better services.
 
+                        </p>
 
 
+                        <p>
 
-{
-open==="privacy"
+                            Your personal information is never sold or shared with unauthorized third parties.
 
-&&
+                        </p>
 
-<div className="accordion-content">
 
+                    </div>
 
-<h4>
-Your Privacy Matters
-</h4>
+                }
 
 
-<p>
 
-CampusConnect respects your privacy and protects your personal information.
 
-</p>
 
 
-<p>
 
-We collect only required information such as your profile details, posts, messages, and account activities to provide better services.
 
-</p>
 
+                {/* SECURITY */}
 
-<p>
 
-Your personal information is never sold or shared with unauthorized third parties.
 
-</p>
+                <div
 
+                    className="accordion-item"
 
-</div>
+                    onClick={() => toggle("security")}
 
-}
+                >
 
 
+                    <div className="setting-left">
 
 
+                        <FiLock />
 
 
+                        <div>
 
+                            <h3>
+                                Account Security
+                            </h3>
 
 
-{/* SECURITY */}
+                            <p>
+                                Password and login protection
+                            </p>
 
 
+                        </div>
 
-<div
 
-className="accordion-item"
+                    </div>
 
-onClick={()=>toggle("security")}
 
->
 
+                    {
 
-<div className="setting-left">
+                        open === "security"
 
+                            ?
 
-<FiLock/>
+                            <FiChevronDown />
 
+                            :
 
-<div>
+                            <FiChevronRight />
 
-<h3>
-Account Security
-</h3>
+                    }
 
 
-<p>
-Password and login protection
-</p>
+                </div>
 
 
-</div>
 
 
-</div>
 
+                {
 
+                    open === "security"
 
-{
+                    &&
 
-open==="security"
 
-?
+                    <div className="accordion-content">
 
-<FiChevronDown/>
 
-:
+                        <h4>
+                            Keep Your Account Safe
+                        </h4>
 
-<FiChevronRight/>
 
-}
+                        <p>
 
+                            Use a strong password and avoid sharing your login information with others.
 
-</div>
+                        </p>
 
 
+                        <p>
 
+                            CampusConnect provides secure authentication to protect your account access.
 
+                        </p>
 
-{
 
-open==="security"
+                        <p>
 
-&&
+                            If you notice suspicious activity, contact our support team immediately.
 
+                        </p>
 
-<div className="accordion-content">
 
+                    </div>
 
-<h4>
-Keep Your Account Safe
-</h4>
 
+                }
 
-<p>
 
-Use a strong password and avoid sharing your login information with others.
 
-</p>
 
 
-<p>
 
-CampusConnect provides secure authentication to protect your account access.
 
-</p>
 
 
-<p>
+                {/* TERMS */}
 
-If you notice suspicious activity, contact our support team immediately.
 
-</p>
 
 
-</div>
+                <div
 
+                    className="accordion-item"
 
-}
+                    onClick={() => toggle("terms")}
 
+                >
 
 
+                    <div className="setting-left">
 
 
+                        <FiFileText />
 
 
+                        <div>
 
 
-{/* TERMS */}
+                            <h3>
+                                Terms & Conditions
+                            </h3>
 
 
+                            <p>
+                                Read CampusConnect usage rules
+                            </p>
 
 
-<div
+                        </div>
 
-className="accordion-item"
 
-onClick={()=>toggle("terms")}
+                    </div>
 
->
 
 
-<div className="setting-left">
+                    {
 
+                        open === "terms"
 
-<FiFileText/>
+                            ?
 
+                            <FiChevronDown />
 
-<div>
+                            :
 
+                            <FiChevronRight />
 
-<h3>
-Terms & Conditions
-</h3>
+                    }
 
 
-<p>
-Read CampusConnect usage rules
-</p>
+                </div>
 
 
-</div>
 
 
-</div>
 
+                {
 
+                    open === "terms"
 
-{
+                    &&
 
-open==="terms"
 
-?
+                    <div className="accordion-content">
 
-<FiChevronDown/>
 
-:
+                        <h4>
+                            CampusConnect Terms
+                        </h4>
 
-<FiChevronRight/>
 
-}
+                        <p>
 
+                            Users must provide accurate information when creating an account.
 
-</div>
+                        </p>
 
 
+                        <p>
 
+                            Users should respect other students and avoid harmful or inappropriate content.
 
+                        </p>
 
-{
 
-open==="terms"
+                        <p>
 
-&&
+                            CampusConnect reserves the right to improve services and update platform policies.
 
+                        </p>
 
-<div className="accordion-content">
 
+                    </div>
 
-<h4>
-CampusConnect Terms
-</h4>
 
+                }
 
-<p>
 
-Users must provide accurate information when creating an account.
 
-</p>
+            </div>
 
 
-<p>
 
-Users should respect other students and avoid harmful or inappropriate content.
 
-</p>
 
 
-<p>
 
-CampusConnect reserves the right to improve services and update platform policies.
 
-</p>
 
+            {/* SUPPORT */}
 
-</div>
 
 
-}
+            <div className="setting-card">
 
 
+                <h2>
+                    Support
+                </h2>
 
-</div>
 
 
 
+                <div className="accordion-item">
 
 
+                    <div className="setting-left">
 
 
+                        <FiMail />
 
 
-{/* SUPPORT */}
+                        <div>
 
 
+                            <h3>
+                                Support Email
+                            </h3>
 
-<div className="setting-card">
 
+                            <p>
+                                campusconnect@gmail.com
+                            </p>
 
-<h2>
-Support
-</h2>
 
+                        </div>
 
 
+                    </div>
 
-<div className="accordion-item">
 
+                </div>
 
-<div className="setting-left">
 
 
-<FiMail/>
 
 
-<div>
 
 
-<h3>
-Support Email
-</h3>
+                <div className="accordion-item">
 
 
-<p>
-campusconnect@gmail.com
-</p>
+                    <div className="setting-left">
 
 
-</div>
+                        <FiHelpCircle />
 
 
-</div>
+                        <div>
 
+                            <h3>
+                                Help Center
+                            </h3>
 
-</div>
 
+                            <p>
+                                Get assistance from CampusConnect team
+                            </p>
 
 
+                        </div>
 
 
+                    </div>
 
 
-<div className="accordion-item">
 
+                </div>
 
-<div className="setting-left">
 
 
-<FiHelpCircle/>
 
+            </div>
 
-<div>
 
-<h3>
-Help Center
-</h3>
 
 
-<p>
-Get assistance from CampusConnect team
-</p>
 
 
-</div>
 
+        </div>
+        </div>
 
-</div>
 
-
-
-</div>
-
-
-
-
-</div>
-
-
-
-
-
-
-
-</div>
-
-
-);
+    );
 
 
 }

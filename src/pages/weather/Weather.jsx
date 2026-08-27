@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import "./weather.css";
 
 import Navbar from "../../components/navbar/Navbar";
+import CommonNavBar from "../../components/commonNavBar/CommonNavBar";
 
 import WeatherCard from "../../components/Weather/WeatherCard";
 import HourlyCard from "../../components/Weather/HourlyCard";
 import ForecastCard from "../../components/Weather/ForecastCard";
+
 
 import { getWeather } from "../../services/weatherService";
 
@@ -98,7 +100,9 @@ export default function Weather() {
 
         <div>
 
-            <Navbar />
+            {/* <Navbar /> */}
+            <CommonNavBar />
+            
 
             <div className="weather-page">
 

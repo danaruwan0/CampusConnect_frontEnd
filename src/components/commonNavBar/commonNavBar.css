@@ -1,0 +1,702 @@
+/* ==========================================
+   NAVBAR
+========================================== */
+
+.common-nav-navbar {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 999;
+
+    height: 64px;
+
+    width: 100%;
+
+    background: #ffffff;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 22px;
+
+    box-sizing: border-box;
+
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+
+}
+
+
+/* ==========================================
+   LEFT
+========================================== */
+
+.common-nav-navbar-left {
+
+    flex: 1;
+
+    display: flex;
+
+    align-items: center;
+
+}
+
+
+.common-nav-header-avatar {
+
+    width: 40px;
+
+    height: 40px;
+
+    object-fit: contain;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+
+.common-nav-header-avatar:hover {
+
+    transform: scale(1.08);
+
+}
+
+
+/* ==========================================
+   CENTER
+========================================== */
+
+.common-nav-navbar-center {
+
+    flex: 2;
+
+    display: flex;
+
+    justify-content: center;
+
+    position: relative;
+
+}
+
+
+.common-nav-search-input {
+
+    width: 100%;
+
+    max-width: 430px;
+
+    height: 42px;
+
+    border: none;
+
+    outline: none;
+
+    background: #f1f3f5;
+
+    border-radius: 999px;
+
+    padding: 0 18px;
+
+    font-size: 14px;
+
+    transition: .25s;
+
+}
+
+
+.common-nav-search-input:focus {
+
+    background: #fff;
+
+    box-shadow:
+        0 0 0 3px rgba(59,130,246,.18);
+
+}
+
+
+/* ==========================================
+   SEARCH RESULTS
+========================================== */
+
+.common-nav-search-result {
+
+    position: absolute;
+
+    top: 48px;
+
+    width: 100%;
+
+    max-width: 430px;
+
+    background: #fff;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.15);
+
+    overflow: hidden;
+
+    max-height: 320px;
+
+    overflow-y: auto;
+
+    z-index: 9999;
+
+}
+
+
+.common-nav-search-user {
+
+    padding: 14px 16px;
+
+    cursor: pointer;
+
+    transition: .2s;
+
+    border-bottom: 1px solid #f1f1f1;
+
+}
+
+
+.common-nav-search-user:last-child {
+
+    border-bottom: none;
+
+}
+
+
+.common-nav-search-user:hover {
+
+    background: #f5f8ff;
+
+}
+
+
+.common-nav-search-user h4 {
+
+    margin: 0;
+
+    font-size: 15px;
+
+    color: #222;
+
+}
+
+
+.common-nav-search-user p {
+
+    margin-top: 4px;
+
+    color: #777;
+
+    font-size: 12px;
+
+}
+
+
+/* ==========================================
+   RIGHT
+========================================== */
+
+.common-nav-navbar-right {
+
+    flex: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 12px;
+
+}
+
+
+/* ==========================================
+   ICON BUTTONS
+========================================== */
+
+.common-nav-notification {
+
+    width: 42px;
+
+    height: 42px;
+
+    border-radius: 50%;
+
+    background: #f1f3f5;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+    position: relative;
+
+}
+
+
+.common-nav-notification svg {
+
+    font-size: 21px;
+
+    color: #333;
+
+}
+
+
+.common-nav-notification:hover {
+
+    background: #2563eb;
+
+    transform: translateY(-2px);
+
+}
+
+
+.common-nav-notification:hover svg {
+
+    color: #fff;
+
+}
+
+
+/* ==========================================
+   NOTIFICATION WRAPPER
+========================================== */
+
+.common-nav-notification-wrapper {
+
+    position: relative;
+
+    display: flex;
+
+}
+
+
+/* ==========================================
+   BADGE
+========================================== */
+
+.common-nav-notification-badge {
+
+    position: absolute;
+
+    top: -2px;
+
+    right: -2px;
+
+    min-width: 19px;
+
+    height: 19px;
+
+    border-radius: 999px;
+
+    background: #ef4444;
+
+    color: #fff;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    border: 2px solid #fff;
+
+    padding: 0 5px;
+
+    box-sizing: border-box;
+
+    animation: common-nav-pop .25s ease;
+
+}
+
+
+@keyframes common-nav-pop {
+
+    from {
+
+        transform: scale(.5);
+
+        opacity: 0;
+
+    }
+
+    to {
+
+        transform: scale(1);
+
+        opacity: 1;
+
+    }
+
+}
+
+
+/* ==========================================
+   PROFILE
+========================================== */
+
+.common-nav-profile-image {
+
+    width: 42px;
+
+    height: 42px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    border: 2px solid #2563eb;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+
+.common-nav-profile-image:hover {
+
+    transform: scale(1.06);
+
+}
+
+
+/* ==========================================
+   MENU
+========================================== */
+
+.common-nav-menu-icon {
+
+    width: 42px;
+
+    height: 42px;
+
+    background: #f1f3f5;
+
+    border-radius: 50%;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+
+.common-nav-menu-icon svg {
+
+    font-size: 22px;
+
+}
+
+
+.common-nav-menu-icon:hover {
+
+    background: #2563eb;
+
+    color: #fff;
+
+}
+
+
+/* ==========================================
+   SIDEBAR OVERLAY
+========================================== */
+
+.common-nav-sidebar-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,.4);
+
+    z-index: 99998;
+
+}
+
+
+/* ==========================================
+   SIDEBAR CONTAINER
+========================================== */
+
+.common-nav-sidebar-container {
+
+    position: fixed;
+
+    top: 0;
+
+    left: 0;
+
+    width: 260px;
+
+    height: 100vh;
+
+    z-index: 99999;
+
+    background: #ffffff;
+
+    animation: common-nav-slide-in .3s ease;
+
+    box-shadow:
+        5px 0 25px rgba(0,0,0,.2);
+
+}
+
+
+@keyframes common-nav-slide-in {
+
+    from {
+
+        transform: translateX(-100%);
+
+    }
+
+    to {
+
+        transform: translateX(0);
+
+    }
+
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media(max-width:768px) {
+
+    .common-nav-navbar {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        height: auto;
+
+        padding: 12px;
+
+        gap: 12px;
+
+    }
+
+
+    .common-nav-navbar-left {
+
+        width: 100%;
+
+    }
+
+
+    .common-nav-navbar-right {
+
+        position: absolute;
+
+        right: 12px;
+
+        top: 12px;
+
+        gap: 8px;
+
+    }
+
+
+    .common-nav-navbar-center {
+
+        width: 100%;
+
+        justify-content: center;
+
+    }
+
+
+    .common-nav-search-input {
+
+        max-width: none;
+
+    }
+
+
+    .common-nav-search-result {
+
+        max-width: none;
+
+    }
+
+
+    .common-nav-menu-icon {
+
+        display: flex;
+
+    }
+
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media(max-width:520px) {
+
+    .common-nav-navbar {
+
+        padding: 10px;
+
+    }
+
+
+    .common-nav-notification,
+    .common-nav-profile-image,
+    .common-nav-menu-icon {
+
+        width: 36px;
+
+        height: 36px;
+
+    }
+
+
+    .common-nav-notification svg {
+
+        font-size: 18px;
+
+    }
+
+
+    .common-nav-menu-icon svg {
+
+        font-size: 20px;
+
+    }
+
+
+    .common-nav-search-input {
+
+        height: 40px;
+
+        font-size: 13px;
+
+    }
+
+
+    .common-nav-notification-badge {
+
+        min-width: 17px;
+
+        height: 17px;
+
+        font-size: 9px;
+
+    }
+
+
+    .common-nav-sidebar-container {
+
+        width: 240px;
+
+    }
+
+}
+
+
+/* ==========================================
+   SMALL MOBILE
+========================================== */
+
+@media(max-width:380px) {
+
+    .common-nav-navbar-right {
+
+        gap: 6px;
+
+    }
+
+
+    .common-nav-notification,
+    .common-nav-profile-image,
+    .common-nav-menu-icon {
+
+        width: 34px;
+
+        height: 34px;
+
+    }
+
+
+    .common-nav-search-input {
+
+        padding: 0 14px;
+
+    }
+
+}
+
+/* ==========================================
+   COMMON SIDEBAR - MOBILE FIX
+========================================== */
+
+@media (max-width: 768px) {
+
+    .common-nav-sidebar-container {
+
+        position: fixed;
+
+        top: 0;
+        left: 0;
+
+        width: 240px;
+        height: 100vh;
+
+        overflow: hidden;
+
+        z-index: 99999;
+
+    }
+
+
+    .common-nav-sidebar-container .side-navbar {
+
+        position: fixed;
+
+        top: 0;
+        left: 0;
+
+        width: 240px;
+        height: 100vh;
+
+        margin: 0;
+
+        box-sizing: border-box;
+
+    }
+
+}
