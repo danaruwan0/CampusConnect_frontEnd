@@ -1,64 +1,107 @@
 import React, { useEffect, useState } from "react";
+
 import "./home.css";
+
 import Navbar from "../../components/navbar/Navbar";
 import SideNavBar from "../../components/sideNavBar/SideNavBar";
 import PostCard from "../../components/postCard/PostCard";
 import CreatePostModal from "../../components/createPost/CreatePostModal";
 
-import { getFeed, reactPost, sharePost } from "../../api/postApi";
-import { getSuggestions, followUser } from "../../api/followApi";
+import {
+    getFeed,
+    sharePost
+} from "../../api/postApi";
+
+import {
+    getSuggestions,
+    followUser
+} from "../../api/followApi";
+
 import noSuggestions from "../../assets/No suggestions.png";
 
 import Loader from "../../components/loader/Loader";
 import Suggestion from "../../components/suggestion/Suggestion";
 
-export default function Home() {
 
+export default function Home() {
 
     const userId =
         Number(localStorage.getItem("userId"));
+
 
     // ==========================
     // STATES
     // ==========================
 
-    const [feed, setFeed] = useState([]);
-    const [suggestions, setSuggestions] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [showMenu, setShowMenu] = useState(false);
-    const [showCreatePost, setShowCreatePost] = useState(false);
+    const [feed, setFeed] =
+        useState([]);
 
+    const [suggestions, setSuggestions] =
+        useState([]);
+
+    const [loading, setLoading] =
+        useState(true);
+
+    const [showMenu, setShowMenu] =
+        useState(false);
+
+    const [showCreatePost, setShowCreatePost] =
+        useState(false);
+
+
+    // ==========================
     // LOAD HOME DATA
+    // ==========================
 
     useEffect(() => {
+
         loadData();
+
     }, []);
+
 
     const loadData = async () => {
 
         try {
 
             setLoading(true);
+
+
             const [
                 posts,
                 users
             ] = await Promise.all([
+
                 getFeed(),
+
                 getSuggestions(userId)
 
             ]);
 
-            setFeed(posts || []);
-            setSuggestions(users || []);
 
-        } catch (error) {
+            setFeed(
+                posts || []
+            );
+
+
+            setSuggestions(
+                users || []
+            );
+
+
+        }
+
+        catch (error) {
 
             console.log(
-                "HOME LOAD ERROR : ",
+                "HOME LOAD ERROR:",
                 error
             );
 
-        } finally {
+        }
+
+        finally {
+
             setLoading(false);
 
         }
@@ -66,80 +109,129 @@ export default function Home() {
     };
 
 
+    // ==========================
     // FOLLOW USER
+    // ==========================
 
-    const handleFollow = async (targetId) => {
+    const handleFollow = async (
+        targetId
+    ) => {
 
         try {
+
             await followUser(
                 userId,
                 targetId
             );
+
             loadData();
 
-        } catch (error) {
+        }
 
-            console.log(error);
+        catch (error) {
+
+            console.log(
+                "FOLLOW ERROR:",
+                error
+            );
 
         }
 
     };
+
 
     // ==========================
     // REACTION
     // ==========================
 
-    const handleReact = async (
+    const handleReact = (
         postId,
-        type
+        type,
+        removed = false,
+        previousReaction = null
     ) => {
 
+        setFeed(prev =>
 
-        try {
+            prev.map(post => {
 
-            await reactPost(
-                postId,
-                userId,
-                type
-            );
+                if (
+                    post.postId !== postId
+                ) {
 
-            setFeed(prev =>
+                    return post;
 
-                prev.map(post =>
-
-                    post.postId === postId
-
-                        ?
-
-                        {
-                            ...post,
-
-                            reactionCount:
-                                (post.reactionCount || 0) + 1
-
-                        }
-                        :
-                        post
-
-                )
-
-            );
+                }
 
 
+                const currentCount =
+                    post.reactionCount || 0;
 
-        } catch (error) {
-            console.log(error);
-        }
+
+                // ==========================
+                // REMOVE REACTION
+                // ==========================
+
+                if (removed) {
+
+                    return {
+
+                        ...post,
+
+                        reactionCount:
+                            Math.max(
+                                0,
+                                currentCount - 1
+                            )
+
+                    };
+
+                }
+
+
+                // ==========================
+                // CHANGE REACTION
+                // ==========================
+
+                if (previousReaction) {
+
+                    return {
+                        ...post
+                    };
+
+                }
+
+
+                // ==========================
+                // NEW REACTION
+                // ==========================
+
+                return {
+
+                    ...post,
+
+                    reactionCount:
+                        currentCount + 1
+
+                };
+
+            })
+
+        );
 
     };
+
 
     // ==========================
     // SHARE POST
     // ==========================
 
-    const handleShare = async (postId) => {
+    const handleShare = async (
+        postId
+    ) => {
 
         try {
+
             await sharePost(
                 postId,
                 userId
@@ -147,20 +239,31 @@ export default function Home() {
 
             loadData();
 
-        } catch (error) {
+        }
 
-            console.log(error);
+        catch (error) {
+
+            console.log(
+                "SHARE ERROR:",
+                error
+            );
 
         }
 
+    };
+
+
+    // ==========================
+    // COMMENT
+    // ==========================
+
+    const handleComment = () => {
+
+        // Comment functionality
+        // handled inside PostCard
 
     };
 
-    // ==========================
-    // COMMENT PLACEHOLDER
-    // ==========================
-
-    const handleComment = () => { };
 
     // ==========================
     // LOADING UI
@@ -168,11 +271,12 @@ export default function Home() {
 
     if (loading) {
 
-
         return (
 
             <>
+
                 <Navbar
+
                     onCreatePost={() =>
                         setShowCreatePost(true)
                     }
@@ -183,9 +287,8 @@ export default function Home() {
 
                 />
 
-                <div className="loading-text">
 
-                    {/* Loading feed... */}
+                <div className="loading-text">
 
                     <Loader
                         text="Loading Feed..."
@@ -200,12 +303,17 @@ export default function Home() {
     }
 
 
+    // ==========================
+    // MAIN UI
+    // ==========================
+
     return (
 
         <div className="home-page">
 
+
             {/* ======================
-                 NAVBAR
+                NAVBAR
             ======================= */}
 
             <Navbar
@@ -214,73 +322,85 @@ export default function Home() {
                     setShowCreatePost(true)
                 }
 
-
                 onMenuClick={() =>
                     setShowMenu(true)
                 }
 
             />
 
+
             {/* ======================
-                 MOBILE OVERLAY
+                MOBILE OVERLAY
             ======================= */}
 
-
             {
-                showMenu &&
 
-                <div
+                showMenu && (
 
-                    className="sidebar-overlay"
+                    <div
 
-                    onClick={() =>
-                        setShowMenu(false)
-                    }
+                        className="sidebar-overlay"
 
-                />
+                        onClick={() =>
+                            setShowMenu(false)
+                        }
+
+                    />
+
+                )
 
             }
 
 
-
             {/* ======================
-                 MAIN CONTENT
+                MAIN CONTENT
             ======================= */}
 
-
             <Suggestion />
+
 
             <div className="home-container">
 
 
                 {/* ======================
-                     LEFT SIDEBAR
+                    LEFT SIDEBAR
                 ======================= */}
 
-
-                <aside className={`left-card ${showMenu ? "show" : ""}`}>
+                <aside
+                    className={
+                        `left-card ${
+                            showMenu
+                                ? "show"
+                                : ""
+                        }`
+                    }
+                >
 
                     <SideNavBar
+
                         open={showMenu}
-                        onClose={() => setShowMenu(false)}
+
+                        onClose={() =>
+                            setShowMenu(false)
+                        }
+
                     />
 
                 </aside>
 
-                {/* ======================
-                     FEED
-                ======================= */}
 
+                {/* ======================
+                    FEED
+                ======================= */}
 
                 <main className="feed">
 
 
                     {
+
                         feed.length === 0
 
-                            ?
-
-                            (
+                            ? (
 
                                 <div className="empty-feed">
 
@@ -292,48 +412,51 @@ export default function Home() {
                                         Start sharing something with your campus community.
                                     </p>
 
-
                                 </div>
-
 
                             )
 
-                            :
+                            : (
 
-                            feed.map(post => (
+                                feed.map(post => (
 
+                                    <PostCard
 
-                                <PostCard
+                                        key={
+                                            post.postId
+                                        }
 
-                                    key={
-                                        post.postId
-                                    }
+                                        post={post}
 
-                                    post={post}
+                                        currentUserId={
+                                            userId
+                                        }
 
-                                    currentUserId={
-                                        userId
-                                    }
+                                        onReact={
+                                            handleReact
+                                        }
 
-                                    onReact={
-                                        handleReact
-                                    }
+                                        onComment={
+                                            handleComment
+                                        }
 
-                                    onComment={
-                                        handleComment
-                                    }
+                                        onShare={
+                                            handleShare
+                                        }
 
-                                    onShare={
-                                        handleShare
-                                    }
-                                />
-                            ))
+                                    />
+
+                                ))
+
+                            )
+
                     }
+
                 </main>
 
 
                 {/* ======================
-                     RIGHT PANEL
+                    RIGHT PANEL
                 ======================= */}
 
                 <aside className="right-card">
@@ -342,75 +465,111 @@ export default function Home() {
                         People You May Know
                     </h3>
 
+
                     <div className="suggestions-list">
 
+
                         {
+
                             suggestions.length === 0
 
-                                ?
+                                ? (
 
-                                (
                                     <div className="no-suggestions">
 
                                         <img
-                                            src={noSuggestions}
+
+                                            src={
+                                                noSuggestions
+                                            }
+
                                             alt="No Suggestions"
+
                                             className="no-suggestions-img"
+
                                         />
+
 
                                         <h4>
                                             No Suggestions
                                         </h4>
+
 
                                         <p>
                                             You're connected with everyone for now.
                                         </p>
 
                                     </div>
+
                                 )
 
-                                :
+                                : (
 
-                                suggestions.map(user => (
+                                    suggestions.map(
+                                        user => (
 
-                                    <div
-                                        className="suggestion"
-                                        key={user.userId}
-                                    >
+                                            <div
 
-                                        <div>
+                                                className="suggestion"
 
-                                            <p>
-                                                {user.fullName}
-                                            </p>
+                                                key={
+                                                    user.userId
+                                                }
 
-                                            <small>
-                                                {user.email}
-                                            </small>
+                                            >
 
-                                        </div>
+                                                <div>
 
-                                        <button
-                                            onClick={() =>
-                                                handleFollow(user.userId)
-                                            }
-                                        >
-                                            Follow
-                                        </button>
+                                                    <p>
+                                                        {
+                                                            user.fullName
+                                                        }
+                                                    </p>
 
-                                    </div>
 
-                                ))
+                                                    <small>
+                                                        {
+                                                            user.email
+                                                        }
+                                                    </small>
+
+                                                </div>
+
+
+                                                <button
+
+                                                    onClick={() =>
+                                                        handleFollow(
+                                                            user.userId
+                                                        )
+                                                    }
+
+                                                >
+
+                                                    Follow
+
+                                                </button>
+
+                                            </div>
+
+                                        )
+                                    )
+
+                                )
+
                         }
 
                     </div>
 
                 </aside>
+
             </div>
 
+
             {/* ======================
-                 CREATE POST
+                CREATE POST
             ======================= */}
+
             <CreatePostModal
 
                 open={
@@ -422,10 +581,17 @@ export default function Home() {
                 }
 
                 onSuccess={() => {
+
                     loadData();
-                    setShowCreatePost(false);
+
+                    setShowCreatePost(
+                        false
+                    );
+
                 }}
+
             />
+
         </div>
 
     );
