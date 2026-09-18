@@ -71,8 +71,8 @@ export default function Home() {
                 posts,
                 users
             ] = await Promise.all([
-
-                getFeed(),
+                // update code 
+                getFeed(userId),
 
                 getSuggestions(userId)
 
@@ -368,10 +368,9 @@ export default function Home() {
 
                 <aside
                     className={
-                        `left-card ${
-                            showMenu
-                                ? "show"
-                                : ""
+                        `left-card ${showMenu
+                            ? "show"
+                            : ""
                         }`
                     }
                 >

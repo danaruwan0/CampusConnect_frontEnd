@@ -23,84 +23,56 @@ export default function ReactionBar({
 
     const userId =
         Number(localStorage.getItem("userId"));
-
+    //upatae code 
     const [selectedReaction, setSelectedReaction] =
-        useState(null);
+        useState(post.userReaction || null);
 
+const handleReaction = async (type) => {
+    try {
+        if (selectedReaction === type) {
 
-    const handleReaction = async (type) => {
-
-        try {
-
-            // ==============================
-            // REMOVE CURRENT REACTION
-            // ==============================
-
-            if (selectedReaction === type) {
-
-                await removeReaction(
-                    post.postId,
-                    userId
-                );
-
-                setSelectedReaction(null);
-
-                // Tell parent that reaction was removed
-                if (onReact) {
-
-                    onReact(
-                        post.postId,
-                        null,
-                        true
-                    );
-
-                }
-
-            }
-
-            // ==============================
-            // ADD / CHANGE REACTION
-            // ==============================
-
-            else {
-
-                await reactPost(
-                    post.postId,
-                    userId,
-                    type
-                );
-
-                const previousReaction =
-                    selectedReaction;
-
-                setSelectedReaction(type);
-
-                // Tell parent about reaction
-                if (onReact) {
-
-                    onReact(
-                        post.postId,
-                        type,
-                        false,
-                        previousReaction
-                    );
-
-                }
-
-            }
-
-        }
-
-        catch (err) {
-
-            console.error(
-                "REACTION ERROR:",
-                err
+            await removeReaction(
+                post.postId,
+                userId
             );
 
+            setSelectedReaction(null);
+
+            if (onReact) {
+                onReact(
+                    post.postId,
+                    null,
+                    true,
+                    selectedReaction
+                );
+            }
+
+        } else {
+
+            await reactPost(
+                post.postId,
+                userId,
+                type
+            );
+
+            const previousReaction = selectedReaction;
+
+            setSelectedReaction(type);
+
+            if (onReact) {
+                onReact(
+                    post.postId,
+                    type,
+                    false,
+                    previousReaction
+                );
+            }
         }
 
-    };
+    } catch (err) {
+        console.log(err);
+    }
+};
 
 
     return (

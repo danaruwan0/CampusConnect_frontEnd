@@ -1,7 +1,16 @@
 import api from "./axios";
 
-export const getFeed = async () => {
-    const res = await api.get("/api/posts/feed");
+// export const getFeed = async () => {
+//     const res = await api.get("/api/posts/feed");
+//     return res.data;
+// };
+
+
+export const getFeed = async (userId) => {
+    const res = await api.get(
+        `/api/posts/feed?userId=${userId}`
+    );
+
     return res.data;
 };
 
