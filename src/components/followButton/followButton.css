@@ -1,276 +1,286 @@
-/* ==========================
-   FOLLOW BUTTON BASE
-========================== */
-
+/* =========================================================
+   FOLLOW BUTTON
+========================================================= */
 
 .follow-btn,
 .unfollow-btn {
 
-    border:none;
+    border: none;
+    outline: none;
 
-    outline:none;
+    cursor: pointer;
 
-    cursor:pointer;
+    display: inline-flex;
 
-    display:flex;
+    align-items: center;
+    justify-content: center;
 
-    align-items:center;
+    gap: 8px;
 
-    justify-content:center;
+    min-width: 150px;
+    height: 46px;
 
-    gap:8px;
+    padding: 0 22px;
 
-    padding:9px 20px;
+    border-radius: 10px;
 
-    min-width:110px;
+    font-family: inherit;
 
-    height:38px;
+    font-size: 14px;
+    font-weight: 650;
 
-    border-radius:20px;
+    letter-spacing: .1px;
 
-    font-size:14px;
+    user-select: none;
 
-    font-weight:600;
-
-    letter-spacing:.2px;
-
-    transition:.25s ease;
-
-    user-select:none;
-
-}
-
-
-/* ==========================
-   FOLLOW BUTTON
-========================== */
-
-
-.follow-btn{
-
-
-    background:#1877f2;
-
-    color:white;
-
-    box-shadow:0 3px 10px rgba(24,119,242,.25);
+    transition:
+        background .2s ease,
+        color .2s ease,
+        border-color .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
 
 }
 
 
+/* =========================================================
+   FOLLOW
+========================================================= */
 
-.follow-btn:hover{
+.follow-btn {
 
+    background: #1877f2;
 
-    background:#166fe5;
+    color: #ffffff;
 
-    transform:translateY(-2px);
-
-    box-shadow:0 6px 15px rgba(24,119,242,.35);
-
-}
-
-
-
-.follow-btn:active{
-
-
-    transform:scale(.96);
+    box-shadow:
+        0 4px 12px rgba(24, 119, 242, .22);
 
 }
 
 
+.follow-btn:hover {
 
+    background: #0d66d8;
 
-/* ==========================
-   FOLLOWING BUTTON
-========================== */
+    transform: translateY(-2px);
 
-
-.unfollow-btn{
-
-
-    background:#f0f2f5;
-
-    color:#333;
-
-    border:1px solid #d8dbe2;
+    box-shadow:
+        0 7px 17px rgba(24, 119, 242, .28);
 
 }
 
 
+.follow-btn:active {
 
-.unfollow-btn:hover{
-
-
-    background:#ffe9e9;
-
-    color:#d93025;
-
-    border-color:#ffb3b3;
-
-    transform:translateY(-2px);
+    transform: translateY(0);
 
 }
 
 
+/* =========================================================
+   FOLLOWING / UNFOLLOW
+========================================================= */
 
-.unfollow-btn:active{
+.unfollow-btn {
 
+    background: #f0f2f5;
 
-    transform:scale(.96);
+    color: #334155;
+
+    border: 1px solid #d8dee8;
+
+    box-shadow:
+        0 3px 8px rgba(15, 23, 42, .05);
 
 }
 
 
+/*
+   Normally shows "Following"
+
+   When user hovers:
+   CSS cannot change the actual text,
+   so JSX will handle it if you want "Unfollow".
+*/
+
+.unfollow-btn:hover {
+
+    background: #fff1f1;
+
+    color: #d93025;
+
+    border-color: #ffb8b8;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 5px 13px rgba(217, 48, 37, .12);
+
+}
 
 
-/* ==========================
+.unfollow-btn:active {
+
+    transform: translateY(0);
+
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.follow-loading {
+
+    background: #e8edf5;
+
+    color: #64748b;
+
+    border: 1px solid #e1e6ef;
+
+    cursor: default;
+
+    box-shadow: none;
+
+}
+
+
+.follow-loading:hover {
+
+    transform: none;
+
+    box-shadow: none;
+
+}
+
+
+/* =========================================================
    DISABLED
-========================== */
-
+========================================================= */
 
 .follow-btn:disabled,
-.unfollow-btn:disabled{
+.unfollow-btn:disabled {
 
+    opacity: .65;
 
-    opacity:.6;
+    cursor: not-allowed;
 
-    cursor:not-allowed;
+    transform: none;
 
-    transform:none;
+    box-shadow: none;
 
 }
 
 
-
-/* =================================================
-   TABLET RESPONSIVE
+/* =========================================================
+   TABLET
    769px - 1024px
-================================================= */
+========================================================= */
 
-
-@media(max-width:1024px){
-
+@media (max-width: 1024px) {
 
     .follow-btn,
-    .unfollow-btn{
+    .unfollow-btn {
 
+        min-width: 140px;
 
-        min-width:90px;
+        height: 44px;
 
-        height:34px;
+        padding: 0 19px;
 
-        padding:7px 15px;
+        border-radius: 10px;
 
-        border-radius:18px;
-
-        font-size:13px;
-
-        font-weight:600;
-
+        font-size: 14px;
 
     }
-
 
 }
 
 
-
-
-
-/* =================================================
-   MOBILE RESPONSIVE
+/* =========================================================
+   MOBILE
    max 768px
-================================================= */
+========================================================= */
 
-
-@media(max-width:768px){
-
+@media (max-width: 768px) {
 
     .follow-btn,
-    .unfollow-btn{
+    .unfollow-btn {
 
+        width: auto;
+        min-width: 100px;
+        max-width: 150px;
 
-        min-width:80px;
+        height: 38px;
 
-        height:32px;
+        padding: 0 14px;
 
-        padding:6px 14px;
+        border-radius: 9px;
 
-        border-radius:16px;
-
-        font-size:12px;
-
-        font-weight:600;
-
+        font-size: 12px;
+        font-weight: 600;
 
     }
-
-
 
 }
 
 
-
-
-
-/* =================================================
+/* =========================================================
    SMALL MOBILE
    max 480px
-================================================= */
+========================================================= */
 
-
-@media(max-width:480px){
-
+@media (max-width: 480px) {
 
     .follow-btn,
-    .unfollow-btn{
+    .unfollow-btn {
 
+        width: auto;
 
-        min-width:75px;
+        min-width: 90px;
+        max-width: 120px;
 
-        height:30px;
+        height: 35px;
 
-        padding:5px 12px;
+        padding: 0 12px;
 
-        border-radius:10px;
+        border-radius: 8px;
 
-        font-size:11px;
+        font-size: 11px;
+        font-weight: 600;
 
+        gap: 5px;
 
     }
-
-
 
 }
 
 
-
-
-/* =================================================
+/* =========================================================
    VERY SMALL DEVICES
    max 360px
-================================================= */
+========================================================= */
 
-
-@media(max-width:360px){
-
+@media (max-width: 360px) {
 
     .follow-btn,
-    .unfollow-btn{
+    .unfollow-btn {
 
+        min-width: 82px;
 
-        min-width:70px;
+        max-width: 110px;
 
-        height:28px;
+        height: 33px;
 
-        padding:4px 10px;
+        padding: 0 10px;
 
-        font-size:10px;
+        border-radius: 7px;
 
+        font-size: 10.5px;
+
+        gap: 4px;
 
     }
-
 
 }

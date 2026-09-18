@@ -83,22 +83,6 @@ body{
 
 
 
-
-
-
-
-/* ==========================================
-   LEFT SIDEBAR
-========================================== */
-
-
-/* .left-card{
-    position:sticky;
-    top:90px;
-    height:calc(100vh - 110px);
-} */
-
-
 .left-card{
 
     position:sticky;
@@ -111,11 +95,6 @@ body{
 
 }
 
-
-
-/* .left-card .side-navbar{
-    height:100%;
-} */
 
 
 /* ==========================================
@@ -150,11 +129,6 @@ body{
 
 
 }
-
-
-
-
-
 
 
 /* ==========================================
@@ -535,12 +509,6 @@ body{
 
 
 
-
-
-
-
-
-
 /* ==========================================
    LOADING
 ========================================== */
@@ -607,13 +575,6 @@ body{
 }
 
 
-
-
-
-
-
-
-
 /* ==========================================
    TABLET
 ========================================== */
@@ -660,13 +621,6 @@ body{
 
 
 }
-
-
-
-
-
-
-
 
 
 /* ==========================================
@@ -759,15 +713,295 @@ body{
 
 .suggestion button{
 
-
     padding:7px 12px;
-
 
     font-size:13px;
 
+}
+
+}
+
+
+/* ==========================================
+   RIGHT SUGGESTION CARD
+========================================== */
+
+.right-card {
+
+    background: white;
+
+    border-radius: 15px;
+
+    padding: 20px;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.08);
+
+    position: sticky;
+
+    top: 90px;
+
+    height: calc(100vh - 110px);
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+
+/* ==========================================
+   RIGHT CARD TITLE
+========================================== */
+
+.right-card h3 {
+
+    font-size: 20px;
+
+    margin-bottom: 15px;
+
+    color: #333;
+
+    flex-shrink: 0;
+
+}
+
+
+/* ==========================================
+   SUGGESTIONS SCROLL AREA
+========================================== */
+
+.suggestions-list {
+
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+
+    padding-right: 5px;
+
+    scroll-behavior: smooth;
+
+}
+
+
+/* ==========================================
+   SCROLLBAR
+========================================== */
+
+.suggestions-list::-webkit-scrollbar {
+
+    width: 6px;
+
+}
+
+
+.suggestions-list::-webkit-scrollbar-track {
+
+    background: transparent;
+
+}
+
+
+.suggestions-list::-webkit-scrollbar-thumb {
+
+    background: #c7c7c7;
+
+    border-radius: 10px;
+
+}
+
+
+.suggestions-list::-webkit-scrollbar-thumb:hover {
+
+    background: #999;
+
+}
+
+
+/* ////// */
+
+
+/* ==========================================
+   MOBILE RESPONSIVE FIX
+========================================== */
+
+@media (max-width: 900px) {
+
+    .home-container {
+
+        width: 100%;
+
+        max-width: 100%;
+
+        margin: 15px auto;
+
+        padding: 0 12px;
+
+        display: block;
+
+    }
+
+    .feed {
+
+        width: 100%;
+
+        max-width: 700px;
+
+        margin: 0 auto;
+
+        min-width: 0;
+
+    }
+
+    .feed .post-card {
+
+        width: 100%;
+
+        max-width: 100%;
+
+        min-width: 0;
+
+    }
+
+}
+
+
+/* ==========================================
+   MOBILE 768px
+========================================== */
+
+@media (max-width: 768px) {
+
+    body {
+
+        width: 100%;
+
+        max-width: 100%;
+
+        overflow-x: hidden;
+
+    }
+
+    .home-page {
+
+        width: 100%;
+
+        max-width: 100%;
+
+        overflow-x: hidden;
+
+    }
+
+    .home-container {
+
+        width: 100%;
+
+        max-width: 100%;
+
+        margin: 12px 0;
+
+        padding: 0 10px;
+
+        display: block;
+
+    }
+
+    .feed {
+
+        width: 100%;
+
+        max-width: 100%;
+
+        min-width: 0;
+
+    }
+
+    .feed .post-card {
+
+        width: 100%;
+
+        max-width: 100%;
+
+        min-width: 0;
+
+        border-radius: 12px;
+
+    }
+
+}
+
+
+/* ==========================================
+   SMALL MOBILE 480px
+========================================== */
+
+@media (max-width: 480px) {
+
+    .home-container {
+
+        width: 100%;
+
+        padding: 0 8px;
+
+        margin: 10px 0;
+
+    }
+
+    .feed {
+
+        width: 100%;
+
+        max-width: 100%;
+
+    }
+
+    .feed .post-card {
+
+        width: 100%;
+
+        max-width: 100%;
+
+    }
+
+}
+
+
+/* ==========================================
+   VERY SMALL MOBILE 360px
+========================================== */
+
+@media (max-width: 360px) {
+
+    .home-container {
+
+        padding: 0 6px;
+
+    }
+
+    .feed .post-card {
+
+        width: 100%;
+
+        border-radius: 10px;
+
+    }
 
 }
 
 
 
+
+/* ==========================================
+   HIDE RIGHT CARD BELOW 1200px
+========================================== */
+
+@media (max-width: 1200px) {
+
+    .right-card {
+        display: none;
+    }
+
 }
+

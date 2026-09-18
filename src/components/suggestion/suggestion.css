@@ -1,0 +1,627 @@
+/* =========================================================
+   SUGGESTION COMPONENT
+
+   Mobile + Tablet Only
+========================================================= */
+
+.suggestion-sectionpart {
+
+    width: 100%;
+
+    padding: 16px 0;
+
+    background: #f5f7fb;
+
+    font-family:
+        "Inter",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.suggestion-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 16px;
+
+    margin-bottom: 12px;
+}
+
+
+.suggestion-header h2 {
+
+    margin: 0;
+
+    color: #172033;
+
+    font-size: 19px;
+
+    font-weight: 750;
+
+    line-height: 1.3;
+}
+
+
+.suggestion-header p {
+
+    margin: 4px 0 0;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   HORIZONTAL SCROLL
+========================================================= */
+
+.suggestion-scroll {
+
+    width: 100%;
+
+    display: flex;
+
+    gap: 12px;
+
+    overflow-x: auto;
+
+    overflow-y: hidden;
+
+    padding: 4px 16px 12px;
+
+    scroll-behavior: smooth;
+
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: none;
+}
+
+
+.suggestion-scroll::-webkit-scrollbar {
+
+    display: none;
+}
+
+
+/* =========================================================
+   SUGGESTION CARD
+========================================================= */
+
+.suggestion-card {
+
+    flex: 0 0 190px;
+
+    min-width: 190px;
+
+    background: #ffffff;
+
+    border: 1px solid #e8edf5;
+
+    border-radius: 16px;
+
+    padding: 16px 14px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    text-align: center;
+
+    box-shadow:
+        0 4px 15px rgba(15, 23, 42, 0.05);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.suggestion-card:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 8px 22px rgba(15, 23, 42, 0.10);
+}
+
+
+/* =========================================================
+   PROFILE IMAGE
+========================================================= */
+
+.suggestion-profile {
+
+    width: 72px;
+
+    height: 72px;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    border: 4px solid #ffffff;
+
+    background: #f8fafc;
+
+    box-shadow:
+        0 5px 15px rgba(15, 23, 42, 0.14);
+
+    margin-bottom: 10px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   USER INFO
+========================================================= */
+
+.suggestion-info {
+
+    width: 100%;
+
+    min-width: 0;
+}
+
+
+.suggestion-info h3 {
+
+    margin: 0;
+
+    color: #172033;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    line-height: 1.35;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.suggestion-info p {
+
+    margin: 4px 0 12px;
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    font-weight: 500;
+
+    line-height: 1.4;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   FOLLOW BUTTON
+========================================================= */
+
+.suggestion-follow-btn {
+
+    width: 100%;
+
+    height: 38px;
+
+    padding: 0 14px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #1877f2;
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 650;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.suggestion-follow-btn:hover {
+
+    background: #0d66d8;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 5px 12px rgba(24, 119, 242, 0.22);
+}
+
+
+.suggestion-follow-btn:active {
+
+    transform: translateY(0);
+}
+
+
+.suggestion-follow-btn:disabled {
+
+    cursor: not-allowed;
+
+    opacity: 0.75;
+}
+
+
+/* =========================================================
+   TABLET
+   481px - 768px
+========================================================= */
+
+@media (min-width: 481px) and (max-width: 768px) {
+
+    .suggestion-sectionpart {
+
+        padding: 18px 0;
+    }
+
+
+    .suggestion-header {
+
+        padding: 0 20px;
+
+        margin-bottom: 13px;
+    }
+
+
+    .suggestion-header h2 {
+
+        font-size: 20px;
+    }
+
+
+    .suggestion-header p {
+
+        font-size: 13px;
+    }
+
+
+    .suggestion-scroll {
+
+        gap: 13px;
+
+        padding-left: 20px;
+
+        padding-right: 20px;
+
+        padding-bottom: 13px;
+    }
+
+
+    .suggestion-card {
+
+        flex: 0 0 195px;
+
+        min-width: 195px;
+
+        padding: 16px 14px;
+
+        border-radius: 15px;
+    }
+
+
+    .suggestion-profile {
+
+        width: 74px;
+
+        height: 74px;
+
+        margin-bottom: 9px;
+    }
+
+
+    .suggestion-info h3 {
+
+        font-size: 14px;
+    }
+
+
+    .suggestion-info p {
+
+        font-size: 11.5px;
+
+        margin-bottom: 11px;
+    }
+
+
+    .suggestion-follow-btn {
+
+        height: 37px;
+
+        font-size: 12.5px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   320px - 480px
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .suggestion-sectionpart {
+
+        padding: 11px 0;
+    }
+
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .suggestion-header {
+
+        padding: 0 12px;
+
+        margin-bottom: 8px;
+    }
+
+
+    .suggestion-header h2 {
+
+        font-size: 16px;
+
+        line-height: 1.25;
+    }
+
+
+    .suggestion-header p {
+
+        margin-top: 2px;
+
+        font-size: 10.5px;
+
+        line-height: 1.3;
+    }
+
+
+    /* =========================
+       SCROLL
+    ========================= */
+
+    .suggestion-scroll {
+
+        gap: 8px;
+
+        padding: 3px 12px 8px;
+    }
+
+
+    /* =========================
+       CARD
+    ========================= */
+
+    .suggestion-card {
+
+        flex: 0 0 145px;
+
+        min-width: 145px;
+
+        padding: 11px 9px;
+
+        border-radius: 12px;
+
+        box-shadow:
+            0 3px 10px rgba(15, 23, 42, 0.045);
+    }
+
+
+    /* =========================
+       PROFILE IMAGE
+    ========================= */
+
+    .suggestion-profile {
+
+        width: 56px;
+
+        height: 56px;
+
+        border-width: 2px;
+
+        margin-bottom: 7px;
+
+        box-shadow:
+            0 4px 10px rgba(15, 23, 42, 0.11);
+    }
+
+
+    /* =========================
+       USER INFO
+    ========================= */
+
+    .suggestion-info h3 {
+
+        font-size: 12.5px;
+
+        font-weight: 700;
+
+        line-height: 1.3;
+    }
+
+
+    .suggestion-info p {
+
+        margin: 2px 0 7px;
+
+        font-size: 10px;
+
+        font-weight: 500;
+
+        line-height: 1.3;
+    }
+
+
+    /* =========================
+       FOLLOW BUTTON
+    ========================= */
+
+    .suggestion-follow-btn {
+
+        width: 100%;
+
+        height: 31px;
+
+        padding: 0 8px;
+
+        border-radius: 7px;
+
+        font-size: 11px;
+
+        font-weight: 650;
+    }
+
+
+    .suggestion-follow-btn:hover {
+
+        transform: none;
+
+        box-shadow: none;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+   320px - 360px
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .suggestion-sectionpart {
+
+        padding: 9px 0;
+    }
+
+
+    .suggestion-header {
+
+        padding: 0 10px;
+
+        margin-bottom: 7px;
+    }
+
+
+    .suggestion-header h2 {
+
+        font-size: 15px;
+    }
+
+
+    .suggestion-header p {
+
+        font-size: 10px;
+    }
+
+
+    .suggestion-scroll {
+
+        gap: 7px;
+
+        padding-left: 10px;
+
+        padding-right: 10px;
+
+        padding-bottom: 7px;
+    }
+
+
+    .suggestion-card {
+
+        flex: 0 0 138px;
+
+        min-width: 138px;
+
+        padding: 10px 8px;
+
+        border-radius: 11px;
+    }
+
+
+    .suggestion-profile {
+
+        width: 52px;
+
+        height: 52px;
+
+        margin-bottom: 6px;
+    }
+
+
+    .suggestion-info h3 {
+
+        font-size: 12px;
+    }
+
+
+    .suggestion-info p {
+
+        font-size: 9.5px;
+
+        margin-bottom: 6px;
+    }
+
+
+    .suggestion-follow-btn {
+
+        height: 29px;
+
+        font-size: 10.5px;
+
+        border-radius: 6px;
+    }
+
+}
+
+
+/* =========================================================
+   DESKTOP
+   Hide Suggestion Component
+========================================================= */
+
+@media (min-width: 769px) {
+
+    .suggestion-sectionpart {
+
+        display: none;
+    }
+
+}

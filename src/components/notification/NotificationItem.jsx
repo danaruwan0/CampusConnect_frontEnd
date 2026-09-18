@@ -5,136 +5,278 @@ import {
     FiArrowLeft,
     FiMapPin,
     FiClock,
-    FiAlertTriangle
+    FiAlertTriangle,
+    FiUserMinus,
+    FiUserPlus
 } from "react-icons/fi";
 
 import defaultProfile from "../../assets/Default profile.jpg";
 
 import { getEmergency } from "../../api/emergencyApi";
 
-
 import { useNavigate } from "react-router-dom";
 
 export default function NotificationItem({
-
     notification,
-
     onBack
-
 }) {
-
 
     const navigate = useNavigate();
 
+    const [emergency, setEmergency] = useState(null);
+
+    const [loading, setLoading] = useState(false);
+
+
+    /*
+    =========================================================
+    FOLLOW NOTIFICATION
+    =========================================================
+    */
+
     if (notification.type === "FOLLOW") {
 
-    return (
+        return (
 
-        <div className="notification-detail">
+            <div className="notification-detail">
 
-            <div className="notification-detail-header">
+                {/* HEADER */}
 
-                <button
-                    className="notification-back-btn"
-                    onClick={onBack}
-                >
-                    <FiArrowLeft />
-                </button>
+                <div className="notification-detail-header">
 
-                <h2>
-                    New Follower
-                </h2>
+                    <button
+                        className="notification-back-btn"
+                        onClick={onBack}
+                    >
+                        <FiArrowLeft />
+                    </button>
 
-            </div>
+                    <h2>
+                        New Follower
+                    </h2>
+
+                </div>
 
 
-            <div className="notification-user">
+                {/* USER */}
 
-                <img
-                    src={
-                        notification.senderProfileImage
-                        || defaultProfile
-                    }
-                    alt="Profile"
-                />
+                <div className="notification-user">
 
-                <div>
+                    <img
+                        src={
+                            notification.senderProfileImage ||
+                            defaultProfile
+                        }
+                        alt="Profile"
+                    />
 
-                    <h3>
+                    <div>
+
+                        <h3>
+                            {notification.senderName}
+                        </h3>
+
+                        <span>
+
+                            <FiClock />
+
+                            {new Date(
+                                notification.createdAt
+                            ).toLocaleString()}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                {/* CONTENT */}
+
+                <div className="notification-section">
+
+                    <div className="notification-badge">
+
+                        <FiUserPlus />
+
+                        New Follower
+
+                    </div>
+
+
+                    <h1>
+
                         {notification.senderName}
-                    </h3>
-
-                    <span>
-                        <FiClock />
 
                         {" "}
 
-                        {
-                            new Date(
-                                notification.createdAt
-                            ).toLocaleString()
+                        started following you
+
+                    </h1>
+
+
+                    {/* PROFILE BUTTON */}
+
+                    <button
+                        className="notification-profile-btn"
+                        onClick={() =>
+                            navigate(
+                                `/profile/${notification.referenceId}`
+                            )
                         }
-                    </span>
+                    >
+
+                        View Profile
+
+                    </button>
 
                 </div>
 
             </div>
 
+        );
 
-            <div className="notification-section">
+    }
 
-                <div className="notification-badge">
 
-                    New Follower
+    /*
+    =========================================================
+    UNFOLLOW NOTIFICATION
+    =========================================================
+    */
+
+    if (notification.type === "UNFOLLOW") {
+
+        return (
+
+            <div className="notification-detail">
+
+                {/* HEADER */}
+
+                <div className="notification-detail-header">
+
+                    <button
+                        className="notification-back-btn"
+                        onClick={onBack}
+                    >
+                        <FiArrowLeft />
+                    </button>
+
+                    <h2>
+                        Unfollowed You
+                    </h2>
 
                 </div>
 
-                <h1>
-                    {notification.senderName}
-                    {" "}
-                    started following you
-                </h1>
 
-                <button
-                    className="notification-profile-btn"
-                    onClick={() =>
-                        navigate(
-                            `/profile/${notification.referenceId}`
-                        )
-                    }
-                >
-                    View Profile
-                </button>
+                {/* USER */}
+
+                <div className="notification-user">
+
+                    <img
+                        src={
+                            notification.senderProfileImage ||
+                            defaultProfile
+                        }
+                        alt="Profile"
+                    />
+
+                    <div>
+
+                        <h3>
+                            {notification.senderName}
+                        </h3>
+
+                        <span>
+
+                            <FiClock />
+
+                            {new Date(
+                                notification.createdAt
+                            ).toLocaleString()}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                {/* CONTENT */}
+
+                <div className="notification-section">
+
+                    <div className="notification-badge notification-unfollow-badge">
+
+                        <FiUserMinus />
+
+                        Unfollowed You
+
+                    </div>
+
+
+                    <h1>
+
+                        {notification.senderName}
+
+                        {" "}
+
+                        unfollowed you
+
+                    </h1>
+
+
+                    {/* PROFILE BUTTON */}
+
+                    <button
+                        className="notification-profile-btn"
+                        onClick={() =>
+                            navigate(
+                                `/profile/${notification.referenceId}`
+                            )
+                        }
+                    >
+
+                        View Profile
+
+                    </button>
+
+                </div>
 
             </div>
 
-        </div>
+        );
 
-    );
-}
-
+    }
 
 
-
-
-    ///////
-
-    const [emergency, setEmergency] = useState(null);
-
-    const [loading, setLoading] = useState(true);
+    /*
+    =========================================================
+    EMERGENCY NOTIFICATION
+    =========================================================
+    */
 
     useEffect(() => {
 
+        if (notification.type !== "EMERGENCY") {
+            return;
+        }
+
         loadEmergency();
 
-    }, []);
+    }, [notification]);
+
 
     const loadEmergency = async () => {
 
         try {
 
+            setLoading(true);
+
             const data =
-                await getEmergency(notification.referenceId);
+                await getEmergency(
+                    notification.referenceId
+                );
 
             setEmergency(data);
 
@@ -142,7 +284,10 @@ export default function NotificationItem({
 
         catch (err) {
 
-            console.log(err);
+            console.log(
+                "Error loading emergency:",
+                err
+            );
 
         }
 
@@ -153,6 +298,13 @@ export default function NotificationItem({
         }
 
     };
+
+
+    /*
+    =========================================================
+    EMERGENCY LOADING
+    =========================================================
+    */
 
     if (loading) {
 
@@ -168,6 +320,13 @@ export default function NotificationItem({
 
     }
 
+
+    /*
+    =========================================================
+    EMERGENCY NOT FOUND
+    =========================================================
+    */
+
     if (!emergency) {
 
         return (
@@ -182,70 +341,60 @@ export default function NotificationItem({
 
     }
 
+
+    /*
+    =========================================================
+    EMERGENCY DETAIL
+    =========================================================
+    */
+
     return (
 
         <div className="notification-detail">
 
-            {/* Header */}
+            {/* HEADER */}
 
             <div className="notification-detail-header">
 
                 <button
-
                     className="notification-back-btn"
-
                     onClick={onBack}
-
                 >
-
                     <FiArrowLeft />
-
                 </button>
 
                 <h2>
-
                     Emergency Alert
-
                 </h2>
 
             </div>
 
-            {/* Sender */}
+
+            {/* SENDER */}
 
             <div className="notification-user">
 
                 <img
-
                     src={
                         emergency.senderProfileImage ||
                         defaultProfile
                     }
-
                     alt="Profile"
-
                 />
 
                 <div>
 
                     <h3>
-
                         {emergency.senderName}
-
                     </h3>
 
                     <span>
 
                         <FiClock />
 
-                        {" "}
-
-                        {
-
-                            new Date(
-                                emergency.createdAt
-                            ).toLocaleString()
-
-                        }
+                        {new Date(
+                            emergency.createdAt
+                        ).toLocaleString()}
 
                     </span>
 
@@ -253,7 +402,8 @@ export default function NotificationItem({
 
             </div>
 
-            {/* Title */}
+
+            {/* TITLE */}
 
             <div className="notification-section">
 
@@ -266,101 +416,92 @@ export default function NotificationItem({
                 </div>
 
                 <h1>
-
                     {emergency.title}
-
                 </h1>
 
             </div>
 
-            {/* Description */}
+
+            {/* DESCRIPTION */}
 
             <div className="notification-section">
 
-                <h4>Description</h4>
+                <h4>
+                    Description
+                </h4>
 
                 <p>
-
                     {emergency.description}
-
                 </p>
 
             </div>
 
-            {/* Location */}
+
+            {/* LOCATION */}
 
             {
+                emergency.locationName && (
 
-                emergency.locationName &&
+                    <div className="notification-section">
 
-                <div className="notification-section">
+                        <h4>
 
-                    <h4>
+                            <FiMapPin />
 
-                        <FiMapPin />
+                            Location
 
-                        Location
+                        </h4>
 
-                    </h4>
+                        <p>
+                            {emergency.locationName}
+                        </p>
 
-                    <p>
+                    </div>
 
-                        {emergency.locationName}
-
-                    </p>
-
-                </div>
-
+                )
             }
 
-            {/* Image */}
+
+            {/* IMAGE */}
 
             {
+                emergency.imageUrl && (
 
-                emergency.imageUrl &&
+                    <div className="notification-section">
 
-                <div className="notification-section">
-
-                    <img
-
-                        className="notification-image"
-
-                        src={emergency.imageUrl}
-
-                        alt="Emergency"
-
-                    />
-
-                </div>
-
-            }
-
-            {/* Video */}
-
-            {
-
-                emergency.videoUrl &&
-
-                <div className="notification-section">
-
-                    <video
-
-                        controls
-
-                        className="notification-video"
-
-                    >
-
-                        <source
-
-                            src={emergency.videoUrl}
-
+                        <img
+                            className="notification-image"
+                            src={emergency.imageUrl}
+                            alt="Emergency"
                         />
 
-                    </video>
+                    </div>
 
-                </div>
+                )
+            }
 
+
+            {/* VIDEO */}
+
+            {
+                emergency.videoUrl && (
+
+                    <div className="notification-section">
+
+                        <video
+                            controls
+                            className="notification-video"
+                        >
+
+                            <source
+                                src={emergency.videoUrl}
+                            />
+
+                        </video>
+
+                    </div>
+
+                )
             }
 
         </div>

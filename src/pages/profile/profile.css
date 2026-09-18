@@ -942,3 +942,834 @@
         font-size: 16px;
     }
 }
+
+
+
+
+
+
+
+/* =========================================================
+   PROFILE IMAGE VIEWER
+========================================================= */
+
+.profile-pic {
+    cursor: pointer;
+}
+
+.profile-image-viewer {
+    position: fixed;
+    inset: 0;
+
+    z-index: 9999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    background: rgba(0, 0, 0, 0.88);
+
+    animation: profileViewerFade 0.2s ease;
+}
+
+.profile-image-large {
+    width: auto;
+    height: auto;
+
+    max-width: 90vw;
+    max-height: 85vh;
+
+    object-fit: contain;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 15px 50px rgba(0, 0, 0, 0.5);
+
+    animation: profileImageZoom 0.25s ease;
+}
+
+.profile-image-close {
+    position: absolute;
+
+    top: 20px;
+    right: 25px;
+
+    width: 45px;
+    height: 45px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.15);
+
+    color: #ffffff;
+
+    font-size: 32px;
+    font-weight: 300;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.profile-image-close:hover {
+    background: rgba(255, 255, 255, 0.25);
+
+    transform: scale(1.08);
+}
+
+@keyframes profileViewerFade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes profileImageZoom {
+    from {
+        opacity: 0;
+        transform: scale(0.85);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* =========================================================
+   MOBILE PROFILE IMAGE VIEWER
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .profile-image-viewer {
+        padding: 15px;
+    }
+
+    .profile-image-large {
+        max-width: 94vw;
+        max-height: 75vh;
+
+        border-radius: 6px;
+    }
+
+    .profile-image-close {
+        top: 15px;
+        right: 15px;
+
+        width: 40px;
+        height: 40px;
+
+        font-size: 28px;
+    }
+}
+
+
+/* =========================================================
+   PROFILE SUGGESTIONS
+   Mobile + Tablet Only
+========================================================= */
+
+.profile-container > .suggestion-sectionpart {
+
+    width: min(920px, calc(100% - 32px));
+
+    margin: 0 auto 30px;
+
+    border-radius: 18px;
+
+}
+
+
+/* =========================================================
+   TABLET
+   481px - 768px
+========================================================= */
+
+@media (min-width: 481px) and (max-width: 768px) {
+
+    .profile-container > .suggestion-sectionpart {
+
+        width: calc(100% - 24px);
+
+        margin: 0 auto 25px;
+
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   320px - 480px
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .profile-container > .suggestion-sectionpart {
+
+        width: calc(100% - 16px);
+
+        margin: 0 auto 20px;
+
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+   320px - 360px
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .profile-container > .suggestion-sectionpart {
+
+        width: calc(100% - 12px);
+
+        margin-bottom: 18px;
+
+    }
+
+}
+
+
+/* =========================================================
+   DESKTOP
+   Suggestion component is already hidden
+   by suggestion.css at 769px+
+========================================================= */
+
+@media (min-width: 769px) {
+
+    .profile-container > .suggestion-sectionpart {
+
+        display: none;
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   PROFILE INFORMATION - COLLAPSIBLE
+========================================================= */
+
+.profile-info-section {
+    width: 100%;
+    margin: 28px 0;
+}
+
+
+/* ===========================
+   TOP / BOTTOM TOGGLE
+=========================== */
+
+.profile-info-toggle {
+    width: 100%;
+    min-height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 12px 16px;
+
+    border: 1px solid #e8edf5;
+    border-radius: 12px;
+
+    background: #f8fafc;
+    color: #334155;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.profile-info-toggle:hover {
+
+    background: #eff6ff;
+
+    border-color: #bfdbfe;
+
+}
+
+
+.profile-info-toggle:active {
+
+    transform: scale(0.99);
+
+}
+
+
+/* ===========================
+   ARROW
+=========================== */
+
+.profile-info-arrow {
+
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    color: #1877f2;
+
+    font-size: 20px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    box-shadow:
+        0 2px 6px rgba(15, 23, 42, 0.08);
+
+}
+
+
+/* ===========================
+   INFORMATION GRID
+=========================== */
+
+.profile-info-section .profile-info {
+
+    width: 100%;
+
+    margin: 10px 0 0;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 12px;
+
+    text-align: left;
+
+    animation: profileInfoOpen 0.25s ease;
+
+}
+
+
+@keyframes profileInfoOpen {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(-6px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+}
+
+
+/* ===========================
+   INFO ITEM
+=========================== */
+
+.profile-info-section .info-item {
+
+    min-height: 72px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    padding: 14px 17px;
+
+    background: #f8fafc;
+
+    border: 1px solid #edf1f7;
+
+    border-radius: 13px;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+
+}
+
+
+.profile-info-section .info-item:hover {
+
+    background: #f1f5f9;
+
+    border-color: #dbe3ef;
+
+    transform: translateY(-1px);
+
+}
+
+
+.profile-info-section .info-item strong {
+
+    color: #334155;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.3px;
+
+}
+
+
+.profile-info-section .info-item span,
+.profile-info-section .info-item a {
+
+    color: #64748b;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    word-break: break-word;
+
+}
+
+
+.profile-info-section .info-item a {
+
+    color: #1877f2;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+}
+
+
+.profile-info-section .info-item a:hover {
+
+    text-decoration: underline;
+
+}
+
+
+/* ===========================
+   BOTTOM ARROW
+=========================== */
+
+.bottom-toggle {
+
+    margin-top: 10px;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    background: #ffffff;
+
+    color: #1877f2;
+
+}
+
+
+.bottom-toggle:hover {
+
+    background: #eff6ff;
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .profile-info-section {
+
+        margin: 24px 0;
+
+    }
+
+    .profile-info-section .profile-info {
+
+        grid-template-columns: 1fr;
+
+        gap: 10px;
+
+    }
+
+    .profile-info-toggle {
+
+        min-height: 44px;
+
+        padding: 11px 14px;
+
+        font-size: 13.5px;
+
+    }
+
+    .profile-info-arrow {
+
+        width: 28px;
+
+        height: 28px;
+
+        font-size: 19px;
+
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .profile-info-section {
+
+        margin: 20px 0;
+
+    }
+
+    .profile-info-toggle {
+
+        min-height: 42px;
+
+        padding: 10px 13px;
+
+        border-radius: 11px;
+
+        font-size: 13px;
+
+    }
+
+    .profile-info-arrow {
+
+        width: 27px;
+
+        height: 27px;
+
+        font-size: 18px;
+
+    }
+
+    .profile-info-section .profile-info {
+
+        margin-top: 8px;
+
+        gap: 8px;
+
+    }
+
+    .profile-info-section .info-item {
+
+        min-height: 62px;
+
+        padding: 11px 13px;
+
+        border-radius: 10px;
+
+    }
+
+    .profile-info-section .info-item strong {
+
+        font-size: 10.5px;
+
+    }
+
+    .profile-info-section .info-item span,
+    .profile-info-section .info-item a {
+
+        font-size: 13px;
+
+    }
+
+}
+
+
+/* =========================================================
+   EXTRA SMALL DEVICES
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .profile-info-toggle {
+
+        font-size: 12.5px;
+
+    }
+
+    .profile-info-section .info-item {
+
+        padding: 10px 12px;
+
+    }
+
+    .profile-info-section .info-item strong {
+
+        font-size: 10px;
+
+    }
+
+    .profile-info-section .info-item span,
+    .profile-info-section .info-item a {
+
+        font-size: 12.5px;
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   PROFILE INFORMATION TOGGLE
+========================================================= */
+
+.profile-info-section {
+    width: 100%;
+    margin: 28px 0;
+}
+
+
+/* =========================
+   TOGGLE BUTTON
+========================= */
+
+.profile-info-toggle {
+
+    width: 100%;
+
+    min-height: 52px;
+
+    padding: 13px 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border: 1px solid #e8edf5;
+
+    border-radius: 13px;
+
+    background: #f8fafc;
+
+    color: #334155;
+
+    font-family: inherit;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* Arrow */
+
+.profile-info-toggle svg {
+
+    font-size: 15px;
+
+    color: #1877f2;
+
+    flex-shrink: 0;
+
+    transition: transform 0.2s ease;
+}
+
+
+/* Hover */
+
+.profile-info-toggle:hover {
+
+    background: #f1f5f9;
+
+    border-color: #dbe3ef;
+
+    box-shadow:
+        0 3px 10px rgba(15, 23, 42, 0.05);
+}
+
+
+/* Click */
+
+.profile-info-toggle:active {
+
+    transform: scale(0.99);
+
+}
+
+
+/* =========================================================
+   PROFILE INFO OPEN AREA
+========================================================= */
+
+.profile-info-section .profile-info {
+
+    margin-top: 12px;
+
+    animation: profileInfoOpen 0.25s ease;
+
+}
+
+
+@keyframes profileInfoOpen {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(-8px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .profile-info-section {
+
+        margin: 22px 0;
+
+    }
+
+    .profile-info-toggle {
+
+        min-height: 48px;
+
+        padding: 12px 14px;
+
+        font-size: 14px;
+
+        border-radius: 11px;
+
+    }
+
+    .profile-info-toggle svg {
+
+        font-size: 13px;
+
+    }
+
+    .profile-info-section .profile-info {
+
+        margin-top: 9px;
+
+    }
+
+}
+
+
+/* =========================================================
+   EXTRA SMALL
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .profile-info-toggle {
+
+        min-height: 45px;
+
+        padding: 11px 12px;
+
+        font-size: 13px;
+
+    }
+
+}

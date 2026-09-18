@@ -1,11 +1,17 @@
 import React from 'react'
-import CommonNavBar from '../../components/commonNavBar/CommonNavBar'
+
+
+
+
 
 export default function Demo() {
   return (
     <div>
-      <CommonNavBar />
-      <div>Demo</div>
+
+
+      <h1>demo </h1>
+
+
     </div>
   )
 }

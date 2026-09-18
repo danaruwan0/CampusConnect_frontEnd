@@ -9,88 +9,168 @@ import {
 import "./followButton.css";
 
 export default function FollowButton({
-
     followerId,
     followingId
-
 }) {
 
     const [following, setFollowing] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [actionLoading, setActionLoading] = useState(false);
+
+    /*
+    =========================================================
+    LOAD FOLLOW STATUS
+    =========================================================
+    */
 
     useEffect(() => {
 
+        if (!followerId || !followingId) {
+            setLoading(false);
+            return;
+        }
+
         loadStatus();
 
-    }, []);
+    }, [followerId, followingId]);
+
 
     const loadStatus = async () => {
 
         try {
 
-            const status = await isFollowing(
+            setLoading(true);
 
+            const status = await isFollowing(
                 followerId,
                 followingId
-
             );
 
-            setFollowing(status);
+            setFollowing(Boolean(status));
 
-        }
+        } catch (err) {
 
-        catch (err) {
+            console.error(
+                "Error loading follow status:",
+                err
+            );
 
-            console.log(err);
+            setFollowing(false);
+
+        } finally {
+
+            setLoading(false);
 
         }
 
     };
 
+
+    /*
+    =========================================================
+    FOLLOW / UNFOLLOW
+    =========================================================
+    */
+
     const handleFollow = async () => {
+
+        if (
+            actionLoading ||
+            !followerId ||
+            !followingId
+        ) {
+            return;
+        }
 
         try {
 
+            setActionLoading(true);
+
             if (following) {
 
-                await unfollowUser(
+                /*
+                ==========================
+                UNFOLLOW
+                ==========================
+                */
 
+                await unfollowUser(
                     followerId,
                     followingId
-
                 );
 
                 setFollowing(false);
 
-            }
+            } else {
 
-            else {
+                /*
+                ==========================
+                FOLLOW
+                ==========================
+                */
 
                 await followUser(
-
                     followerId,
                     followingId
-
                 );
 
                 setFollowing(true);
 
             }
 
-        }
+        } catch (err) {
 
-        catch (err) {
+            console.error(
+                "Follow / Unfollow error:",
+                err
+            );
 
-            console.log(err);
+        } finally {
+
+            setActionLoading(false);
 
         }
 
     };
 
+
+    /*
+    =========================================================
+    LOADING
+    =========================================================
+    */
+
+    if (loading) {
+
+        return (
+
+            <button
+                className="follow-btn follow-loading"
+                disabled
+            >
+                Loading...
+            </button>
+
+        );
+
+    }
+
+
+    /*
+    =========================================================
+    BUTTON
+    =========================================================
+    */
+
     return (
 
         <button
 
+            type="button"
+
             onClick={handleFollow}
+
+            disabled={actionLoading}
 
             className={
                 following
@@ -100,10 +180,14 @@ export default function FollowButton({
 
         >
 
-            {
-                following
+            {actionLoading
+
+                ? "Please wait..."
+
+                : following
                     ? "Following"
                     : "Follow"
+
             }
 
         </button>

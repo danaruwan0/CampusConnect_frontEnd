@@ -2,45 +2,70 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import Navbar from "../../components/navbar/Navbar";
-
 import CommonNavBar from "../../components/commonNavBar/CommonNavBar";
-
 import PostCard from "../../components/postCard/PostCard";
+
 import "./profile.css";
+
 import defaultProfile from "../../assets/Default profile.jpg";
 import profilenotfound from "../../assets/Profile Not Found.png";
 import noPostsYet from "../../assets/No Posts Yet.png";
-import { getProfile } from "../../api/profileApi";
-import { getFollowerCount, getFollowingCount } from "../../api/followApi";
-import { getUserPosts } from "../../api/postApi";
-import FollowButton from "../../components/followButton/FollowButton";
-import { FaFacebookMessenger } from "react-icons/fa";
-import CreatePostModal from "../../components/createPost/CreatePostModal";
-import { reactPost, sharePost } from "../../api/postApi";
 
+import { getProfile } from "../../api/profileApi";
+import {
+    getFollowerCount,
+    getFollowingCount
+} from "../../api/followApi";
+
+import {
+    getUserPosts,
+    reactPost,
+    sharePost
+} from "../../api/postApi";
+
+import FollowButton from "../../components/followButton/FollowButton";
+
+import { FaFacebookMessenger } from "react-icons/fa";
 import { FaRegNewspaper } from "react-icons/fa";
-import { FaStream } from "react-icons/fa";
+
+import CreatePostModal from "../../components/createPost/CreatePostModal";
 
 import Loader from "../../components/loader/Loader";
 
+// NEW
+import Suggestion from "../../components/suggestion/Suggestion";
+import ProfileSuggestion from "../../components/profileSuggestion/ProfileSuggestion";
 
+
+
+import {
+    FaChevronDown,
+    FaChevronUp
+} from "react-icons/fa";
 
 
 export default function Profile() {
 
-
     const [showFullBio, setShowFullBio] = useState(false);
+
+    const [showProfileImage, setShowProfileImage] =
+        useState(false);
 
     const navigate = useNavigate();
 
-    // const userId = Number(localStorage.getItem("userId"));
     const { userId } = useParams();
 
-    const loggedUserId = Number(localStorage.getItem("userId"));
+    const loggedUserId =
+        Number(localStorage.getItem("userId"));
 
     const profileUserId = userId
         ? Number(userId)
         : loggedUserId;
+
+
+    // ================================
+    // STATES
+    // ================================
 
     const [profile, setProfile] = useState(null);
 
@@ -52,11 +77,31 @@ export default function Profile() {
 
     const [loading, setLoading] = useState(true);
 
-    const [showCreatePost, setShowCreatePost] = useState(false);
+    const [showCreatePost, setShowCreatePost] =
+        useState(false);
+
+
+
+
+
+
+
+
+    const [showProfileInfo, setShowProfileInfo] = useState(false);
+
+
+
+
+    // ================================
+    // LOAD PROFILE
+    // ================================
 
     useEffect(() => {
+
         loadProfile();
+
     }, [profileUserId]);
+
 
     const loadProfile = async () => {
 
@@ -65,12 +110,10 @@ export default function Profile() {
             setLoading(true);
 
             const [
-
                 profileData,
                 followerCount,
                 followingCount,
                 userPosts
-
             ] = await Promise.all([
 
                 getProfile(profileUserId),
@@ -83,7 +126,12 @@ export default function Profile() {
 
             ]);
 
-            console.log("USER POSTS =", userPosts);
+
+            console.log(
+                "USER POSTS =",
+                userPosts
+            );
+
 
             setProfile(profileData);
 
@@ -91,7 +139,8 @@ export default function Profile() {
 
             setFollowing(followingCount);
 
-            setPosts(userPosts);
+            setPosts(userPosts || []);
+
 
         } catch (err) {
 
@@ -105,14 +154,18 @@ export default function Profile() {
 
     };
 
+
+    // ================================
+    // LOADING
+    // ================================
+
     if (loading) {
 
         return (
 
             <>
-                {/* <Navbar /> */}
-                <CommonNavBar />
 
+                <CommonNavBar />
 
                 <div
                     style={{
@@ -120,12 +173,11 @@ export default function Profile() {
                         marginTop: "70px"
                     }}
                 >
-                    {/* <h2>Loading Profile...</h2> */}
-
 
                     <Loader
                         text="Loading Profile..."
                     />
+
                 </div>
 
             </>
@@ -134,11 +186,17 @@ export default function Profile() {
 
     }
 
+
+    // ================================
+    // PROFILE NOT FOUND
+    // ================================
+
     if (!profile) {
 
         return (
 
             <>
+
                 <Navbar />
 
                 <div className="profile-not-found">
@@ -149,10 +207,13 @@ export default function Profile() {
                         className="profile-not-found-img"
                     />
 
-                    <h2>Profile Not Found</h2>
+                    <h2>
+                        Profile Not Found
+                    </h2>
 
                     <p>
-                        The profile you're looking for doesn't exist.
+                        The profile you're looking for
+                        doesn't exist.
                     </p>
 
                 </div>
@@ -163,17 +224,27 @@ export default function Profile() {
 
     }
 
-    // Function to handle post deletion
+
+    // ================================
+    // DELETE POST
+    // ================================
+
     const handleDeletePost = (postId) => {
 
         setPosts(prevPosts =>
-            prevPosts.filter(post => post.postId !== postId)
+            prevPosts.filter(
+                post =>
+                    post.postId !== postId
+            )
         );
 
     };
 
 
-    // Function to handle reactions  TODAY ADD
+    // ================================
+    // REACTION
+    // ================================
+
     const handleReaction = async (
         postId,
         reactionType
@@ -187,9 +258,7 @@ export default function Profile() {
                 reactionType
             );
 
-
             loadProfile();
-
 
         } catch (err) {
 
@@ -200,7 +269,10 @@ export default function Profile() {
     };
 
 
-    //new add
+    // ================================
+    // COMMENT
+    // ================================
+
     const handleCommentAdded = (postId) => {
 
         setPosts(prevPosts =>
@@ -208,10 +280,13 @@ export default function Profile() {
             prevPosts.map(post =>
 
                 post.postId === postId
+
                     ? {
                         ...post,
-                        commentCount: post.commentCount + 1
+                        commentCount:
+                            (post.commentCount || 0) + 1
                     }
+
                     : post
 
             )
@@ -221,11 +296,18 @@ export default function Profile() {
     };
 
 
+    // ================================
+    // SHARE
+    // ================================
+
     const handleShare = async (postId) => {
 
         try {
 
-            await sharePost(postId, loggedUserId);
+            await sharePost(
+                postId,
+                loggedUserId
+            );
 
             loadProfile();
 
@@ -237,98 +319,121 @@ export default function Profile() {
 
     };
 
+
+    // ================================
+    // UI
+    // ================================
+
     return (
 
         <>
 
-
-            {/* im change on this navbar to common navbar, this is pecil
-            paart   */}
-
-            {/* <Navbar
-                onCreatePost={() => setShowCreatePost(true)}
-            /> */}
+            {/* ==========================
+                NAVBAR
+            ========================== */}
 
             <CommonNavBar
-                onCreatePost={() => setShowCreatePost(true)}
+                onCreatePost={() =>
+                    setShowCreatePost(true)
+                }
             />
+
 
             <div className="profile-container">
 
-                {/* COVER */}
+
+                {/* ==========================
+                    COVER
+                ========================== */}
 
                 <div className="cover">
 
                     <img
-
                         src={
                             profile.coverImage ||
                             "https://images.unsplash.com/photo-1503264116251-35a269479413"
                         }
-
                         alt="cover"
-
                     />
 
                 </div>
 
-                {/* PROFILE */}
+
+                {/* ==========================
+                    PROFILE CARD
+                ========================== */}
 
                 <div className="profile-box">
 
-                    <img
 
+                    {/* PROFILE IMAGE */}
+
+                    <img
                         src={
                             profile.profileImage ||
                             defaultProfile
                         }
-
                         alt="profile"
-
                         className="profile-pic"
-
+                        onClick={() =>
+                            setShowProfileImage(true)
+                        }
                         onError={(e) => {
 
-                            e.target.src = defaultProfile;
+                            e.target.src =
+                                defaultProfile;
 
                         }}
-
                     />
 
+
+                    {/* NAME */}
+
                     <h2>
-
                         {profile.fullName}
-
                     </h2>
 
-                    <p className="email" style={{ color: "#1877f2" }}>
+
+                    {/* EMAIL */}
+
+                    <p
+                        className="email"
+                        style={{
+                            color: "#1877f2"
+                        }}
+                    >
                         {profile.email}
                     </p>
+
+
+                    {/* MAJOR */}
 
                     {
                         profile.major && (
 
                             <p>
-
                                 {profile.major}
-
                             </p>
 
                         )
                     }
 
-                    {/* <p>
 
-                        {profile.bio || "No bio available"}
-
-                    </p> */}
+                    {/* BIO */}
 
                     <div className="bio-section">
 
-                        <p className={showFullBio ? "bio full" : "bio"}>
-
-                            {profile.bio || "No bio available"}
-
+                        <p
+                            className={
+                                showFullBio
+                                    ? "bio full"
+                                    : "bio"
+                            }
+                        >
+                            {
+                                profile.bio ||
+                                "No bio available"
+                            }
                         </p>
 
 
@@ -339,7 +444,9 @@ export default function Profile() {
                                 <button
                                     className="bio-toggle"
                                     onClick={() =>
-                                        setShowFullBio(!showFullBio)
+                                        setShowFullBio(
+                                            !showFullBio
+                                        )
                                     }
                                 >
 
@@ -356,7 +463,12 @@ export default function Profile() {
 
                     </div>
 
-                    <div className="profile-info">
+
+                    {/* ==========================
+                        PROFILE INFORMATION
+                    ========================== */}
+
+                    {/* <div className="profile-info">
 
 
                         <div className="info-item">
@@ -366,7 +478,10 @@ export default function Profile() {
                             </strong>
 
                             <span>
-                                {profile.university || "-"}
+                                {
+                                    profile.university ||
+                                    "-"
+                                }
                             </span>
 
                         </div>
@@ -379,11 +494,13 @@ export default function Profile() {
                             </strong>
 
                             <span>
-                                {profile.batchYear || "-"}
+                                {
+                                    profile.batchYear ||
+                                    "-"
+                                }
                             </span>
 
                         </div>
-
 
 
                         <div className="info-item">
@@ -393,11 +510,13 @@ export default function Profile() {
                             </strong>
 
                             <span>
-                                {profile.location || "-"}
+                                {
+                                    profile.location ||
+                                    "-"
+                                }
                             </span>
 
                         </div>
-
 
 
                         <div className="info-item">
@@ -407,11 +526,13 @@ export default function Profile() {
                             </strong>
 
                             <span>
-                                {profile.phone || "-"}
+                                {
+                                    profile.phone ||
+                                    "-"
+                                }
                             </span>
 
                         </div>
-
 
 
                         <div className="info-item">
@@ -421,11 +542,13 @@ export default function Profile() {
                             </strong>
 
                             <span>
-                                {profile.skills || "-"}
+                                {
+                                    profile.skills ||
+                                    "-"
+                                }
                             </span>
 
                         </div>
-
 
 
                         <div className="info-item">
@@ -435,7 +558,10 @@ export default function Profile() {
                             </strong>
 
                             <a
-                                href={profile.githubUrl}
+                                href={
+                                    profile.githubUrl ||
+                                    "#"
+                                }
                                 target="_blank"
                                 rel="noreferrer"
                             >
@@ -443,7 +569,6 @@ export default function Profile() {
                             </a>
 
                         </div>
-
 
 
                         <div className="info-item">
@@ -453,7 +578,10 @@ export default function Profile() {
                             </strong>
 
                             <a
-                                href={profile.linkedinUrl}
+                                href={
+                                    profile.linkedinUrl ||
+                                    "#"
+                                }
                                 target="_blank"
                                 rel="noreferrer"
                             >
@@ -463,7 +591,6 @@ export default function Profile() {
                         </div>
 
 
-
                         <div className="info-item">
 
                             <strong>
@@ -471,7 +598,10 @@ export default function Profile() {
                             </strong>
 
                             <a
-                                href={profile.website}
+                                href={
+                                    profile.website ||
+                                    "#"
+                                }
                                 target="_blank"
                                 rel="noreferrer"
                             >
@@ -480,169 +610,478 @@ export default function Profile() {
 
                         </div>
 
-
-                    </div>
-
-                    {/* STATS */}
-
-                    <div className="profile-stats">
-
-                        <div>
-
-                            <h3>
-
-                                {posts.length}
-
-                            </h3>
-
-                            <p>Posts</p>
-
-                        </div>
-
-                        <div>
-
-                            <h3>
-
-                                {followers}
-
-                            </h3>
-
-                            <p>Followers</p>
-
-                        </div>
-
-                        <div>
-
-                            <h3>
-
-                                {following}
-
-                            </h3>
-
-                            <p>Following</p>
-
-                        </div>
-
-                    </div>
-
-                    {/* EDIT BUTTON */}
-
-                    <div className="profile-buttons">
-
-                        {loggedUserId === profileUserId ? (
-
-                            <>
-                                <button
-                                    onClick={() => navigate("/profile/edit")}
-                                >
-                                    Edit Profile
-                                </button>
-
-                                <button
-                                    className="create-post-btn"
-                                    onClick={() => setShowCreatePost(true)}
-                                >
-                                    Create Post
-                                </button>
-                            </>
+                    </div> */}
 
 
 
 
-                        ) : (
 
-                            <>
-                                <FollowButton
-                                    followerId={loggedUserId}
-                                    followingId={profileUserId}
-                                />
+                    {/* ==========================
+                            PROFILE INFORMATION
+                        ========================== */}
 
-                                <button
-                                    className="message-btn"
-                                    onClick={() =>
-                                        navigate(`/message/${profileUserId}`)
-                                    }
-                                >
-                                    <FaFacebookMessenger />
-                                    Message
-                                </button>
-                            </>
+                    <div className="profile-info-section">
+
+                        {/* HEADER / TOGGLE */}
+
+                        <button
+                            className="profile-info-toggle"
+                            onClick={() =>
+                                setShowProfileInfo(!showProfileInfo)
+                            }
+                            aria-expanded={showProfileInfo}
+                        >
+
+                            <span>
+                                Profile Information
+                            </span>
+
+                            {showProfileInfo ? (
+                                <FaChevronUp />
+                            ) : (
+                                <FaChevronDown />
+                            )}
+
+                        </button>
+
+
+                        {/* INFORMATION */}
+
+                        {showProfileInfo && (
+
+                            <div className="profile-info">
+
+                                <div className="info-item">
+
+                                    <strong>
+                                        University
+                                    </strong>
+
+                                    <span>
+                                        {profile.university || "-"}
+                                    </span>
+
+                                </div>
+
+
+                                <div className="info-item">
+
+                                    <strong>
+                                        Batch
+                                    </strong>
+
+                                    <span>
+                                        {profile.batchYear || "-"}
+                                    </span>
+
+                                </div>
+
+
+                                <div className="info-item">
+
+                                    <strong>
+                                        Location
+                                    </strong>
+
+                                    <span>
+                                        {profile.location || "-"}
+                                    </span>
+
+                                </div>
+
+
+                                <div className="info-item">
+
+                                    <strong>
+                                        Phone
+                                    </strong>
+
+                                    <span>
+                                        {profile.phone || "-"}
+                                    </span>
+
+                                </div>
+
+
+                                <div className="info-item">
+
+                                    <strong>
+                                        Skills
+                                    </strong>
+
+                                    <span>
+                                        {profile.skills || "-"}
+                                    </span>
+
+                                </div>
+
+
+                                <div className="info-item">
+
+                                    <strong>
+                                        GitHub
+                                    </strong>
+
+                                    <a
+                                        href={profile.githubUrl || "#"}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        Visit Profile
+                                    </a>
+
+                                </div>
+
+
+                                <div className="info-item">
+
+                                    <strong>
+                                        LinkedIn
+                                    </strong>
+
+                                    <a
+                                        href={profile.linkedinUrl || "#"}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        Visit Profile
+                                    </a>
+
+                                </div>
+
+
+                                <div className="info-item">
+
+                                    <strong>
+                                        Portfolio
+                                    </strong>
+
+                                    <a
+                                        href={profile.website || "#"}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        Visit Website
+                                    </a>
+
+                                </div>
+
+                            </div>
 
                         )}
 
                     </div>
 
-                </div>
 
-                {/* POSTS */}
 
-                <div className="profile-posts">
 
-                    <h2 className="profile-posts-name">
+                    {/* ==========================
+                        PROFILE STATS
+                    ========================== */}
 
-                        <FaRegNewspaper className="posts-icon" />
+                    <div className="profile-stats">
+
+
+                        <div>
+
+                            <h3>
+                                {posts.length}
+                            </h3>
+
+                            <p>
+                                Posts
+                            </p>
+
+                        </div>
+
+
+                        <div>
+
+                            <h3>
+                                {followers}
+                            </h3>
+
+                            <p>
+                                Followers
+                            </p>
+
+                        </div>
+
+
+                        <div>
+
+                            <h3>
+                                {following}
+                            </h3>
+
+                            <p>
+                                Following
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                    {/* ==========================
+                        PROFILE BUTTONS
+                    ========================== */}
+
+                    <div className="profile-buttons">
 
                         {
                             loggedUserId === profileUserId
+
+                                ?
+
+                                <>
+
+                                    <button
+                                        onClick={() =>
+                                            navigate(
+                                                "/profile/edit"
+                                            )
+                                        }
+                                    >
+                                        Edit Profile
+                                    </button>
+
+
+                                    <button
+                                        className="create-post-btn"
+                                        onClick={() =>
+                                            setShowCreatePost(
+                                                true
+                                            )
+                                        }
+                                    >
+                                        Create Post
+                                    </button>
+
+                                </>
+
+                                :
+
+                                <>
+
+                                    <FollowButton
+                                        followerId={
+                                            loggedUserId
+                                        }
+                                        followingId={
+                                            profileUserId
+                                        }
+                                    />
+
+
+                                    <button
+                                        className="message-btn"
+                                        onClick={() =>
+                                            navigate(
+                                                `/message/${profileUserId}`
+                                            )
+                                        }
+                                    >
+
+                                        <FaFacebookMessenger />
+
+                                        Message
+
+                                    </button>
+
+                                </>
+
+                        }
+
+                    </div>
+
+                </div>
+
+
+                {/* ==================================================
+                    MOBILE / TABLET SUGGESTIONS
+                ================================================== */}
+
+
+
+
+
+
+
+
+                {/* ==================================================
+                    POSTS
+                ================================================== */}
+
+                <div className="profile-posts">
+
+
+                    <ProfileSuggestion className="profile-suggestionnew" />
+
+
+
+                    <h2 className="profile-posts-name">
+
+                        <FaRegNewspaper
+                            className="posts-icon"
+                        />
+
+                        {
+                            loggedUserId === profileUserId
+
                                 ? "My Posts"
+
                                 : `${profile.fullName}'s Posts`
                         }
 
                     </h2>
 
 
-                    {posts.length === 0 ? (
+                    {/* NO POSTS */}
 
-                        <div className="no-posts-card">
+                    {
+                        posts.length === 0
 
-                            <img
-                                src={noPostsYet}
-                                alt="No Posts Yet"
-                                className="no-posts-img"
-                            />
+                            ?
 
-                            <h3>No Posts Yet</h3>
+                            (
 
-                            <p>
-                                You haven't shared any posts yet.
-                            </p>
+                                <div className="no-posts-card">
 
-                        </div>
-                    ) : (
+                                    <img
+                                        src={noPostsYet}
+                                        alt="No Posts Yet"
+                                        className="no-posts-img"
+                                    />
 
-                        posts.map((post) => (
+                                    <h3>
+                                        No Posts Yet
+                                    </h3>
 
-                            <PostCard
-                                key={post.postId}
-                                post={post}
+                                    <p>
+                                        You haven't shared
+                                        any posts yet.
+                                    </p>
 
-                                currentUserId={loggedUserId}
+                                </div>
 
-                                onCommentAdded={handleCommentAdded}
+                            )
 
-                                onReact={handleReaction}
+                            :
 
-                                onDelete={handleDeletePost}
+                            (
 
-                                onShare={handleShare}
-                            />
+                                posts.map((post) => (
 
-                        ))
+                                    <PostCard
 
-                    )}
+                                        key={
+                                            post.postId
+                                        }
+
+                                        post={post}
+
+                                        currentUserId={
+                                            loggedUserId
+                                        }
+
+                                        onCommentAdded={
+                                            handleCommentAdded
+                                        }
+
+                                        onReact={
+                                            handleReaction
+                                        }
+
+                                        onDelete={
+                                            handleDeletePost
+                                        }
+
+                                        onShare={
+                                            handleShare
+                                        }
+
+                                    />
+
+                                ))
+
+                            )
+                    }
 
                 </div>
 
 
+                {/* ==========================
+                    CREATE POST MODAL
+                ========================== */}
+
                 <CreatePostModal
 
-                    open={showCreatePost}
+                    open={
+                        showCreatePost
+                    }
 
-                    onClose={() => setShowCreatePost(false)}
+                    onClose={() =>
+                        setShowCreatePost(false)
+                    }
 
-                    onSuccess={loadProfile}
+                    onSuccess={() => {
+
+                        loadProfile();
+
+                        setShowCreatePost(false);
+
+                    }}
 
                 />
+
+
+                {/* ==========================
+                    PROFILE IMAGE VIEWER
+                ========================== */}
+
+                {
+                    showProfileImage && (
+
+                        <div
+                            className="profile-image-viewer"
+                            onClick={() =>
+                                setShowProfileImage(false)
+                            }
+                        >
+
+                            <button
+                                className="profile-image-close"
+                                onClick={() =>
+                                    setShowProfileImage(
+                                        false
+                                    )
+                                }
+                            >
+                                ×
+                            </button>
+
+
+                            <img
+                                src={
+                                    profile.profileImage ||
+                                    defaultProfile
+                                }
+                                alt={
+                                    `${profile.fullName} profile`
+                                }
+                                className="profile-image-large"
+                                onClick={(e) =>
+                                    e.stopPropagation()
+                                }
+                            />
+
+                        </div>
+
+                    )
+                }
+
 
             </div>
 
