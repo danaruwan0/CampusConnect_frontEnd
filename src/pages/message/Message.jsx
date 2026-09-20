@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useState
+} from "react";
+
 import { useParams } from "react-router-dom";
 
 import ChatList from "../../components/chatList/ChatList";
@@ -8,12 +13,29 @@ import { getProfile } from "../../api/profileApi";
 
 import "./message.css";
 
+
 export default function Message() {
+
+    // =========================================================
+    // CURRENT USER
+    // =========================================================
 
     const currentUserId =
         Number(localStorage.getItem("userId"));
 
-    const { userId: chatUserId } = useParams();
+
+    // =========================================================
+    // URL CHAT USER
+    // =========================================================
+
+    const {
+        userId: chatUserId
+    } = useParams();
+
+
+    // =========================================================
+    // STATES
+    // =========================================================
 
     const [selectedUser, setSelectedUser] =
         useState(null);
@@ -27,107 +49,210 @@ export default function Message() {
     const [typingUsers, setTypingUsers] =
         useState([]);
 
-    const [mobileChatOpen, setMobileChatOpen] = useState(false);
+    const [mobileChatOpen, setMobileChatOpen] =
+        useState(false);
 
-    // ----------------------------
-    // Refresh Chat List
-    // ----------------------------
 
-    const refreshChats = () => {
+    // =========================================================
+    // REFRESH CHAT LIST
+    // =========================================================
+
+    const refreshChats = useCallback(() => {
+
+        console.log(
+            "REFRESH CHAT LIST"
+        );
 
         setRefreshKey(prev => prev + 1);
 
-        console.log("REFRESH CHATS");
+    }, []);
 
-    };
 
-    // ----------------------------
-    // Open chat directly from Profile
-    // ----------------------------
+    // =========================================================
+    // OPEN CHAT DIRECTLY FROM PROFILE / URL
+    // =========================================================
 
     useEffect(() => {
 
-        if (!chatUserId) return;
+        if (!chatUserId) {
+            return;
+        }
 
         const loadSelectedUser = async () => {
 
             try {
 
-                const profile = await getProfile(
-                    Number(chatUserId)
+                console.log(
+                    "OPEN CHAT USER:",
+                    chatUserId
                 );
+
+                const profile =
+                    await getProfile(
+                        Number(chatUserId)
+                    );
+
 
                 setSelectedUser({
 
-                    userId: Number(chatUserId),
+                    userId:
+                        Number(chatUserId),
 
-                    fullName: profile.fullName,
+                    fullName:
+                        profile.fullName,
 
-                    email: profile.email,
+                    email:
+                        profile.email,
 
-                    profileImage: profile.profileImage,
+                    profileImage:
+                        profile.profileImage,
 
-                    major: profile.major
+                    major:
+                        profile.major
 
                 });
 
-                // THIS PART USER CHAT NAVIGATE FROM PROFILE TO MESSAGE PAGE, SO WHEN USER CLICK ON MESSAGE BUTTON, IT WILL OPEN THE CHAT WINDOW DIRECTLY WITH THAT USER. SO I SET THE MOBILE CHAT OPEN TO TRUE.
+
+                // -------------------------------------------------
+                // MOBILE
+                // -------------------------------------------------
+
                 setMobileChatOpen(true);
 
             } catch (err) {
 
-                console.log(err);
+                console.error(
+                    "Failed to load selected user:",
+                    err
+                );
 
             }
 
         };
 
+
         loadSelectedUser();
 
     }, [chatUserId]);
+
+
+    // =========================================================
+    // RENDER
+    // =========================================================
 
     return (
 
         <div className="message-page">
 
+            {/* =================================================
+                CHAT LIST
+            ================================================= */}
+
             <div
-                className={`chat-list-wrapper ${mobileChatOpen ? "hide-mobile" : ""
-                    }`}
+                className={
+                    `chat-list-wrapper ${
+                        mobileChatOpen
+                            ? "hide-mobile"
+                            : ""
+                    }`
+                }
             >
+
                 <ChatList
-                    currentUserId={currentUserId}
-                    selectedUser={selectedUser}
-                    refreshKey={refreshKey}
-                    onlineUsers={onlineUsers}
-                    typingUsers={typingUsers}
+
+                    currentUserId={
+                        currentUserId
+                    }
+
+                    selectedUser={
+                        selectedUser
+                    }
+
+                    refreshKey={
+                        refreshKey
+                    }
+
+                    onlineUsers={
+                        onlineUsers
+                    }
+
+                    typingUsers={
+                        typingUsers
+                    }
+
                     onSelect={(user) => {
-                        setSelectedUser(user);
-                        setMobileChatOpen(true);
+
+                        console.log(
+                            "SELECT CHAT:",
+                            user
+                        );
+
+                        setSelectedUser(
+                            user
+                        );
+
+                        setMobileChatOpen(
+                            true
+                        );
+
                     }}
+
                 />
 
             </div>
 
 
+            {/* =================================================
+                CHAT WINDOW
+            ================================================= */}
 
             <div
-                className={`chat-window-wrapper ${mobileChatOpen ? "show-mobile" : ""
-                    }`}
+                className={
+                    `chat-window-wrapper ${
+                        mobileChatOpen
+                            ? "show-mobile"
+                            : ""
+                    }`
+                }
             >
+
                 <ChatWindow
-                    currentUserId={currentUserId}
-                    selectedUser={selectedUser}
-                    onNewMessage={refreshChats}
-                    onlineUsers={onlineUsers}
-                    setOnlineUsers={setOnlineUsers}
-                    setTypingUsers={setTypingUsers}
-                    mobileChatOpen={mobileChatOpen}
-                    setMobileChatOpen={setMobileChatOpen}
+
+                    currentUserId={
+                        currentUserId
+                    }
+
+                    selectedUser={
+                        selectedUser
+                    }
+
+                    onNewMessage={
+                        refreshChats
+                    }
+
+                    onlineUsers={
+                        onlineUsers
+                    }
+
+                    setOnlineUsers={
+                        setOnlineUsers
+                    }
+
+                    setTypingUsers={
+                        setTypingUsers
+                    }
+
+                    mobileChatOpen={
+                        mobileChatOpen
+                    }
+
+                    setMobileChatOpen={
+                        setMobileChatOpen
+                    }
+
                 />
+
             </div>
-
-
-
 
         </div>
 

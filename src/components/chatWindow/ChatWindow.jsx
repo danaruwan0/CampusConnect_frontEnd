@@ -1,22 +1,68 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useRef,
+    useState
+} from "react";
 
-import { getConversation, markConversationAsRead, deleteForMe, deleteForEveryone } from "../../api/messageApi";
+
+import {
+    getConversation,
+    markConversationAsRead,
+    deleteForMe,
+    deleteForEveryone
+} from "../../api/messageApi";
+
+
 import defaultProfile from "../../assets/Default profile.jpg";
 import emptyChat from "../../assets/empty-chat.png";
 
+
 import "./chatWindow.css";
 
-import { getProfile } from "../../api/profileApi";
 
-import { connectSocket, sendMessage, disconnectSocket } from "../../services/websocket";
-import { sendTyping, stopTyping, subscribeTyping } from "../../services/typingSocket";
+import {
+    getProfile
+} from "../../api/profileApi";
 
-import { MdDone, MdDoneAll, MdMoreVert, MdDelete, MdArrowBack } from "react-icons/md";
-import { IoSend } from "react-icons/io5";
 
-import { sendSeen, subscribeSeen } from "../../services/seenSocket";
+import {
+    connectSocket,
+    sendMessage,
+    disconnectSocket
+} from "../../services/websocket";
 
-import { getOnlineUsers } from "../../api/statusApi";
+
+import {
+    sendTyping,
+    stopTyping,
+    subscribeTyping
+} from "../../services/typingSocket";
+
+
+import {
+    MdDone,
+    MdDoneAll,
+    MdDelete,
+    MdArrowBack
+} from "react-icons/md";
+
+
+import {
+    IoSend
+} from "react-icons/io5";
+
+
+import {
+    sendSeen,
+    subscribeSeen
+} from "../../services/seenSocket";
+
+
+import {
+    getOnlineUsers
+} from "../../api/statusApi";
+
 
 
 export default function ChatWindow({
@@ -34,73 +80,81 @@ export default function ChatWindow({
 
 }) {
 
-    const [typing, setTyping] = useState(false);
 
-    const typingTimeout = useRef(null);
+    // =========================================================
+    // STATES
+    // =========================================================
 
-    const [messages, setMessages] = useState([]);
-    const [text, setText] = useState("");
+    const [typing, setTyping] =
+        useState(false);
 
-    const bottomRef = useRef(null);
+    const [messages, setMessages] =
+        useState([]);
+
+    const [text, setText] =
+        useState("");
+
+    const [myProfile, setMyProfile] =
+        useState(null);
+
+    const [menuMessage, setMenuMessage] =
+        useState(null);
+
+    const [menuPosition, setMenuPosition] =
+        useState({
+            x: 0,
+            y: 0
+        });
 
 
-    const [myProfile, setMyProfile] = useState(null);
+    // =========================================================
+    // REFS
+    // =========================================================
+
+    const typingTimeout =
+        useRef(null);
+
+    const bottomRef =
+        useRef(null);
 
 
-    const [menuMessage, setMenuMessage] = useState(null);
+    /*
+     * IMPORTANT
+     *
+     * WebSocket callbacks can keep an old selectedUser value.
+     *
+     * This ref always contains the latest selected chat.
+     */
 
-    const [menuPosition, setMenuPosition] = useState({
-        x: 0,
-        y: 0
-    });
+    const selectedUserRef =
+        useRef(null);
 
 
-    const handleDeleteForMe = async () => {
+    /*
+     * Same idea for loadConversation.
+     */
 
-        console.log("DELETE CLICK");
+    const loadConversationRef =
+        useRef(null);
 
-        try {
 
-            await deleteForMe(menuMessage.id, currentUserId);
 
-            console.log("DELETE SUCCESS");
+    // =========================================================
+    // KEEP SELECTED USER REF UPDATED
+    // =========================================================
 
-            setMenuMessage(null);
+    useEffect(() => {
 
-            loadConversation();
+        selectedUserRef.current =
+            selectedUser;
 
-            onNewMessage();
+    }, [selectedUser]);
 
-        } catch (err) {
 
-            console.log(err);
 
-        }
-    };
-
-    const handleDeleteForEveryone = async () => {
-
-        try {
-
-            await deleteForEveryone(
-                menuMessage.id,
-                currentUserId
-            );
-
-            setMenuMessage(null);
-
-            loadConversation();
-
-            onNewMessage();
-
-        } catch (err) {
-
-            console.log(err);
-
-        }
-
-    };
-
+    // =========================================================
+    // CLOSE CONTEXT MENU
+    // =========================================================
 
     useEffect(() => {
 
@@ -110,33 +164,57 @@ export default function ChatWindow({
 
         };
 
-        window.addEventListener("click", closeMenu);
+
+        window.addEventListener(
+            "click",
+            closeMenu
+        );
+
 
         return () => {
 
-            window.removeEventListener("click", closeMenu);
+            window.removeEventListener(
+                "click",
+                closeMenu
+            );
 
         };
 
     }, []);
 
+
+
+    // =========================================================
+    // LOAD MY PROFILE
+    // =========================================================
+
     useEffect(() => {
 
-        const loadMyProfile = async () => {
+        const loadMyProfile =
+            async () => {
 
-            try {
+                try {
 
-                const data = await getProfile(currentUserId);
+                    const data =
+                        await getProfile(
+                            currentUserId
+                        );
 
-                setMyProfile(data);
+                    setMyProfile(
+                        data
+                    );
 
-            } catch (err) {
+                } catch (err) {
 
-                console.log(err);
+                    console.error(
+                        "My profile error:",
+                        err
+                    );
 
-            }
+                }
 
-        };
+            };
+
 
         if (currentUserId) {
 
@@ -146,92 +224,231 @@ export default function ChatWindow({
 
     }, [currentUserId]);
 
-    // ---------------- LOAD CONVERSATION ----------------
 
-    const loadConversation = useCallback(async () => {
 
-        if (!selectedUser) return;
+    // =========================================================
+    // LOAD CONVERSATION
+    // =========================================================
 
-        try {
+    const loadConversation =
+        useCallback(
+            async () => {
 
-            const data = await getConversation(
+                if (
+                    !currentUserId ||
+                    !selectedUser
+                ) {
+
+                    return;
+
+                }
+
+
+                try {
+
+                    console.log(
+                        "LOADING CONVERSATION:",
+                        currentUserId,
+                        selectedUser.userId
+                    );
+
+
+                    const data =
+                        await getConversation(
+
+                            currentUserId,
+
+                            selectedUser.userId
+
+                        );
+
+
+                    // -------------------------------------------------
+                    // UPDATE CHAT WINDOW
+                    // -------------------------------------------------
+
+                    setMessages(
+                        Array.isArray(data)
+                            ? data
+                            : []
+                    );
+
+
+                    // -------------------------------------------------
+                    // MARK INCOMING MESSAGES AS READ
+                    // -------------------------------------------------
+
+                    await markConversationAsRead(
+
+                        currentUserId,
+
+                        selectedUser.userId
+
+                    );
+
+
+                    // -------------------------------------------------
+                    // CHECK UNREAD MESSAGES
+                    // -------------------------------------------------
+
+                    const hasUnread =
+                        Array.isArray(data) &&
+                        data.some(
+
+                            msg =>
+
+                                Number(
+                                    msg.senderId
+                                ) ===
+                                Number(
+                                    selectedUser.userId
+                                ) &&
+
+                                !msg.readStatus
+
+                        );
+
+
+                    // -------------------------------------------------
+                    // SEND SEEN EVENT
+                    // -------------------------------------------------
+
+                    if (hasUnread) {
+
+                        console.log(
+                            "SENDING SEEN EVENT"
+                        );
+
+                        sendSeen(
+
+                            selectedUser.userId,
+
+                            currentUserId
+
+                        );
+
+                    }
+
+
+                    // -------------------------------------------------
+                    // REFRESH CHAT LIST
+                    // -------------------------------------------------
+
+                    if (
+                        typeof onNewMessage ===
+                        "function"
+                    ) {
+
+                        onNewMessage();
+
+                    }
+
+                } catch (err) {
+
+                    console.error(
+                        "Load conversation error:",
+                        err
+                    );
+
+                }
+
+            },
+
+            [
                 currentUserId,
-                selectedUser.userId
-            );
+                selectedUser,
+                onNewMessage
+            ]
 
-            setMessages(data);
+        );
 
-            // Read messages only for selected chat
-            await markConversationAsRead(
 
-                currentUserId,
-                selectedUser.userId
 
-            );
+    // =========================================================
+    // KEEP LATEST LOAD CONVERSATION IN REF
+    // =========================================================
 
-            const hasUnread = data.some(
+    useEffect(() => {
 
-                msg =>
+        loadConversationRef.current =
+            loadConversation;
 
-                    msg.senderId === selectedUser.userId &&
-                    !msg.readStatus
+    }, [loadConversation]);
 
-            );
 
-            if (hasUnread) {
 
-                sendSeen(
+    // =========================================================
+    // LOAD CONVERSATION WHEN CHAT CHANGES
+    // =========================================================
 
-                    selectedUser.userId,
-                    currentUserId
+    useEffect(() => {
 
-                );
+        if (!selectedUser) {
 
-            }
+            setMessages([]);
 
-            onNewMessage();
-            // Refresh chat list
-
-        } catch (err) {
-
-            console.log(err);
+            return;
 
         }
 
-    }, [
-        currentUserId,
-        selectedUser,
-        onNewMessage
-    ]);
 
-    useEffect(() => {
+        console.log(
+            "SELECTED CHAT CHANGED:",
+            selectedUser
+        );
 
-        if (!selectedUser) return;
 
         loadConversation();
 
-    }, [selectedUser]);
+    }, [
+        selectedUser,
+        loadConversation
+    ]);
 
-    // ---------------- WEBSOCKET ----------------
 
+
+    // =========================================================
+    // LOAD ONLINE USERS
+    // =========================================================
 
     useEffect(() => {
 
-        const loadOnlineUsers = async () => {
+        const loadOnlineUsers =
+            async () => {
 
-            try {
+                try {
 
-                const users = await getOnlineUsers();
+                    const users =
+                        await getOnlineUsers();
 
-                setOnlineUsers(users);
 
-            } catch (e) {
+                    if (
+                        Array.isArray(users)
+                    ) {
 
-                console.log(e);
+                        setOnlineUsers(
+                            users
+                        );
 
-            }
+                    } else {
 
-        };
+                        setOnlineUsers(
+                            []
+                        );
+
+                    }
+
+                } catch (err) {
+
+                    console.error(
+                        "Online users error:",
+                        err
+                    );
+
+                }
+
+            };
+
 
         if (currentUserId) {
 
@@ -239,167 +456,480 @@ export default function ChatWindow({
 
         }
 
-    }, [currentUserId]);
+    }, [
+        currentUserId,
+        setOnlineUsers
+    ]);
+
+
+
+    // =========================================================
+    // MAIN WEBSOCKET
+    // =========================================================
 
     useEffect(() => {
 
+        if (!currentUserId) {
+
+            return;
+
+        }
+
+
+        console.log(
+            "CONNECTING MAIN WEBSOCKET:",
+            currentUserId
+        );
 
 
         connectSocket(
 
-            // Message
+
+            // =================================================
+            // MESSAGE EVENT
+            // =================================================
+
             (message) => {
 
-                onNewMessage();
+                console.log(
+                    "WEBSOCKET MESSAGE RECEIVED:",
+                    message
+                );
+
+
+                /*
+                 * Get latest selected chat from ref.
+                 *
+                 * DO NOT use selectedUser directly here.
+                 */
+
+                const currentChat =
+                    selectedUserRef.current;
+
+
+                if (!currentChat) {
+
+                    console.log(
+                        "NO CURRENT CHAT"
+                    );
+
+
+                    /*
+                     * No chat is open.
+                     * Refresh list so latest message
+                     * appears there.
+                     */
+
+                    if (
+                        typeof onNewMessage ===
+                        "function"
+                    ) {
+
+                        onNewMessage();
+
+                    }
+
+                    return;
+
+                }
+
+
+                // =================================================
+                // CHECK WHETHER MESSAGE BELONGS TO CURRENT CHAT
+                // =================================================
+
+                const senderId =
+                    Number(
+                        message.senderId
+                    );
+
+                const receiverId =
+                    Number(
+                        message.receiverId
+                    );
+
+                const currentChatId =
+                    Number(
+                        currentChat.userId
+                    );
+
+
+                const isCurrentChat =
+
+                    senderId ===
+                    currentChatId
+
+                    ||
+
+                    receiverId ===
+                    currentChatId;
+
+
+
+                // =================================================
+                // CURRENT CHAT
+                // =================================================
+
+                if (isCurrentChat) {
+
+                    console.log(
+                        "CURRENT CHAT MESSAGE"
+                    );
+
+
+                    /*
+                     * Reload conversation from backend.
+                     *
+                     * This updates:
+                     * - Chat Window
+                     * - Chat List
+                     * - Read status
+                     */
+
+                    if (
+                        loadConversationRef
+                            .current
+                    ) {
+
+                        loadConversationRef
+                            .current();
+
+                    }
+
+                    return;
+
+                }
+
+
+
+                // =================================================
+                // OTHER CHAT
+                // =================================================
+
+                console.log(
+                    "OTHER CHAT MESSAGE"
+                );
+
+
+                /*
+                 * Current chat is different.
+                 *
+                 * Only refresh Chat List.
+                 */
 
                 if (
-                    selectedUser &&
-                    (
-                        message.senderId === selectedUser.userId ||
-                        message.receiverId === selectedUser.userId
-                    )
+                    typeof onNewMessage ===
+                    "function"
                 ) {
 
-                    loadConversation();
+                    onNewMessage();
 
                 }
 
             },
 
-            // Online
+
+            // =================================================
+            // ONLINE STATUS
+            // =================================================
+
             (status) => {
 
-                setOnlineUsers(prev => {
+                console.log(
+                    "ONLINE STATUS:",
+                    status
+                );
 
-                    if (status.online) {
 
-                        if (prev.includes(status.userId))
-                            return prev;
+                setOnlineUsers(
+                    prev => {
 
-                        return [...prev, status.userId];
+                        if (
+                            status.online
+                        ) {
+
+                            if (
+                                prev.includes(
+                                    status.userId
+                                )
+                            ) {
+
+                                return prev;
+
+                            }
+
+
+                            return [
+
+                                ...prev,
+
+                                status.userId
+
+                            ];
+
+                        }
+
+
+                        return prev.filter(
+
+                            id =>
+                                id !==
+                                status.userId
+
+                        );
 
                     }
-
-                    return prev.filter(
-                        id => id !== status.userId
-                    );
-
-                });
+                );
 
             },
 
-            // Typing
+
+            // =================================================
+            // TYPING
+            // =================================================
+
             (typingStatus) => {
 
+                console.log(
+                    "TYPING STATUS:",
+                    typingStatus
+                );
+
+
+                const currentChat =
+                    selectedUserRef.current;
+
+
+                // -------------------------------------------------
+                // CHAT HEADER
+                // -------------------------------------------------
+
                 if (
-                    selectedUser &&
-                    typingStatus.senderId === selectedUser.userId
+
+                    currentChat &&
+
+                    Number(
+                        typingStatus.senderId
+                    ) ===
+
+                    Number(
+                        currentChat.userId
+                    )
+
                 ) {
 
-                    setTyping(typingStatus.typing);
+                    setTyping(
+                        typingStatus.typing
+                    );
 
                 }
 
-                setTypingUsers(prev => {
 
-                    if (typingStatus.typing) {
+                // -------------------------------------------------
+                // CHAT LIST
+                // -------------------------------------------------
 
-                        if (prev.includes(typingStatus.senderId))
-                            return prev;
+                setTypingUsers(
+                    prev => {
 
-                        return [
-                            ...prev,
-                            typingStatus.senderId
-                        ];
+                        if (
+                            typingStatus.typing
+                        ) {
+
+                            if (
+                                prev.includes(
+                                    typingStatus.senderId
+                                )
+                            ) {
+
+                                return prev;
+
+                            }
+
+
+                            return [
+
+                                ...prev,
+
+                                typingStatus.senderId
+
+                            ];
+
+                        }
+
+
+                        return prev.filter(
+
+                            id =>
+
+                                id !==
+                                typingStatus.senderId
+
+                        );
 
                     }
-
-                    return prev.filter(
-                        id => id !== typingStatus.senderId
-                    );
-
-                });
+                );
 
             },
 
-            // Seen
+
+            // =================================================
+            // SEEN
+            // =================================================
+
             () => {
 
-                loadConversation();
-                onNewMessage();
+                console.log(
+                    "MESSAGE SEEN EVENT"
+                );
+
+
+                if (
+                    loadConversationRef
+                        .current
+                ) {
+
+                    loadConversationRef
+                        .current();
+
+                }
 
             },
+
 
             currentUserId
 
         );
 
+
+        // =====================================================
+        // CLEANUP
+        // =====================================================
+
         return () => {
 
-            disconnectSocket(currentUserId);
+            console.log(
+                "DISCONNECT MAIN WEBSOCKET:",
+                currentUserId
+            );
+
+
+            disconnectSocket(
+                currentUserId
+            );
 
         };
 
-    }, [currentUserId]);
+    }, [
+        currentUserId
+    ]);
 
+
+
+    // =========================================================
+    // TYPING SOCKET SUBSCRIPTION
+    // =========================================================
 
     useEffect(() => {
 
-        if (!currentUserId) return;
+        if (!currentUserId) {
 
-        const subscription = subscribeTyping(
+            return;
 
-            currentUserId,
-
-            (typingStatus) => {
-                console.log(typingStatus);
+        }
 
 
-                // Chat Header
-                if (
+        const subscription =
+            subscribeTyping(
 
-                    selectedUser &&
+                currentUserId,
 
-                    typingStatus.senderId === selectedUser.userId
+                (typingStatus) => {
 
-                ) {
+                    console.log(
+                        "TYPING SOCKET:",
+                        typingStatus
+                    );
 
-                    setTyping(typingStatus.typing);
 
-                }
+                    const currentChat =
+                        selectedUserRef.current;
 
-                // Chat List
-                setTypingUsers(prev => {
 
-                    if (typingStatus.typing) {
+                    // -------------------------------------------------
+                    // CHAT HEADER
+                    // -------------------------------------------------
 
-                        if (prev.includes(typingStatus.senderId)) {
+                    if (
 
-                            return prev;
+                        currentChat &&
 
-                        }
-
-                        return [
-
-                            ...prev,
-
+                        Number(
                             typingStatus.senderId
+                        ) ===
 
-                        ];
+                        Number(
+                            currentChat.userId
+                        )
+
+                    ) {
+
+                        setTyping(
+                            typingStatus.typing
+                        );
 
                     }
 
-                    return prev.filter(
 
-                        id => id !== typingStatus.senderId
+                    // -------------------------------------------------
+                    // CHAT LIST
+                    // -------------------------------------------------
 
+                    setTypingUsers(
+                        prev => {
+
+                            if (
+                                typingStatus.typing
+                            ) {
+
+                                if (
+                                    prev.includes(
+                                        typingStatus.senderId
+                                    )
+                                ) {
+
+                                    return prev;
+
+                                }
+
+
+                                return [
+
+                                    ...prev,
+
+                                    typingStatus.senderId
+
+                                ];
+
+                            }
+
+
+                            return prev.filter(
+
+                                id =>
+
+                                    id !==
+                                    typingStatus.senderId
+
+                            );
+
+                        }
                     );
 
-                });
+                }
 
-            }
+            );
 
-        );
 
         return () => {
 
@@ -408,34 +938,51 @@ export default function ChatWindow({
         };
 
     }, [
-
         currentUserId,
-
-        selectedUser,
-
         setTypingUsers
-
     ]);
 
 
 
+    // =========================================================
+    // SEEN SOCKET SUBSCRIPTION
+    // =========================================================
+
     useEffect(() => {
 
-        if (!currentUserId) return;
+        if (!currentUserId) {
 
-        const subscription = subscribeSeen(
+            return;
 
-            currentUserId,
+        }
 
-            (status) => {
 
-                loadConversation();
+        const subscription =
+            subscribeSeen(
 
-                onNewMessage();
+                currentUserId,
 
-            }
+                () => {
 
-        );
+                    console.log(
+                        "SEEN SOCKET EVENT"
+                    );
+
+
+                    if (
+                        loadConversationRef
+                            .current
+                    ) {
+
+                        loadConversationRef
+                            .current();
+
+                    }
+
+                }
+
+            );
+
 
         return () => {
 
@@ -443,47 +990,103 @@ export default function ChatWindow({
 
         };
 
-    }, [currentUserId, loadConversation]);
+    }, [
+        currentUserId
+    ]);
 
-    // ---------------- LOAD WHEN USER CHANGES ----------------
 
 
-    // ---------------- AUTO SCROLL ----------------
+    // =========================================================
+    // AUTO SCROLL
+    // =========================================================
 
     useEffect(() => {
 
-        bottomRef.current?.scrollIntoView({
-            behavior: "smooth"
-        });
+        if (
+            bottomRef.current
+        ) {
+
+            bottomRef.current.scrollIntoView({
+
+                behavior: "smooth"
+
+            });
+
+        }
 
     }, [messages]);
 
+
+
+    // =========================================================
+    // CLEAR TYPING TIMER
+    // =========================================================
 
     useEffect(() => {
 
         return () => {
 
-            clearTimeout(typingTimeout.current);
+            clearTimeout(
+                typingTimeout.current
+            );
 
         };
 
     }, []);
 
-    // ---------------- SEND ----------------
+
+
+    // =========================================================
+    // SEND MESSAGE
+    // =========================================================
 
     const handleSend = () => {
 
-        if (!text.trim()) return;
+        const messageText =
+            text.trim();
+
+
+        // -----------------------------------------------------
+        // VALIDATION
+        // -----------------------------------------------------
+
+        if (
+            !messageText ||
+            !selectedUser
+        ) {
+
+            return;
+
+        }
+
+
+        console.log(
+            "SENDING MESSAGE:",
+            messageText
+        );
+
+
+        // -----------------------------------------------------
+        // SEND TO BACKEND
+        // -----------------------------------------------------
 
         sendMessage({
 
-            senderId: currentUserId,
+            senderId:
+                currentUserId,
 
-            receiverId: selectedUser.userId,
+            receiverId:
+                selectedUser.userId,
 
-            content: text
+            content:
+                messageText
 
         });
+
+
+        // -----------------------------------------------------
+        // STOP TYPING
+        // -----------------------------------------------------
 
         stopTyping(
 
@@ -493,21 +1096,209 @@ export default function ChatWindow({
 
         );
 
-        clearTimeout(typingTimeout.current);
+
+        clearTimeout(
+            typingTimeout.current
+        );
+
 
         setTyping(false);
 
+
+        // -----------------------------------------------------
+        // CLEAR INPUT
+        // -----------------------------------------------------
+
         setText("");
-
-        setTimeout(() => {
-
-            onNewMessage();
-
-        }, 500);
 
     };
 
-    // ---------------- EMPTY ----------------
+
+
+    // =========================================================
+    // HANDLE TYPING
+    // =========================================================
+
+    const handleTextChange = (
+        e
+    ) => {
+
+        const value =
+            e.target.value;
+
+
+        setText(value);
+
+
+        if (!selectedUser) {
+
+            return;
+
+        }
+
+
+        // -----------------------------------------------------
+        // SEND TYPING
+        // -----------------------------------------------------
+
+        if (
+            value.trim()
+        ) {
+
+            sendTyping(
+
+                currentUserId,
+
+                selectedUser.userId
+
+            );
+
+        } else {
+
+            stopTyping(
+
+                currentUserId,
+
+                selectedUser.userId
+
+            );
+
+        }
+
+
+        // -----------------------------------------------------
+        // RESET TIMER
+        // -----------------------------------------------------
+
+        clearTimeout(
+            typingTimeout.current
+        );
+
+
+        typingTimeout.current =
+            setTimeout(() => {
+
+                stopTyping(
+
+                    currentUserId,
+
+                    selectedUser.userId
+
+                );
+
+            }, 1000);
+
+    };
+
+
+
+    // =========================================================
+    // DELETE FOR ME
+    // =========================================================
+
+    const handleDeleteForMe =
+        async () => {
+
+            if (!menuMessage) {
+
+                return;
+
+            }
+
+
+            try {
+
+                console.log(
+                    "DELETE FOR ME:",
+                    menuMessage.id
+                );
+
+
+                await deleteForMe(
+
+                    menuMessage.id,
+
+                    currentUserId
+
+                );
+
+
+                setMenuMessage(
+                    null
+                );
+
+
+                await loadConversation();
+
+
+            } catch (err) {
+
+                console.error(
+                    "Delete for me error:",
+                    err
+                );
+
+            }
+
+        };
+
+
+
+    // =========================================================
+    // DELETE FOR EVERYONE
+    // =========================================================
+
+    const handleDeleteForEveryone =
+        async () => {
+
+            if (!menuMessage) {
+
+                return;
+
+            }
+
+
+            try {
+
+                console.log(
+                    "DELETE FOR EVERYONE:",
+                    menuMessage.id
+                );
+
+
+                await deleteForEveryone(
+
+                    menuMessage.id,
+
+                    currentUserId
+
+                );
+
+
+                setMenuMessage(
+                    null
+                );
+
+
+                await loadConversation();
+
+
+            } catch (err) {
+
+                console.error(
+                    "Delete for everyone error:",
+                    err
+                );
+
+            }
+
+        };
+
+
+
+    // =========================================================
+    // EMPTY CHAT
+    // =========================================================
 
     if (!selectedUser) {
 
@@ -521,10 +1312,16 @@ export default function ChatWindow({
                     className="empty-chat-image"
                 />
 
-                <h2>Select a chat</h2>
+
+                <h2>
+                    Select a chat
+                </h2>
+
 
                 <p>
-                    Choose a conversation from the left or start a new chat.
+                    Choose a conversation
+                    from the left or start
+                    a new chat.
                 </p>
 
             </div>
@@ -532,21 +1329,47 @@ export default function ChatWindow({
         );
 
     }
-    // ---------------- UI ----------------
+
+
+
+    // =========================================================
+    // UI
+    // =========================================================
 
     return (
 
         <div className="chat-window">
 
+
+            {/* =================================================
+                CHAT HEADER
+            ================================================= */}
+
             <div className="chat-header">
+
+
+                {/* MOBILE BACK BUTTON */}
 
                 <button
                     className="mobile-back-btn"
-                    onClick={() => setMobileChatOpen(false)}
+                    onClick={() =>
+                        setMobileChatOpen(
+                            false
+                        )
+                    }
                     aria-label="Back"
+                    type="button"
                 >
+
                     <MdArrowBack />
+
                 </button>
+
+
+
+                {/* =================================================
+                    HEADER AVATAR
+                ================================================= */}
 
                 <div className="header-avatar">
 
@@ -556,13 +1379,27 @@ export default function ChatWindow({
                             defaultProfile
                         }
                         alt=""
+                        onError={(e) => {
+
+                            e.target.onerror =
+                                null;
+
+                            e.target.src =
+                                defaultProfile;
+
+                        }}
                     />
+
 
                     {
 
-                        onlineUsers.includes(selectedUser.userId) && (
+                        onlineUsers.includes(
+                            selectedUser.userId
+                        ) && (
 
-                            <span className="online-dot"></span>
+                            <span
+                                className="online-dot"
+                            ></span>
 
                         )
 
@@ -570,9 +1407,20 @@ export default function ChatWindow({
 
                 </div>
 
+
+
+                {/* =================================================
+                    HEADER USER INFO
+                ================================================= */}
+
                 <div>
 
-                    <h3>{selectedUser.fullName}</h3>
+                    <h3>
+                        {
+                            selectedUser.fullName
+                        }
+                    </h3>
+
 
                     <small>
 
@@ -582,7 +1430,9 @@ export default function ChatWindow({
 
                                 ? "Typing..."
 
-                                : onlineUsers.includes(selectedUser.userId)
+                                : onlineUsers.includes(
+                                    selectedUser.userId
+                                )
 
                                     ? "Online"
 
@@ -596,155 +1446,329 @@ export default function ChatWindow({
 
             </div>
 
+
+
+            {/* =================================================
+                MESSAGES
+            ================================================= */}
+
             <div className="messages">
+
 
                 {
 
-                    messages.map((msg, index) => {
+                    messages.map(
+                        (
+                            msg,
+                            index
+                        ) => {
 
-                        const mine =
-                            msg.senderId === currentUserId;
+                            const mine =
 
-                        return (
+                                Number(
+                                    msg.senderId
+                                ) ===
 
-                            // ll
+                                Number(
+                                    currentUserId
+                                );
 
-                            <div
-                                key={msg.id ?? index}
-                                className={
-                                    mine
-                                        ? "message-row mine-row"
-                                        : "message-row other-row"
-                                }
-                            >
 
-                                {/* Other User Avatar */}
-
-                                {
-
-                                    !mine && (
-
-                                        <img
-
-                                            className="message-avatar"
-
-                                            src={
-                                                msg.senderImage ||
-                                                selectedUser.profileImage ||
-                                                defaultProfile
-                                            }
-
-                                            alt=""
-
-                                            onError={(e) => {
-
-                                                e.target.src = defaultProfile;
-
-                                            }}
-
-                                        />
-
-                                    )
-
-                                }
+                            return (
 
                                 <div
+                                    key={
+                                        msg.id ??
+                                        `${msg.senderId}-${msg.sentAt}-${index}`
+                                    }
                                     className={
                                         mine
-                                            ? "mine"
-                                            : "other"
+                                            ? "message-row mine-row"
+                                            : "message-row other-row"
                                     }
-
-                                    onContextMenu={(e) => {
-
-                                        e.preventDefault();
-
-                                        const menuWidth = 220;
-                                        const menuHeight = 110;
-                                        const padding = 16;
-
-                                        let x = e.clientX;
-                                        let y = e.clientY;
-
-                                        // Right edge
-                                        if (x + menuWidth > window.innerWidth) {
-                                            x = window.innerWidth - menuWidth - padding;
-                                        }
-
-                                        // Bottom edge
-                                        if (y + menuHeight > window.innerHeight) {
-                                            y = window.innerHeight - menuHeight - padding;
-                                        }
-
-                                        // Left edge
-                                        if (x < padding) {
-                                            x = padding;
-                                        }
-
-                                        // Top edge
-                                        if (y < padding) {
-                                            y = padding;
-                                        }
-
-                                        setMenuMessage(msg);
-
-                                        setMenuPosition({
-                                            x,
-                                            y
-                                        });
-
-                                    }}
                                 >
 
-                                    <div>
 
-                                        {msg.content}
-
-                                    </div>
+                                    {/* =================================
+                                        OTHER USER AVATAR
+                                    ================================= */}
 
                                     {
 
-                                        msg.sentAt && (
+                                        !mine && (
 
-                                            <div className="message-footer">
+                                            <img
+                                                className="message-avatar"
+                                                src={
+                                                    msg.senderImage ||
+                                                    selectedUser.profileImage ||
+                                                    defaultProfile
+                                                }
+                                                alt=""
+                                                onError={(
+                                                    e
+                                                ) => {
 
-                                                <small>
+                                                    e.target.onerror =
+                                                        null;
+
+                                                    e.target.src =
+                                                        defaultProfile;
+
+                                                }}
+                                            />
+
+                                        )
+
+                                    }
+
+
+
+                                    {/* =================================
+                                        MESSAGE BUBBLE
+                                    ================================= */}
+
+                                    <div
+
+                                        className={
+                                            mine
+                                                ? "mine"
+                                                : "other"
+                                        }
+
+
+                                        onContextMenu={(
+                                            e
+                                        ) => {
+
+                                            e.preventDefault();
+
+
+                                            const menuWidth =
+                                                220;
+
+                                            const menuHeight =
+                                                110;
+
+                                            const padding =
+                                                16;
+
+
+                                            let x =
+                                                e.clientX;
+
+                                            let y =
+                                                e.clientY;
+
+
+                                            // -------------------------
+                                            // RIGHT EDGE
+                                            // -------------------------
+
+                                            if (
+                                                x +
+                                                menuWidth >
+                                                window.innerWidth
+                                            ) {
+
+                                                x =
+                                                    window.innerWidth -
+                                                    menuWidth -
+                                                    padding;
+
+                                            }
+
+
+                                            // -------------------------
+                                            // BOTTOM EDGE
+                                            // -------------------------
+
+                                            if (
+                                                y +
+                                                menuHeight >
+                                                window.innerHeight
+                                            ) {
+
+                                                y =
+                                                    window.innerHeight -
+                                                    menuHeight -
+                                                    padding;
+
+                                            }
+
+
+                                            // -------------------------
+                                            // LEFT EDGE
+                                            // -------------------------
+
+                                            if (
+                                                x <
+                                                padding
+                                            ) {
+
+                                                x =
+                                                    padding;
+
+                                            }
+
+
+                                            // -------------------------
+                                            // TOP EDGE
+                                            // -------------------------
+
+                                            if (
+                                                y <
+                                                padding
+                                            ) {
+
+                                                y =
+                                                    padding;
+
+                                            }
+
+
+                                            setMenuMessage(
+                                                msg
+                                            );
+
+
+                                            setMenuPosition({
+
+                                                x,
+
+                                                y
+
+                                            });
+
+                                        }}
+
+                                    >
+
+
+                                        {/* MESSAGE TEXT */}
+
+                                        <div>
+
+                                            {
+                                                msg.content
+                                            }
+
+                                        </div>
+
+
+
+                                        {/* =================================
+                                            MESSAGE FOOTER
+                                        ================================= */}
+
+                                        {
+
+                                            msg.sentAt && (
+
+                                                <div
+                                                    className="message-footer"
+                                                >
+
+                                                    <small>
+
+                                                        {
+
+                                                            new Date(
+                                                                msg.sentAt
+                                                            ).toLocaleTimeString(
+                                                                [],
+                                                                {
+                                                                    hour:
+                                                                        "2-digit",
+                                                                    minute:
+                                                                        "2-digit"
+                                                                }
+                                                            )
+
+                                                        }
+
+                                                    </small>
+
+
 
                                                     {
 
-                                                        new Date(msg.sentAt).toLocaleTimeString(
-                                                            [],
-                                                            {
-                                                                hour: "2-digit",
-                                                                minute: "2-digit"
-                                                            }
+                                                        mine && (
+
+                                                            <span
+                                                                className="message-status"
+                                                            >
+
+                                                                {
+
+                                                                    msg.readStatus
+
+                                                                        ?
+
+                                                                        (
+                                                                            <MdDoneAll
+                                                                                className="seen"
+                                                                            />
+                                                                        )
+
+                                                                        :
+
+                                                                        (
+                                                                            <MdDone
+                                                                                className="sent"
+                                                                            />
+                                                                        )
+
+                                                                }
+
+                                                            </span>
+
                                                         )
 
                                                     }
 
-                                                </small>
+                                                </div>
 
-                                                {
+                                            )
 
-                                                    mine && (
+                                        }
 
-                                                        <span className="message-status">
+                                    </div>
 
-                                                            {
 
-                                                                msg.readStatus
-                                                                    ? <MdDoneAll className="seen" />
-                                                                    : <MdDone className="sent" />
 
-                                                            }
+                                    {/* =================================
+                                        MY AVATAR
+                                    ================================= */}
 
-                                                        </span>
+                                    {
 
-                                                    )
+                                        mine && (
 
+                                            <img
+
+                                                className="message-avatar"
+
+                                                src={
+                                                    myProfile?.profileImage ||
+                                                    defaultProfile
                                                 }
 
-                                            </div>
+                                                alt=""
+
+                                                onError={(
+                                                    e
+                                                ) => {
+
+                                                    e.target.onerror =
+                                                        null;
+
+                                                    e.target.src =
+                                                        defaultProfile;
+
+                                                }}
+
+                                            />
 
                                         )
 
@@ -752,113 +1776,56 @@ export default function ChatWindow({
 
                                 </div>
 
-                                {/* My Avatar */}
+                            );
 
-                                {
+                        }
 
-                                    mine && (
-
-                                        <img
-
-                                            className="message-avatar"
-
-                                            src={
-                                                myProfile?.profileImage ||
-                                                defaultProfile
-                                            }
-
-                                            alt=""
-
-                                            onError={(e) => {
-
-                                                e.target.src = defaultProfile;
-
-                                            }}
-
-                                        />
-
-                                    )
-
-                                }
-
-                            </div>
-                        );
-
-                    })
+                    )
 
                 }
 
-                <div ref={bottomRef}></div>
+
+                {/* AUTO SCROLL TARGET */}
+
+                <div
+                    ref={bottomRef}
+                ></div>
 
             </div>
 
+
+
+            {/* =================================================
+                SEND BOX
+            ================================================= */}
+
             <div className="send-box">
 
+
+                {/* INPUT */}
+
                 <input
+
+                    type="text"
 
                     value={text}
 
                     placeholder="Type message..."
 
-                    // onChange={(e) =>
-                    //     setText(e.target.value)
-                    // }
+                    onChange={
+                        handleTextChange
+                    }
 
-                    onChange={(e) => {
+                    onKeyDown={(
+                        e
+                    ) => {
 
-                        const value = e.target.value;
-                        console.log("Typing...", value);
+                        if (
+                            e.key ===
+                            "Enter"
+                        ) {
 
-                        setText(value);
-
-                        if (!selectedUser) return;
-
-                        if (value.trim()) {
-                            console.log("Sending typing event");
-
-                            sendTyping(
-
-
-                                currentUserId,
-
-                                selectedUser.userId
-
-                            );
-
-                        } else {
-
-                            stopTyping(
-
-                                currentUserId,
-
-                                selectedUser.userId
-
-                            );
-
-                        }
-
-                        clearTimeout(typingTimeout.current);
-
-                        typingTimeout.current = setTimeout(() => {
-
-                            stopTyping(
-
-                                currentUserId,
-
-                                selectedUser.userId
-
-                            );
-
-                        }, 1000);
-
-                    }}
-
-
-                    //up
-
-                    onKeyDown={(e) => {
-
-                        if (e.key === "Enter") {
+                            e.preventDefault();
 
                             handleSend();
 
@@ -869,58 +1836,119 @@ export default function ChatWindow({
                 />
 
 
-                {/* //send btn */}
-                <button onClick={handleSend} className="send-btn">
-                    <IoSend size={22} />
+
+                {/* SEND BUTTON */}
+
+                <button
+
+                    type="button"
+
+                    onClick={
+                        handleSend
+                    }
+
+                    className="send-btn"
+
+                    aria-label="Send message"
+
+                >
+
+                    <IoSend
+                        size={22}
+                    />
+
                 </button>
 
             </div>
 
 
 
-            {/* //? */}
-            {
-                menuMessage &&
+            {/* =================================================
+                CONTEXT MENU
+            ================================================= */}
 
-                <div
-                    className="message-menu"
-                    style={{
-                        left: menuPosition.x,
-                        top: menuPosition.y
-                    }}
-                >
+            {
+
+                menuMessage && (
 
                     <div
-                        className="menu-item"
-                        onClick={handleDeleteForMe}
+
+                        className="message-menu"
+
+                        style={{
+
+                            left:
+                                menuPosition.x,
+
+                            top:
+                                menuPosition.y
+
+                        }}
+
+                        onClick={(e) =>
+                            e.stopPropagation()
+                        }
+
                     >
 
-                        <MdDelete />
 
-                        Delete for me
-
-                    </div>
-
-                    {
-                        menuMessage.senderId === currentUserId &&
+                        {/* DELETE FOR ME */}
 
                         <div
+
                             className="menu-item"
-                            onClick={handleDeleteForEveryone}
+
+                            onClick={
+                                handleDeleteForMe
+                            }
+
                         >
 
                             <MdDelete />
 
-                            Delete for everyone
+                            Delete for me
 
                         </div>
 
-                    }
 
-                </div>
+
+                        {/* DELETE FOR EVERYONE */}
+
+                        {
+
+                            Number(
+                                menuMessage.senderId
+                            ) ===
+
+                            Number(
+                                currentUserId
+                            ) && (
+
+                                <div
+
+                                    className="menu-item"
+
+                                    onClick={
+                                        handleDeleteForEveryone
+                                    }
+
+                                >
+
+                                    <MdDelete />
+
+                                    Delete for everyone
+
+                                </div>
+
+                            )
+
+                        }
+
+                    </div>
+
+                )
 
             }
-
 
         </div>
 
