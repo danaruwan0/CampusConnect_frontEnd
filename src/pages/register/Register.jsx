@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import Button from '../../components/button/Button'
 import LabelInput from '../../components/labelInput/LabelInput'
-import Logo from '../../components/logo/Logo'
+import Logo from '../../components/logo/logo'
 import OtpModal from '../../components/otpModal/OtpModal'
 
 import RegisterImage from '../../assets/register.png'

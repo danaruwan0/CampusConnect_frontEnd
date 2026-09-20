@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Button from '../../components/button/Button';
 import LabelInput from '../../components/labelInput/LabelInput';
-import Logo from '../../components/logo/Logo';
+import Logo from '../../components/logo/logo';
 
 import LoginImage from '../../assets/login.png';
 
