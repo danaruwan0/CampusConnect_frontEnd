@@ -11,7 +11,7 @@ import { getProfile } from "../../api/profileApi";
 import { connectSocket, sendMessage, disconnectSocket } from "../../services/websocket";
 import { sendTyping, stopTyping, subscribeTyping } from "../../services/typingSocket";
 
-import { MdDone, MdDoneAll, MdMoreVert, MdDelete } from "react-icons/md";
+import { MdDone, MdDoneAll, MdMoreVert, MdDelete, MdArrowBack } from "react-icons/md";
 import { IoSend } from "react-icons/io5";
 
 import { sendSeen, subscribeSeen } from "../../services/seenSocket";
@@ -543,8 +543,9 @@ export default function ChatWindow({
                 <button
                     className="mobile-back-btn"
                     onClick={() => setMobileChatOpen(false)}
+                    aria-label="Back"
                 >
-                    ←
+                    <MdArrowBack />
                 </button>
 
                 <div className="header-avatar">

@@ -1,37 +1,17 @@
-import React, {
-    useState,
-    useRef,
-    useEffect
-} from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import "./postCard.css";
 
 import ReactionBar from "../reactionBar/ReactionBar";
 import FollowButton from "../followButton/FollowButton";
 
-import {
-    getComments,
-    addComment,
-    deletePost,
-    sharePost
-} from "../../api/postApi";
+import { getComments, addComment, deletePost, sharePost } from "../../api/postApi";
 
 import defaultProfile from "../../assets/Default profile.jpg";
 
-import {
-    FaThumbsUp,
-    FaRegCommentDots
-} from "react-icons/fa";
+import { FaThumbsUp, FaRegCommentDots } from "react-icons/fa";
 
-import {
-    BsThreeDots,
-    BsTrash,
-    BsPencilSquare,
-    BsLink45Deg,
-    BsFlag,
-    BsShare,
-    BsXLg
-} from "react-icons/bs";
+import { BsThreeDots,BsTrash, BsPencilSquare, BsLink45Deg ,BsFlag, BsShare, BsXLg } from "react-icons/bs";
 
 import { useNavigate } from "react-router-dom";
 

@@ -700,3 +700,74 @@
     }
 
 }
+
+
+
+/* ==========================================
+   SEARCH USER PROFILE
+========================================== */
+
+.nav-search-user-image {
+    width: 44px;
+    height: 44px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    background: #f1f3f5;
+}
+
+.nav-search-user-image img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+}
+
+
+/* ==========================================
+   SEARCH USER INFO
+========================================== */
+
+.nav-search-user-info {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.nav-search-user-info h4 {
+    margin: 0;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #222;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+.nav-search-user-info p {
+    margin: 4px 0 0;
+
+    color: #777;
+
+    font-size: 12px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}

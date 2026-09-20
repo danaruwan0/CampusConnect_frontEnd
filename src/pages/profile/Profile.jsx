@@ -12,16 +12,9 @@ import profilenotfound from "../../assets/Profile Not Found.png";
 import noPostsYet from "../../assets/No Posts Yet.png";
 
 import { getProfile } from "../../api/profileApi";
-import {
-    getFollowerCount,
-    getFollowingCount
-} from "../../api/followApi";
+import { getFollowerCount, getFollowingCount } from "../../api/followApi";
 
-import {
-    getUserPosts,
-    reactPost,
-    sharePost
-} from "../../api/postApi";
+import { getUserPosts, reactPost, sharePost } from "../../api/postApi";
 
 import FollowButton from "../../components/followButton/FollowButton";
 
@@ -91,6 +84,12 @@ export default function Profile() {
 
 
 
+
+    const [shareAlert, setShareAlert] = useState({
+        show: false,
+        success: true,
+        message: ""
+    });
 
     // ================================
     // LOAD PROFILE
@@ -304,16 +303,63 @@ export default function Profile() {
 
         try {
 
+            // Share API
             await sharePost(
                 postId,
                 loggedUserId
             );
 
-            loadProfile();
+            // Get updated posts only
+            const updatedPosts =
+                await getUserPosts(profileUserId);
+
+            // Update posts immediately
+            setPosts(
+                updatedPosts || []
+            );
+
+            // Success alert
+            setShareAlert({
+                show: true,
+                success: true,
+                message: "Post shared successfully"
+            });
+
+            // Auto close
+            setTimeout(() => {
+
+                setShareAlert({
+                    show: false,
+                    success: true,
+                    message: ""
+                });
+
+            }, 3000);
 
         } catch (err) {
 
-            console.log(err);
+            console.log(
+                "SHARE ERROR:",
+                err
+            );
+
+            // Error alert
+            setShareAlert({
+                show: true,
+                success: false,
+                message: "Unable to share post"
+            });
+
+            // Auto close
+            setTimeout(() => {
+
+                setShareAlert({
+                    show: false,
+                    success: true,
+                    message: ""
+                });
+
+            }, 2000);
 
         }
 
@@ -1036,6 +1082,75 @@ export default function Profile() {
 
                 />
 
+
+                {/* =========================================================
+    SHARE ALERT
+========================================================= */}
+
+                {shareAlert.show && (
+
+                    <div className="profile-share-alert-overlay">
+
+                        <div
+                            className={`profile-share-alert-box ${shareAlert.success
+                                    ? "profile-share-alert-success"
+                                    : "profile-share-alert-error"
+                                }`}
+                        >
+
+                            {/* ICON */}
+
+                            <div className="profile-share-alert-icon">
+
+                                {shareAlert.success
+                                    ? "✓"
+                                    : "!"}
+
+                            </div>
+
+
+                            {/* CONTENT */}
+
+                            <div className="profile-share-alert-content">
+
+                                <h3>
+
+                                    {shareAlert.success
+                                        ? "Success"
+                                        : "Error"}
+
+                                </h3>
+
+                                <p>
+                                    {shareAlert.message}
+                                </p>
+
+                            </div>
+
+
+                            {/* CLOSE */}
+
+                            <button
+                                type="button"
+                                className="profile-share-alert-close"
+                                onClick={() =>
+                                    setShareAlert({
+                                        show: false,
+                                        success: true,
+                                        message: ""
+                                    })
+                                }
+                            >
+
+                                ×
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                )}
 
                 {/* ==========================
                     PROFILE IMAGE VIEWER

@@ -625,3 +625,115 @@
     }
 
 }
+
+
+
+/* =========================================================
+   SUGGESTION USER INFO
+========================================================= */
+
+.suggestion-user-info {
+
+    flex: 1;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+}
+
+
+.suggestion-user-info p {
+
+    margin: 0 0 4px;
+
+    font-weight: 600;
+
+    color: #222;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+}
+
+
+.suggestion-user-info small {
+
+    display: block;
+
+    color: #777;
+
+    font-size: 12px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+}
+
+
+
+
+
+
+
+/* =========================================================
+   FOLLOWING BUTTON
+========================================================= */
+
+.suggestion button {
+
+    background: #1877f2;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 8px 16px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.suggestion button:hover {
+
+    background: #145ec9;
+
+    transform: translateY(-1px);
+
+}
+
+
+/* =========================================================
+   FOLLOWING STATE
+========================================================= */
+
+.suggestion button.following-btn {
+
+    background: #e5e7eb;
+
+    color: #374151;
+
+}
+
+
+.suggestion button.following-btn:hover {
+
+    background: #d1d5db;
+
+}

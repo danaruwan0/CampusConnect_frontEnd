@@ -84,6 +84,8 @@ export default function Navbar({
                 const res =
                     await searchUsers(
                         value
+                        ,
+                        userId
                     );
 
                 setUsers(res);
@@ -169,26 +171,45 @@ export default function Navbar({
                                                     navigate(`/profile/${user.userId}`);
 
                                                     setKeyword("");
-
                                                     setUsers([]);
 
                                                 }}
                                             >
 
-                                                <h4>
-                                                    {
-                                                        user.fullName
-                                                    }
-                                                </h4>
+                                                <div className="nav-search-user-image">
 
-                                                <p>
-                                                    {
-                                                        user.email
-                                                    }
-                                                </p>
+                                                    <img
+                                                        src={
+                                                            user.profileImage &&
+                                                                user.profileImage.trim() !== ""
+                                                                ? user.profileImage
+                                                                : defaultProfile
+                                                        }
+                                                        alt={user.fullName}
+                                                        onError={(e) => {
+
+                                                            e.target.onerror = null;
+                                                            e.target.src = defaultProfile;
+
+                                                        }}
+                                                    />
+
+                                                </div>
+
+
+                                                <div className="nav-search-user-info">
+
+                                                    <h4>
+                                                        {user.fullName}
+                                                    </h4>
+
+                                                    <p>
+                                                        {user.email}
+                                                    </p>
+
+                                                </div>
 
                                             </div>
-
                                         )
                                     )
                                 }

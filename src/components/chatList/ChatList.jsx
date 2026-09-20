@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getChatList } from "../../api/messageApi";
+import { searchUsers } from "../../api/searchApi";
 
 import defaultProfile from "../../assets/Default profile.jpg";
-import "./chatList.css";
 import noChatImage from "../../assets/noChatImage.webp";
 
+import "./chatList.css";
+import { FiSearch } from "react-icons/fi";
 export default function ChatList({
     currentUserId,
     selectedUser,
@@ -12,34 +14,44 @@ export default function ChatList({
     refreshKey,
     onlineUsers = [],
     typingUsers = []
-
 }) {
+
+    /* =========================================================
+       STATES
+    ========================================================= */
 
     const [chats, setChats] = useState([]);
 
+    const [searchKeyword, setSearchKeyword] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
+    const [searchLoading, setSearchLoading] = useState(false);
+
+
+    /* =========================================================
+       LOAD CHAT LIST
+    ========================================================= */
+
     useEffect(() => {
-        //test log
-        console.log("CHAT LIST RELOAD", refreshKey);
+
+        console.log("CHAT LIST RELOAD:", refreshKey);
+
         if (!currentUserId) return;
 
         loadChats();
 
     }, [currentUserId, refreshKey]);
 
+
     const loadChats = async () => {
 
         try {
 
             const data = await getChatList(currentUserId);
-            //test log
-            console.log("API DATA", data);
 
-            console.log("Chat List :", data);
+            console.log("CHAT LIST API DATA:", data);
 
             if (Array.isArray(data)) {
-                // test log
-                // setChats(data);
-                // setChats(data.map(chat => ({ ...chat })));
+
                 setChats([...data]);
 
             } else {
@@ -48,192 +60,477 @@ export default function ChatList({
 
             }
 
-        }
+        } catch (err) {
 
-        catch (err) {
-
-            console.error(err);
+            console.error("Chat list error:", err);
 
             setChats([]);
 
         }
 
     };
-    //test 
-    console.log("Rendering Chats", chats);
+
+
+    /* =========================================================
+       SEARCH USERS
+    ========================================================= */
+
+    const handleSearch = async (value) => {
+
+        setSearchKeyword(value);
+
+        // Less than 2 characters
+        if (value.trim().length < 2) {
+
+            setSearchResults([]);
+
+            return;
+
+        }
+
+        try {
+
+            setSearchLoading(true);
+
+            const results = await searchUsers(
+                value.trim(),
+                currentUserId
+            );
+
+            setSearchResults(
+                Array.isArray(results)
+                    ? results
+                    : []
+            );
+
+        } catch (err) {
+
+            console.error(
+                "User search error:",
+                err
+            );
+
+            setSearchResults([]);
+
+        } finally {
+
+            setSearchLoading(false);
+
+        }
+
+    };
+
+
+    /* =========================================================
+       SELECT SEARCH RESULT
+    ========================================================= */
+
+    const handleSelectSearchUser = (user) => {
+
+        // Open chat window
+        onSelect(user);
+
+        // Clear search
+        setSearchKeyword("");
+
+        setSearchResults([]);
+
+    };
+
+
+    /* =========================================================
+       PROFILE IMAGE
+    ========================================================= */
+
+    const getProfileImage = (image) => {
+
+        if (
+            image &&
+            typeof image === "string" &&
+            image.trim() !== ""
+        ) {
+
+            return image;
+
+        }
+
+        return defaultProfile;
+
+    };
+
+
+    /* =========================================================
+       RENDER
+    ========================================================= */
 
     return (
 
         <div className="chat-list">
 
-            <h2>Chats</h2>
+            {/* =================================================
+                HEADER
+            ================================================= */}
 
-            {
-                chats.length === 0 && (
+            <div className="chat-list-header">
 
-                    <div className="no-chat">
+                <h2>
+                    Chats
+                </h2>
 
-                        <img
-                            src={noChatImage}
-                            alt="No Chats"
-                            className="no-chat-image"
-                        />
+                {/* SEARCH */}
 
-                        <h3>No Chats Yet</h3>
+                <div className="chat-search-wrapper">
+
+                    <span className="chat-search-icon">
+                        <FiSearch />
+                    </span>
+
+                    <input
+                        type="text"
+                        className="chat-search-input"
+                        placeholder="Find Contact..."
+                        value={searchKeyword}
+                        onChange={(e) =>
+                            handleSearch(e.target.value)
+                        }
+                    />
+
+                    {searchKeyword && (
+                        <button
+                            className="chat-search-clear"
+                            onClick={() => {
+                                setSearchKeyword("");
+                                setSearchResults([]);
+                            }}
+                            type="button"
+                            aria-label="Clear search"
+                        >
+                            ×
+                        </button>
+                    )}
+
+                </div>
+            </div>
+
+
+            {/* =================================================
+                SEARCH LOADING
+            ================================================= */}
+
+            {searchLoading && (
+
+                <div className="chat-search-loading">
+
+                    <span className="search-spinner"></span>
+
+                    <span>
+                        Searching...
+                    </span>
+
+                </div>
+
+            )}
+
+
+            {/* =================================================
+                SEARCH RESULTS
+            ================================================= */}
+
+            {!searchLoading &&
+                searchKeyword.trim().length >= 2 &&
+                searchResults.length > 0 && (
+
+                    <div className="chat-search-results">
+
+                        <div className="search-result-title">
+                            Contacts
+                        </div>
+
+                        {searchResults.map((user) => {
+
+                            const image =
+                                getProfileImage(
+                                    user.profileImage
+                                );
+
+                            const isOnline =
+                                onlineUsers.includes(
+                                    user.userId
+                                );
+
+                            return (
+
+                                <div
+                                    key={user.userId}
+                                    className="chat-search-user"
+                                    onClick={() =>
+                                        handleSelectSearchUser(
+                                            user
+                                        )
+                                    }
+                                >
+
+                                    {/* PROFILE */}
+
+                                    <div className="chat-profile-box">
+
+                                        <img
+                                            src={image}
+                                            alt={user.fullName}
+                                            className="chat-profile-img"
+                                            loading="lazy"
+                                            onError={(e) => {
+
+                                                e.target.onerror =
+                                                    null;
+
+                                                e.target.src =
+                                                    defaultProfile;
+
+                                            }}
+                                        />
+
+                                        {isOnline && (
+
+                                            <span className="chat-online-dot"></span>
+
+                                        )}
+
+                                    </div>
+
+
+                                    {/* USER INFO */}
+
+                                    <div className="chat-info">
+
+                                        <h4>
+                                            {user.fullName}
+                                        </h4>
+
+                                        <p>
+                                            {user.email}
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            );
+
+                        })}
+
+                    </div>
+
+                )}
+
+
+            {/* =================================================
+                NO SEARCH RESULTS
+            ================================================= */}
+
+            {!searchLoading &&
+                searchKeyword.trim().length >= 2 &&
+                searchResults.length === 0 && (
+
+                    <div className="chat-no-search-result">
+
+                        <div className="no-search-icon">
+
+                            <FiSearch />
+
+                        </div>
 
                         <p>
-                            Start a conversation with your friends.
+                            No contacts found
                         </p>
 
                     </div>
 
-                )
-            }
+                )}
 
-            {
 
-                chats.map((chat) => {
+            {/* =================================================
+                EXISTING CHAT LIST
+            ================================================= */}
 
-                    const image =
+            {searchKeyword.trim().length < 2 && (
 
-                        chat.profileImage &&
-                            chat.profileImage.trim() !== ""
+                <>
 
-                            ? chat.profileImage
+                    {chats.length === 0 ? (
 
-                            : defaultProfile;
+                        /* =====================================
+                           NO CHATS
+                        ===================================== */
 
-                    const isOnline =
+                        <div className="no-chat">
 
-                        onlineUsers.includes(chat.userId);
+                            <img
+                                src={noChatImage}
+                                alt="No Chats"
+                                className="no-chat-image"
+                            />
 
-                    const isTyping =
+                            <h3>
+                                No Chats Yet
+                            </h3>
 
-                        typingUsers.includes(chat.userId);
-
-                    return (
-
-                        <div
-
-                            key={chat.userId}
-
-                            className={
-
-                                selectedUser?.userId === chat.userId
-
-                                    ? "chat-item active"
-
-                                    : "chat-item"
-
-                            }
-
-                            onClick={() => onSelect(chat)}
-
-                        >
-
-                            <div className="chat-profile-box">
-
-                                <img
-
-                                    src={image}
-
-                                    alt={chat.fullName}
-
-                                    className="chat-profile-img"
-
-                                    loading="lazy"
-
-                                    onError={(e) => {
-
-                                        e.target.onerror = null;
-
-                                        e.target.src = defaultProfile;
-
-                                    }}
-
-                                />
-
-                                {
-
-                                    isOnline && (
-
-                                        <span className="chat-online-dot"></span>
-
-                                    )
-
-                                }
-
-                            </div>
-
-                            <div className="chat-info">
-
-                                <h4>
-
-                                    {chat.fullName}
-
-                                </h4>
-
-                                <p
-                                    style={
-
-                                        isTyping
-
-                                            ? {
-
-                                                color: "#1877f2",
-
-                                                // fontStyle: "italic",
-
-                                                fontWeight: "600"
-
-                                            }
-
-                                            : {}
-
-                                    }
-                                >
-
-                                    {
-
-                                        isTyping
-
-                                            ? "Typing..."
-
-                                            : chat.lastMessage || "No messages"
-
-                                    }
-
-                                </p>
-
-                                {/* <p style={{ color: "red", fontWeight: "bold" }}>
-                                    {chat.lastMessage}
-                                </p> */}
-
-                                <p>{new Date().toLocaleTimeString()}</p>
-
-                            </div>
-
-                            {
-
-                                chat.unreadCount > 0 && (
-
-                                    <span className="badge">
-
-                                        {chat.unreadCount}
-
-                                    </span>
-
-                                )
-
-                            }
+                            <p>
+                                Search for a contact above
+                                <br />
+                                to start a conversation.
+                            </p>
 
                         </div>
 
-                    );
+                    ) : (
 
-                })
+                        /* =====================================
+                           CHATS
+                        ===================================== */
 
-            }
+                        <div className="chat-items">
+
+                            {chats.map((chat) => {
+
+                                const image =
+                                    getProfileImage(
+                                        chat.profileImage
+                                    );
+
+                                const isOnline =
+                                    onlineUsers.includes(
+                                        chat.userId
+                                    );
+
+                                const isTyping =
+                                    typingUsers.includes(
+                                        chat.userId
+                                    );
+
+                                const isActive =
+                                    selectedUser?.userId ===
+                                    chat.userId;
+
+
+                                return (
+
+                                    <div
+                                        key={chat.userId}
+                                        className={
+                                            isActive
+                                                ? "chat-item active"
+                                                : "chat-item"
+                                        }
+                                        onClick={() =>
+                                            onSelect(chat)
+                                        }
+                                    >
+
+                                        {/* PROFILE */}
+
+                                        <div className="chat-profile-box">
+
+                                            <img
+                                                src={image}
+                                                alt={chat.fullName}
+                                                className="chat-profile-img"
+                                                loading="lazy"
+                                                onError={(e) => {
+
+                                                    e.target.onerror =
+                                                        null;
+
+                                                    e.target.src =
+                                                        defaultProfile;
+
+                                                }}
+                                            />
+
+                                            {isOnline && (
+
+                                                <span className="chat-online-dot"></span>
+
+                                            )}
+
+                                        </div>
+
+
+                                        {/* CHAT INFO */}
+
+                                        <div className="chat-info">
+
+                                            <h4>
+                                                {chat.fullName}
+                                            </h4>
+
+                                            <p
+                                                className={
+                                                    isTyping
+                                                        ? "chat-typing"
+                                                        : ""
+                                                }
+                                            >
+
+                                                {isTyping
+                                                    ? "Typing..."
+                                                    : chat.lastMessage ||
+                                                    "No messages"}
+
+                                            </p>
+
+                                            {!isTyping && (
+
+                                                <span className="chat-time">
+
+                                                    {chat.lastMessageTime
+                                                        ? new Date(
+                                                            chat.lastMessageTime
+                                                        ).toLocaleTimeString(
+                                                            [],
+                                                            {
+                                                                hour:
+                                                                    "2-digit",
+                                                                minute:
+                                                                    "2-digit"
+                                                            }
+                                                        )
+                                                        : ""}
+
+                                                </span>
+
+                                            )}
+
+                                        </div>
+
+
+                                        {/* UNREAD */}
+
+                                        {chat.unreadCount > 0 && (
+
+                                            <span className="badge">
+
+                                                {chat.unreadCount > 99
+                                                    ? "99+"
+                                                    : chat.unreadCount}
+
+                                            </span>
+
+                                        )}
+
+                                    </div>
+
+                                );
+
+                            })}
+
+                        </div>
+
+                    )}
+
+                </>
+
+            )}
 
         </div>
 

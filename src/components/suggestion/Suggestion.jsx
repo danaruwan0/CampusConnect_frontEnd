@@ -1,184 +1,266 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import "./suggestion.css";
 
 import defaultProfile from "../../assets/Default profile.jpg";
 
-import {
-    getSuggestions,
-    followUser
-} from "../../api/followApi";
 
-export default function Suggestion() {
+export default function Suggestion({
+    suggestions = [],
+    onFollow
+}) {
 
     const navigate = useNavigate();
 
-    const [suggestions, setSuggestions] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [following, setFollowing] = useState({});
 
-    const loggedUserId = Number(
-        localStorage.getItem("userId")
-    );
+    // =====================================================
+    // LOCAL SUGGESTIONS
+    // =====================================================
+
+    const [localSuggestions, setLocalSuggestions] =
+        useState(
+            Array.isArray(suggestions)
+                ? suggestions
+                : []
+        );
 
 
-    /* =====================================================
-       LOAD SUGGESTIONS
-    ===================================================== */
+    // =====================================================
+    // FOLLOWING / LOADING STATE
+    // =====================================================
+
+    const [following, setFollowing] =
+        useState({});
+
+
+    // =====================================================
+    // UPDATE LOCAL SUGGESTIONS
+    // WHEN PARENT DATA CHANGES
+    // =====================================================
 
     useEffect(() => {
-        loadSuggestions();
-    }, []);
+
+        setLocalSuggestions(
+            Array.isArray(suggestions)
+                ? suggestions
+                : []
+        );
+
+    }, [suggestions]);
 
 
-    const loadSuggestions = async () => {
+    // =====================================================
+    // FOLLOW USER
+    // =====================================================
+
+    const handleFollow = async (
+        userId,
+        isFollowing
+    ) => {
+
+        // -------------------------------------------------
+        // Prevent duplicate clicks
+        // -------------------------------------------------
+
+        if (following[userId]) {
+            return;
+        }
+
+
+        // -------------------------------------------------
+        // Save current data
+        // -------------------------------------------------
+
+        const previousSuggestions =
+            [...localSuggestions];
+
 
         try {
 
-            setLoading(true);
+            // =================================================
+            // BUTTON LOADING
+            // =================================================
 
-            const data = await getSuggestions(
-                loggedUserId
+            setFollowing(prev => ({
+                ...prev,
+                [userId]: true
+            }));
+
+
+            // =================================================
+            // BACKEND FOLLOW / UNFOLLOW
+            // =================================================
+
+            await onFollow(
+                userId,
+                isFollowing
             );
 
-            setSuggestions(data || []);
+
+            // =================================================
+            // FOLLOW SUCCESS
+            // =================================================
+
+            if (!isFollowing) {
+
+                /*
+                 * User was not following before.
+                 *
+                 * Follow success.
+                 *
+                 * Remove the user from
+                 * People You May Know.
+                 */
+
+                setLocalSuggestions(prev =>
+                    prev.filter(
+                        user =>
+                            user.userId !== userId
+                    )
+                );
+
+            }
+
+
+            // =================================================
+            // UNFOLLOW SUCCESS
+            // =================================================
+
+            else {
+
+                /*
+                 * If this component ever contains
+                 * a Following user and they unfollow,
+                 * update the state.
+                 */
+
+                setLocalSuggestions(prev =>
+                    prev.map(user => {
+
+                        if (
+                            user.userId === userId
+                        ) {
+
+                            return {
+                                ...user,
+                                isFollowing: false
+                            };
+
+                        }
+
+                        return user;
+
+                    })
+                );
+
+            }
+
 
         } catch (error) {
 
+            // =================================================
+            // ERROR
+            // =================================================
+
             console.error(
-                "Error loading suggestions:",
+                "Suggestion follow error:",
                 error
             );
 
-            setSuggestions([]);
+
+            // -------------------------------------------------
+            // Restore old suggestions
+            // -------------------------------------------------
+
+            setLocalSuggestions(
+                previousSuggestions
+            );
+
 
         } finally {
 
-            setLoading(false);
+            // =================================================
+            // REMOVE LOADING
+            // =================================================
+
+            setFollowing(prev => {
+
+                const updated = {
+                    ...prev
+                };
+
+                delete updated[userId];
+
+                return updated;
+
+            });
 
         }
 
     };
 
 
-    /* =====================================================
-       FOLLOW USER
-    ===================================================== */
+    // =====================================================
+    // OPEN PROFILE
+    // =====================================================
 
-    const handleFollow = async (followingId) => {
+    const handleProfileClick = (
+        userId
+    ) => {
 
-        try {
-
-            // Prevent double click
-            setFollowing((prev) => ({
-                ...prev,
-                [followingId]: true
-            }));
-
-
-            await followUser(
-                loggedUserId,
-                followingId
-            );
-
-
-            // Remove followed user from suggestions
-            setSuggestions((prev) =>
-                prev.filter(
-                    (user) =>
-                        user.userId !== followingId
-                )
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                "Error following user:",
-                error
-            );
-
-
-            // Reset button if request failed
-            setFollowing((prev) => ({
-                ...prev,
-                [followingId]: false
-            }));
-
+        if (!userId) {
+            return;
         }
 
-    };
 
-
-    /* =====================================================
-       OPEN PROFILE
-    ===================================================== */
-
-    const handleProfileClick = (userId) => {
-
-        navigate(`/profile/${userId}`);
-
-    };
-
-
-    /* =====================================================
-       LOADING
-    ===================================================== */
-
-    if (loading) {
-
-        return (
-            <section className="suggestion-sectionpart">
-
-                <div className="suggestion-header">
-
-                    <div>
-
-                        <h2>
-                            People You May Know
-                        </h2>
-
-                        <p>
-                            Connect with students
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div className="suggestion-scroll">
-
-                    <div className="suggestion-loading">
-                        Loading...
-                    </div>
-
-                </div>
-
-            </section>
+        navigate(
+            `/profile/${userId}`
         );
 
-    }
+    };
 
 
-    /* =====================================================
-       NO SUGGESTIONS
-    ===================================================== */
+    // =====================================================
+    // IMAGE ERROR
+    // =====================================================
 
-    if (suggestions.length === 0) {
+    const handleImageError = (
+        event
+    ) => {
+
+        event.currentTarget.src =
+            defaultProfile;
+
+    };
+
+
+    // =====================================================
+    // NO SUGGESTIONS
+    // =====================================================
+
+    if (
+        !localSuggestions ||
+        localSuggestions.length === 0
+    ) {
 
         return null;
 
     }
 
 
-    /* =====================================================
-       UI
-    ===================================================== */
+    // =====================================================
+    // UI
+    // =====================================================
 
     return (
 
         <section className="suggestion-sectionpart">
+
+
+            {/* =================================================
+                HEADER
+            ================================================= */}
 
             <div className="suggestion-header">
 
@@ -197,82 +279,163 @@ export default function Suggestion() {
             </div>
 
 
+            {/* =================================================
+                SUGGESTION SCROLL
+            ================================================= */}
+
             <div className="suggestion-scroll">
 
-                {suggestions.map((user) => (
+                {localSuggestions.map(
+                    user => {
 
-                    <div
-                        className="suggestion-card"
-                        key={user.userId}
-                    >
-
-                        {/* PROFILE IMAGE */}
-
-                        <img
-                            src={
-                                user.profileImage ||
-                                defaultProfile
-                            }
-                            alt={
-                                user.fullName ||
-                                "User"
-                            }
-                            className="suggestion-profile"
-                            onClick={() =>
-                                handleProfileClick(
-                                    user.userId
-                                )
-                            }
-                            onError={(e) => {
-
-                                e.target.src =
-                                    defaultProfile;
-
-                            }}
-                        />
+                        const userId =
+                            user.userId;
 
 
-                        {/* USER INFO */}
-
-                        <div className="suggestion-info">
-
-                            <h3>
-                                {user.fullName}
-                            </h3>
-
-                            <p>
-                                {user.major ||
-                                    "Student"}
-                            </p>
-
-                        </div>
+                        const isFollowing =
+                            Boolean(
+                                user.isFollowing
+                            );
 
 
-                        {/* FOLLOW BUTTON */}
+                        const isUpdating =
+                            Boolean(
+                                following[userId]
+                            );
 
-                        <button
-                            className="suggestion-follow-btn"
-                            disabled={
-                                following[user.userId]
-                            }
-                            onClick={() =>
-                                handleFollow(
-                                    user.userId
-                                )
-                            }
-                        >
 
-                            {following[user.userId]
-                                ? "Following..."
-                                : "Follow"}
+                        return (
 
-                        </button>
+                            <div
+                                className="suggestion-card"
+                                key={userId}
+                            >
 
-                    </div>
 
-                ))}
+                                {/* =================================
+                                    PROFILE IMAGE
+                                ================================= */}
+
+                                <img
+                                    src={
+                                        user.profileImage ||
+                                        defaultProfile
+                                    }
+
+                                    alt={
+                                        user.fullName ||
+                                        "User"
+                                    }
+
+                                    className="suggestion-profile"
+
+                                    onClick={() =>
+                                        handleProfileClick(
+                                            userId
+                                        )
+                                    }
+
+                                    onError={
+                                        handleImageError
+                                    }
+                                />
+
+
+                                {/* =================================
+                                    USER INFORMATION
+                                ================================= */}
+
+                                <div className="suggestion-info">
+
+                                    <h3
+                                        title={
+                                            user.fullName ||
+                                            "User"
+                                        }
+                                    >
+                                        {
+                                            user.fullName ||
+                                            "Unknown User"
+                                        }
+                                    </h3>
+
+
+                                    <p
+                                        title={
+                                            user.major ||
+                                            "Student"
+                                        }
+                                    >
+                                        {
+                                            user.major ||
+                                            "Student"
+                                        }
+                                    </p>
+
+                                </div>
+
+
+                                {/* =================================
+                                    FOLLOW BUTTON
+                                ================================= */}
+
+                                <button
+
+                                    type="button"
+
+                                    className={
+                                        `
+                                        suggestion-follow-btn
+                                        ${
+                                            isFollowing
+                                                ? "following"
+                                                : ""
+                                        }
+                                        ${
+                                            isUpdating
+                                                ? "updating"
+                                                : ""
+                                        }
+                                        `
+                                    }
+
+                                    disabled={
+                                        isUpdating
+                                    }
+
+                                    onClick={() =>
+                                        handleFollow(
+                                            userId,
+                                            isFollowing
+                                        )
+                                    }
+
+                                >
+
+                                    {
+                                        isUpdating
+
+                                            ? "Following..."
+
+                                            : isFollowing
+
+                                                ? "Following"
+
+                                                : "Follow"
+                                    }
+
+                                </button>
+
+
+                            </div>
+
+                        );
+
+                    }
+                )}
 
             </div>
+
 
         </section>
 
